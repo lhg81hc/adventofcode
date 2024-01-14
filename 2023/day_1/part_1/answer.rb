@@ -15,72 +15,37 @@
 #
 # Consider your entire calibration document. What is the sum of all of the calibration values?
 
-class Day1
-  INPUT_FILE = "/input.txt"
+require '../part_1/line_parser'
+# require 'line_parser'
 
-  attr_reader :sum
+module Part1
+  class Answer
+    INPUT_FILE = "/input.txt"
 
-  def initialize
-    @sum = 0
-  end
+    attr_reader :sum
 
-  def self.run
-    new.run
-  end
-
-  def run
-    File.open(input_path).each do |line|
-      parser = LineParser.new(line)
-      @sum += parser.calibration_value
-
-      puts parser.output
+    def initialize
+      @sum = 0
     end
 
-    puts "\n\n"
-    puts "The sum of all of the calibration values: #{sum}"
-  end
+    def self.run
+      new.run
+    end
 
-  def input_path
-    File.join(File.dirname(__FILE__), INPUT_FILE)
-  end
-end
+    def run
+      File.open(input_path).each do |line|
+        parser = Part1::LineParser.new(line)
+        @sum += parser.calibration_value
 
-class LineParser
-  NUMBER_SELECTORS = "^0-9"
+        puts parser.output
+      end
 
-  attr_reader :value
+      puts "\n\n"
+      puts "The sum of all of the calibration values: #{sum}"
+    end
 
-  def initialize(value)
-    @value = value
-  end
-
-  def numbers_only_str
-    @numbers_only_str ||= value.delete(NUMBER_SELECTORS)
-  end
-
-  def number_characters
-    @number_characters ||= numbers_only_str.chars
-  end
-
-  def first_found_digit
-    numbers_only_str[0]
-  end
-
-  def last_found_digit
-    numbers_only_str[-1]
-  end
-
-  def calibration_value
-    ((first_found_digit || 0).to_i * 10) + (last_found_digit || 0).to_i
-  end
-
-  def output
-    [
-      value.strip,
-      "[#{number_characters.join(', ')}]",
-      calibration_value
-    ].join(' --> ')
+    def input_path
+      File.join(File.dirname(__FILE__), INPUT_FILE)
+    end
   end
 end
-
-Day1.run
