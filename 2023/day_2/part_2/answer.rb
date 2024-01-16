@@ -16,7 +16,6 @@ module Day2
       def run
         File.open(input_path).each do |line|
           game = Day2::Game.new(line)
-          puts game.the_power_of_the_set_of_cubes
           @sum_of_power_of_all_sets += game.the_power_of_the_set_of_cubes
         end
 
