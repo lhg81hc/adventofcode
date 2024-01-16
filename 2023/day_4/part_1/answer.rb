@@ -1,4 +1,4 @@
-require_relative 'scratchcard_reader'
+require_relative '../scratchcard_reader'
 
 module Day4
   module Part1
@@ -16,7 +16,7 @@ module Day4
 
       def run
         input_file.each_line do |line|
-          scratchcard_reader = Day4::Part1::ScratchcardReader.read(line)
+          scratchcard_reader = Day4::ScratchcardReader.read(line)
           @sum += scratchcard_reader.card_point
         end
 
