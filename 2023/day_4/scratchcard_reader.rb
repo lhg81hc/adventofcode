@@ -35,8 +35,8 @@ module Day4
       @matched_numbers ||= winning_numbers & given_numbers
     end
 
-    def total_match_numbers
-      @total_match_numbers ||= matched_numbers.length
+    def total_matched_numbers
+      @total_matched_numbers ||= matched_numbers.length
     end
 
     def card_order_number
@@ -44,10 +44,9 @@ module Day4
     end
 
     def card_point
-      return 0 if total_match_numbers.zero?
-      return 1 if total_match_numbers == 1
+      return total_matched_numbers if total_matched_numbers.zero? || total_matched_numbers == 1
 
-      2 ** (total_match_numbers - 1)
+      2 ** (total_matched_numbers - 1)
     end
 
     def secondary_details
