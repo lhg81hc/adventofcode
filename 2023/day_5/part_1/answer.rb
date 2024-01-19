@@ -1,5 +1,5 @@
 require_relative '../seeds_parser'
-require_relative '../category_map_builder'
+require_relative '../category_map_table'
 
 module Day5
   module Part1
@@ -80,7 +80,7 @@ module Day5
                   end
                 end
 
-                Day5::CategoryMapBuilder.build(name, t)
+                Day5::CategoryMapTable.new(name, t)
               end
             )
         end
