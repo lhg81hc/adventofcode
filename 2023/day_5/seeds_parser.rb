@@ -7,7 +7,11 @@ module Day5
     end
 
     def seeds
-      @seeds ||= str.split(':')[1].scan(/\d+/).map(&:to_i)
+      @seeds ||= primary_details.scan(/\d+/).map(&:to_i)
+    end
+
+    def primary_details
+      @primary_details ||= str.split(':')[1]
     end
   end
 end
