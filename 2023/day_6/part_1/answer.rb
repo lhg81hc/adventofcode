@@ -1,4 +1,4 @@
-require_relative 'boat_race'
+require_relative '../boat_race'
 
 module Day6
   module Part1
@@ -20,7 +20,7 @@ module Day6
 
         @total_margin_of_error =
           (0..total_race - 1).
-            map { |idx| Day6::Part1::BoatRace.new(times[idx], distances[idx]).winning_options.count }.
+            map { |idx| Day6::BoatRace.new(times[idx], distances[idx]).winning_options.count }.
             inject(:*)
 
         puts "Margin of error you have: #{total_margin_of_error}"
