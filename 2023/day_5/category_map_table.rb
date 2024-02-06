@@ -16,7 +16,7 @@ module Day5
     end
 
     def find_destination(num)
-      found = map.find { |cm| cm.source_range.cover?(num) }
+      found = table.find { |cm| cm.source_range.cover?(num) }
       found.nil? ? num : found.dest_range.first + (num - found.source_range.first)
     end
 
