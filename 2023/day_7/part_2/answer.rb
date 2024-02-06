@@ -1,8 +1,9 @@
 require_relative '../hand'
-require_relative '../hand_value_comparison'
+require_relative '../hand_comparison'
+require_relative '../card_combination'
 
 module Day7
-  module Part1
+  module Part2
     class Answer
       INPUT_FILE = '../input.txt'
 
@@ -22,6 +23,7 @@ module Day7
         sort_hands!
 
         @total_winnings = hands.each_with_index.inject(0) do |count, (hand, idx)|
+          puts "#{hand.str}"
           count += hand.bid.to_i * (idx + 1)
           count
         end
@@ -40,7 +42,7 @@ module Day7
       end
 
       def sort_hands!
-        @hands.sort! { |a, b| Day7::HandValueComparison.compare(a.hand_value, b.hand_value) }
+        @hands.sort! { |a, b| Day7::HandComparison.compare(a, b, true) }
       end
     end
   end

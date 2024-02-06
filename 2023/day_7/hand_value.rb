@@ -1,14 +1,11 @@
 module Day7
-  class CamelCardHand
+  class HandValue
     TYPES = [:high_card, :one_pair, :two_pair, :three_of_a_kind, :full_house, :four_of_a_kind, :five_of_a_kind]
 
-    Card = Struct.new(:rank)
+    attr_reader :card_ranks
 
-    attr_reader :str, :bid
-
-    def initialize(str, bid)
-      @str = str
-      @bid = bid
+    def initialize(card_ranks)
+      @card_ranks = card_ranks
     end
 
     def type
@@ -78,12 +75,7 @@ module Day7
 
     # ['A', 'K', 'K', 'K', '2'] --> { 'A' => 1, 'K' => 3, '2' = 1 }
     def grouped_cards_by_rank
-      @grouped_cards_by_rank ||= cards.tally
-    end
-
-    # 'AKKK2' --> ['A', 'K', 'K', 'K', '2']
-    def cards
-      @cards ||= str.scan(/\w/).map { |rank| Card.new(rank) }
+      @grouped_cards_by_rank ||= card_ranks.tally
     end
   end
 end
