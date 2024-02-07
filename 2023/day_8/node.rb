@@ -7,7 +7,7 @@ module Day8
     end
 
     def scanned_str
-      @scanned_str ||= str.scan(/[A-Z]+/)
+      @scanned_str ||= str.scan(/[0-9A-Z]+/)
     end
 
     def value

@@ -34,5 +34,49 @@ module Day8
     def instructions_length
       @instructions_length ||= instructions.count
     end
+
+    def find_node_after_num_of_steps(starting_node, starting_direction_idx, number_of_steps)
+      count_step = 0
+      idx = starting_direction_idx
+      current_node = starting_node
+
+      while count_step < number_of_steps
+        count_step += 1
+
+        direction = instructions[idx]
+        next_value = current_node.turn(direction)
+        current_node = map[next_value]
+
+        if idx == instructions_length - 1
+          idx = 0
+        else
+          idx += 1
+        end
+      end
+
+      current_node
+    end
+
+    def find_next_node_ends_with_z(starting_node, starting_direction_idx)
+      idx = starting_direction_idx
+      number_of_next_steps = 0
+      current_node = starting_node
+
+      loop do
+        number_of_next_steps += 1
+
+        direction = instructions[idx]
+        next_value = current_node.turn(direction)
+        current_node = map[next_value]
+
+        if idx == instructions_length - 1
+          idx = 0
+        else
+          idx += 1
+        end
+
+        return [current_node, number_of_next_steps] if next_value.end_with?('Z')
+      end
+    end
   end
 end
