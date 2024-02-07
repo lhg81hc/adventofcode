@@ -1,18 +1,19 @@
-require_relative '../node'
+require 'forwardable'
+require_relative '../network'
 
 module Day8
   module Part1
     class Answer
+      extend Forwardable
+
       INPUT_FILE = '../input.txt'
-
-      attr_reader :network
-
       ORIGIN = 'AAA'
       DESTINATION = 'ZZZ'
 
+      attr_reader :current_value, :current_step_idx, :total_steps
+
       def initialize
-        @network = build_network
-        @current_node = @network[ORIGIN]
+        @current_value = ORIGIN
         @current_step_idx = 0
         @total_steps = 0
       end
@@ -22,47 +23,38 @@ module Day8
       end
 
       def run
-        while @current_step_idx <= instructions.length - 1
+        while @current_step_idx <= instructions_length - 1
           @total_steps += 1
-          next_value = @current_node.turn(direction)
-          @current_node = @network[next_value]
+          @current_value = current_node.turn(direction)
+
           break if destination_node?
 
-          if @current_step_idx == instructions.length - 1
+          if @current_step_idx == instructions_length - 1
             @current_step_idx = 0 unless destination_node?
           else
             @current_step_idx += 1
           end
         end
+
+        puts "Number of steps are required to reach ZZZ: #{total_steps}"
       end
 
+      def network
+        @network ||= Day8::Network.new(input_path)
+      end
+
+      def_delegators :network, :map, :instructions, :instructions_length
+
       def direction
-        instructions[@current_step_idx]
+        instructions[current_step_idx]
       end
 
       def destination_node?
-        @current_node.value == DESTINATION
+        current_value == DESTINATION
       end
 
-      def instructions
-        @instructions ||= lines[0].scan(/\w/)
-      end
-
-      def lines
-        @lines ||= input_file.readlines
-      end
-
-      def input_file
-        @input_file ||= File.open(input_path)
-      end
-
-      def build_network
-        lines[2..-1].inject({}) do |result, line|
-          node = Day8::Node.new(line)
-
-          result[node.value] = node
-          result
-        end
+      def current_node
+        map[current_value]
       end
 
       def input_path
