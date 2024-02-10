@@ -69,14 +69,5 @@ module Day10
           raise "Unknown type '#{char}'"
         end
     end
-
-    def can_connect?(other_component)
-      raise 'Current pole can not be nil' if current_pole.nil?
-
-      other_component.poles.any? do |other_pole|
-        other_pole.axis == current_pole.axis &&
-          (other_pole.value + current_pole.value).zero?
-      end
-    end
   end
 end
