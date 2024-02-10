@@ -1,3 +1,5 @@
+require_relative '../land_scape'
+
 module Day10
   module Part1
     class Answer
@@ -11,17 +13,8 @@ module Day10
       end
 
       def run
-        loop do
-
-        end
-        %w(up down left right).each do |direction|
-          land_scape.current_point = land_scape.starting_point
-          current_component = land_scape.current_component.dup
-
-          land_scape.move(direction)
-
-
-        end
+        history = land_scape.find_loop
+        puts "The number of steps along the loop to get from the starting position to the point farthest from the starting position: #{history.keys.count / 2}"
       end
 
       def land_scape

@@ -1,10 +1,8 @@
 require_relative 'component'
-require 'byebug'
+# require 'byebug'
 
 module Day10
   class LandScape
-    DIRECTIONS = %w(up down left right)
-
     attr_reader :input_path, :map, :starting_point, :width
     attr_accessor :current_point
 
@@ -14,44 +12,48 @@ module Day10
     end
 
     def load_map
-      puts 'Loading map...'
-      @map =
-        lines.each.with_index.reduce([]) do |r, (line, row_idx)|
-          component_chars = line.scan(/[\w&.|\-]/)
-          @width = component_chars.length
+      lines.each.with_index.reduce([]) do |r, (line, row_idx)|
+        component_chars = line.scan(/[\w&.|\-]/)
+        @width = component_chars.count
 
-          r <<
-            component_chars.map.with_index do |c, char_idx|
-              if c == 'S'
-                @starting_point = [row_idx, char_idx]
-                @current_point = [row_idx, char_idx]
-              end
-              component = Day10::Component.new(c, row_idx, char_idx)
-              component.adjacent_components = find_connected_components(row_idx, char_idx)
-              component
+        r <<
+          component_chars.map.with_index do |c, char_idx|
+            if c == 'S'
+              @starting_point = [row_idx, char_idx]
+              @current_point = [row_idx, char_idx]
             end
-          r
-        end
-      puts "Loaded!"
+
+            component = Day10::Component.new(c, [row_idx, char_idx])
+            component.adjacent_components = find_connected_components(component)
+            component
+          end
+        r
+      end
     end
 
-    def find_connected_components(row_idx, char_idx)
-      [[-1, 0], [1, 0], [0, -1], [0, 1]].inject([]) do |r, (y_diff, x_diff)|
-        tmp_row_idx = row_idx + y_diff
-        tmp_char_idx = char_idx + x_diff
-        adjacent_char = lines&.[](tmp_row_idx)&.[](tmp_char_idx)
+    def find_connected_components(component)
+      component.poles.inject([]) do |r, pole|
+        location = component.location
+
+        row_idx = location[0]
+        char_idx = location[1]
+
+        tmp_row_idx = pole.axis == 'y' ? row_idx - pole.value : row_idx
+        tmp_char_idx = pole.axis == 'x' ? char_idx + pole.value : char_idx
 
         if tmp_row_idx < 0 || tmp_char_idx < 0 || tmp_row_idx >= total_lines || tmp_char_idx >= width
           r
         else
-          placeholder = Day10::Component.new(adjacent_char, tmp_row_idx, tmp_char_idx)
+          adjacent_char = lines[tmp_row_idx][tmp_char_idx]
+          adjacent_component = Day10::Component.new(adjacent_char, [tmp_row_idx, tmp_char_idx])
 
-          if placeholder.poles.any? { |p| (p.axis == 'y' && p.value == y_diff) || (p.axis == 'x' && p.value + x_diff == 0) }
-            r << placeholder
-            r
-          else
-            r
-          end
+          connectable =
+            adjacent_component.poles.any? do |other_pole|
+              other_pole.axis == pole.axis && (other_pole.value + pole.value).zero?
+            end
+
+          r << adjacent_component if connectable
+          r
         end
       end
     end
@@ -81,12 +83,39 @@ module Day10
     end
 
     def find_loop
-      history = []
+      history = {}
+      move_count = 0
+      prev_point = nil
+
       loop do
-        history << current_point
-        current_point =
-        break if current_component.starting_point?
+        # if starting point, then get the next point randomly
+        # if not the starting point, find the next point base on the adjacent components
+        # if the possible next points are more than 1 then raise error (because the way pipes are all 1 way route)
+        # if the possible next points are blank then also raise error
+        # if the next point is the stating point (the loop is found), then stop
+        history_key = current_point.join(',')
+        break unless history[history_key].nil?
+
+        history[history_key] = move_count
+        puts "#{history_key} => #{move_count}"
+
+        next_point =
+          if current_component.starting_point?
+            current_component.adjacent_components.sample.location
+          else
+            possible_next_components = current_component.adjacent_components.select { |c| c.location != prev_point }
+            raise "Found more than 1 possible next component" if possible_next_components.count > 1
+            raise "Loop not found, stopped at #{current_point.join(',')}" if possible_next_components.count < 1
+
+            possible_next_components.first.location
+          end
+
+        prev_point = current_point
+        @current_point = next_point
+        move_count += 1
       end
+
+      history
     end
     # def move(direction)
     #   case direction

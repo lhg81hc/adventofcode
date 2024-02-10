@@ -5,13 +5,12 @@ module Day10
 
     Pole = Struct.new(:axis, :value)
 
-    attr_reader :char, :row_idx, :char_idx
+    attr_reader :char, :location
     attr_accessor :adjacent_components
 
-    def initialize(char, row_idx, char_idx)
+    def initialize(char, location)
       @char = validate_input_char(char)
-      @row_idx = row_idx
-      @char_idx = char_idx
+      @location = location
 
       @adjacent_components = []
     end
