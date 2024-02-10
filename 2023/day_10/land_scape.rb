@@ -1,10 +1,8 @@
 require_relative 'component'
-# require 'byebug'
 
 module Day10
   class LandScape
-    attr_reader :input_path, :map, :starting_point, :width
-    attr_accessor :current_point
+    attr_reader :input_path, :map, :s_point, :width
 
     def initialize(input_path)
       @input_path = input_path
@@ -14,15 +12,11 @@ module Day10
     def load_map
       lines.each.with_index.reduce([]) do |r, (line, row_idx)|
         component_chars = line.scan(/[\w&.|\-]/)
-        @width = component_chars.count
+        @width ||= component_chars.count
 
         r <<
           component_chars.map.with_index do |c, char_idx|
-            if c == 'S'
-              @starting_point = [row_idx, char_idx]
-              @current_point = [row_idx, char_idx]
-            end
-
+            @s_point = [row_idx, char_idx] if c == 'S'
             component = Day10::Component.new(c, [row_idx, char_idx])
             component.adjacent_components = find_connected_components(component)
             component
@@ -70,19 +64,15 @@ module Day10
       @total_lines ||= lines.length
     end
 
-    def current_row
-      current_point[0]
+    def find_main_loop
+      find_loop(starting_point: s_point)
     end
 
-    def current_char_idx
-      current_point[1]
-    end
+    def find_loop(starting_point: [])
+      current_point = starting_point
+      current_component = map.dig(current_point[0], current_point[1])
+      return nil unless !current_component.nil? && (current_component.pipe? || current_component.starting_point?)
 
-    def current_component
-      @current_component = map.dig(current_row, current_char_idx)
-    end
-
-    def find_loop
       history = {}
       move_count = 0
       prev_point = nil
@@ -100,23 +90,26 @@ module Day10
         puts "#{history_key} => #{move_count}"
 
         next_point =
-          if current_component.starting_point?
+          if prev_point.nil?
             current_component.adjacent_components.sample.location
           else
             possible_next_components = current_component.adjacent_components.select { |c| c.location != prev_point }
             raise "Found more than 1 possible next component" if possible_next_components.count > 1
-            raise "Loop not found, stopped at #{current_point.join(',')}" if possible_next_components.count < 1
+            # raise "Loop not found, stopped at #{current_point.join(',')}" if possible_next_components.count < 1
+            return nil if possible_next_components.count < 1
 
             possible_next_components.first.location
           end
 
         prev_point = current_point
-        @current_point = next_point
+        current_point = next_point
+        current_component = map.dig(current_point[0], current_point[1])
         move_count += 1
       end
 
       history
     end
+
     # def move(direction)
     #   case direction
     #   when 'up'
