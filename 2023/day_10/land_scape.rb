@@ -68,6 +68,31 @@ module Day10
       find_loop(starting_point: s_point)
     end
 
+    def find_closest_left_pipe(starting_point: [])
+      current_point = starting_point
+      current_component = map.dig(current_point[0], current_point[1])
+      return nil if current_component.nil?
+
+      current_row_idx = starting_point[0]
+      current_char_idx = starting_point[1]
+
+      (current_char_idx - 1).downto(0).each do |char_idx|
+        tmp_component = map.dig(current_row_idx, char_idx)
+
+        if tmp_component.nil?
+          return nil
+        elsif tmp_component.ground?
+          next
+        elsif tmp_component.pipe? || tmp_component.starting_point?
+          return [current_row_idx, char_idx]
+        else
+          return nil
+        end
+      end
+
+      nil
+    end
+
     def find_loop(starting_point: [])
       current_point = starting_point
       current_component = map.dig(current_point[0], current_point[1])
@@ -87,11 +112,13 @@ module Day10
         break unless history[history_key].nil?
 
         history[history_key] = move_count
-        puts "#{history_key} => #{move_count}"
 
         next_point =
           if prev_point.nil?
-            current_component.adjacent_components.sample.location
+            sample = current_component.adjacent_components.sample
+            return nil if sample.nil?
+
+            sample.location
           else
             possible_next_components = current_component.adjacent_components.select { |c| c.location != prev_point }
             raise "Found more than 1 possible next component" if possible_next_components.count > 1
@@ -109,64 +136,5 @@ module Day10
 
       history
     end
-
-    # def move(direction)
-    #   case direction
-    #   when 'up'
-    #     move_up
-    #   when 'down'
-    #     move_down
-    #   when 'left'
-    #     move_left
-    #   when 'right'
-    #     move_right
-    #   else
-    #     raise "Unknown direction #{direction}"
-    #   end
-    # end
-    #
-    # def move_up
-    #   top_adjacent_row = map[current_point[0] - 1]
-    #
-    #   if top_adjacent_row.nil?
-    #     false
-    #   else
-    #     @current_point = [current_point[0] - 1, current_point[1]]
-    #     true
-    #   end
-    # end
-    #
-    # def move_down
-    #   bottom_adjacent_row = map[current_point[0] + 1]
-    #
-    #   if bottom_adjacent_row.nil?
-    #     false
-    #   else
-    #     @current_point = [current_point[0] + 1, current_point[1]]
-    #     true
-    #   end
-    # end
-    #
-    # def move_left
-    #   left_adjacent_component_idx = current_point[1] - 1
-    #
-    #   if left_adjacent_component_idx < 0
-    #     false
-    #   else
-    #     @current_point = [current_point[0], current_point[1] - 1]
-    #     true
-    #   end
-    # end
-    #
-    # def move_right
-    #   right_adjacent_component_idx = current_point[1] + 1
-    #
-    #   if right_adjacent_component_idx > width - 1
-    #     false
-    #   else
-    #     @current_point = [current_point[0], current_point[1] + 1]
-    #     true
-    #   end
-    # end
   end
 end
