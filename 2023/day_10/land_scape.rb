@@ -2,7 +2,7 @@ require_relative 'component'
 
 module Day10
   class LandScape
-    attr_reader :input_path, :map, :s_point, :width
+    attr_reader :input_path, :map, :s_point, :map_width
 
     def initialize(input_path)
       @input_path = input_path
@@ -12,11 +12,11 @@ module Day10
     def load_map
       lines.each.with_index.reduce([]) do |r, (line, row_idx)|
         component_chars = line.scan(/[\w&.|\-]/)
-        @width ||= component_chars.count
+        @map_width ||= component_chars.count
 
         r <<
           component_chars.map.with_index do |c, char_idx|
-            @s_point = [row_idx, char_idx] if c == 'S'
+            @s_point ||= [row_idx, char_idx] if c == 'S'
             component = Day10::Component.new(c, [row_idx, char_idx])
             component.adjacent_components = find_connected_components(component)
             component
@@ -35,7 +35,7 @@ module Day10
         tmp_row_idx = pole.axis == 'y' ? row_idx - pole.value : row_idx
         tmp_char_idx = pole.axis == 'x' ? char_idx + pole.value : char_idx
 
-        if tmp_row_idx < 0 || tmp_char_idx < 0 || tmp_row_idx >= total_lines || tmp_char_idx >= width
+        if tmp_row_idx < 0 || tmp_char_idx < 0 || tmp_row_idx >= map_height || tmp_char_idx >= map_width
           r
         else
           adjacent_char = lines[tmp_row_idx][tmp_char_idx]
@@ -60,37 +60,12 @@ module Day10
       @lines ||= input_file.readlines
     end
 
-    def total_lines
-      @total_lines ||= lines.length
+    def map_height
+      @map_height ||= lines.length
     end
 
-    def find_main_loop
-      find_loop(starting_point: s_point)
-    end
-
-    def find_closest_left_pipe(starting_point: [])
-      current_point = starting_point
-      current_component = map.dig(current_point[0], current_point[1])
-      return nil if current_component.nil?
-
-      current_row_idx = starting_point[0]
-      current_char_idx = starting_point[1]
-
-      (current_char_idx - 1).downto(0).each do |char_idx|
-        tmp_component = map.dig(current_row_idx, char_idx)
-
-        if tmp_component.nil?
-          return nil
-        elsif tmp_component.ground?
-          next
-        elsif tmp_component.pipe? || tmp_component.starting_point?
-          return [current_row_idx, char_idx]
-        else
-          return nil
-        end
-      end
-
-      nil
+    def main_loop
+      @main_loop ||= find_loop(starting_point: s_point)
     end
 
     def find_loop(starting_point: [])
@@ -134,7 +109,55 @@ module Day10
         move_count += 1
       end
 
+      puts history
       history
+    end
+
+    def inside_map?(point = [])
+      !map.dig(point[0], point[1]).nil?
+    end
+
+    def on_the_main_loop_boundary?(point = [])
+      hash_key = point.join(',')
+      !main_loop[hash_key].nil?
+    end
+
+    def position_compare_to_main_loop(point = [])
+      # -1 means outside of the main loop
+      # 0 means on the main loop boundary
+      # 1 means inside of the main loop
+      return -1 unless inside_map?(point)
+      return 0 if on_the_main_loop_boundary?(point)
+
+      row_idx = point[0]
+      char_idx = point[1]
+      loop_points_on_the_same_row = main_loop.select { |position, _c| position.start_with?("#{row_idx},") }
+      return -1 if loop_points_on_the_same_row.empty?
+
+      # https://en.wikipedia.org/wiki/Point_in_polygon#Ray_casting_algorithm
+      # From the starting point go NORTH-EAST
+      # Count the appearance of '|', '-', '7' and 'L'
+      intersection_points = []
+      diagonal_intersection_points = 0
+      loop do
+        row_idx -= 1
+        char_idx += 1
+        break if row_idx < 0 || char_idx > map_width - 1
+        next if main_loop["#{row_idx},#{char_idx}"].nil?
+
+        diagonal_component = map.dig(row_idx, char_idx)
+        if ['|', '-', 'L', '7'].include?(diagonal_component.char)
+          diagonal_intersection_points += 1
+          intersection_points << [row_idx, char_idx]
+        end
+      end
+
+      puts "#{point.join(',')}"
+      puts "intersection points: #{intersection_points}"
+      puts "-------------------"
+      puts "\n"
+
+      diagonal_intersection_points.odd? ? 1 : -1
     end
   end
 end

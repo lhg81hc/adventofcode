@@ -13,8 +13,8 @@ module Day10
       end
 
       def run
-        history = land_scape.find_main_loop
-        puts "The number of steps along the loop to get from the starting position to the point farthest from the starting position: #{history.keys.count / 2}"
+        main_loop = land_scape.main_loop
+        puts "The number of steps along the loop to get from the starting position to the point farthest from the starting position: #{main_loop.keys.count / 2}"
       end
 
       def land_scape
