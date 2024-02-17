@@ -1,4 +1,3 @@
-require_relative 'edge'
 require_relative 'vertex'
 require_relative 'weighted_graph'
 
@@ -25,24 +24,33 @@ module Day11
         line.scan(/[.|#]/).each.with_index do |char, char_idx|
           puts "Line #{line_idx}, Character #{char_idx}..."
 
-          vertex = Day11::Vertex.new([line_idx, char_idx], char)
-          edges =
-            [[line_idx, char_idx + 1], [line_idx + 1, char_idx]].map do |y, x|
-              next if x >= width || y >= height
+          vertex = Day11::Vertex.new([line_idx, char_idx])
+          horizontal_neighbor_locations = [[line_idx, char_idx + 1], [line_idx, char_idx - 1]]
+          vertical_neighbor_locations = [[line_idx + 1, char_idx], [line_idx - 1, char_idx]]
 
-              weight =
-                if (y == line_idx && cols_contain_no_galaxies.include?(x)) ||
-                  (x == char_idx && rows_contain_no_galaxies.include?(y))
-                  2
-                else
-                  1
-                end
+          horizontal_neighbor_locations.each do |y, x|
+            next if x < 0 || x >= width
 
-              Day11::Edge.new([[line_idx, char_idx], [y, x]], weight)
-            end
+            expansion = cols_contain_no_galaxies.include?(char_idx) ? 1 : 0
+            expansion += 1 if cols_contain_no_galaxies.include?(x)
+
+            weight = expansion + 1
+            neighbor = Day11::Vertex.new([y, x])
+            vertex.add_neighbor_and_weight(neighbor, weight)
+          end
+
+          vertical_neighbor_locations.each do |y, x|
+            next if y < 0 || y >= height
+
+            expansion = rows_contain_no_galaxies.include?(line_idx) ? 1 : 0
+            expansion += 1 if rows_contain_no_galaxies.include?(y)
+
+            weight = expansion + 1
+            neighbor = Day11::Vertex.new([y, x])
+            vertex.add_neighbor_and_weight(neighbor, weight)
+          end
 
           weighted_graph.add_vertex(vertex)
-          weighted_graph.add_edges(edges)
         end
       end
 

@@ -4,15 +4,14 @@ module Day11
 
     def initialize(vertices = [])
       @vertices = vertices
-      @edges = []
     end
 
     def add_vertex(vertex)
       @vertices << vertex
     end
 
-    def add_edges(list)
-      @edges.concat(list)
+    def find_vertex_by_name(name)
+      vertices.find { |v| v.name == name }
     end
   end
 end

@@ -1,11 +1,17 @@
 module Day11
   class Vertex
-    attr_reader :location, :value, :key
+    attr_reader :name, :neighbors, :weights, :location
 
-    def initialize(location, value)
+    def initialize(location)
       @location = location
-      @value = value
-      @key = location.join(',')
+      @name = location.join(',')
+      @neighbors = []
+      @weights = []
+    end
+
+    def add_neighbor_and_weight(neighbor, weight)
+      @neighbors << neighbor
+      @weights << weight
     end
   end
 end
