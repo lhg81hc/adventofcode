@@ -22,7 +22,7 @@ module Day11
 
     def scan
       lines.each.with_index do |line, line_idx|
-        line.scan(/./).each.with_index do |char, char_idx|
+        line.scan(/[.|#]/).each.with_index do |char, char_idx|
           puts "Line #{line_idx}, Character #{char_idx}..."
 
           vertex = Day11::Vertex.new([line_idx, char_idx], char)
@@ -78,7 +78,7 @@ module Day11
       tmp_cols_contain_no_galaxies = (0..(width - 1)).to_a
 
       lines.each.with_index do |line, line_idx|
-        line.scan(/./).each.with_index do |char, char_idx|
+        line.scan(/[.|#]/).each.with_index do |char, char_idx|
           if char == GALAXY
             tmp_rows_contain_no_galaxies.delete_if { |x| x == line_idx }
             tmp_cols_contain_no_galaxies.delete_if { |x| x == char_idx }
