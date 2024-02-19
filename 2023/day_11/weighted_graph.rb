@@ -1,3 +1,5 @@
+require_relative 'priority_queue'
+
 module Day11
   class WeightedGraph
     attr_reader :vertices, :edges
@@ -103,7 +105,7 @@ module Day11
     end
 
     def a_star_2(start, goal)
-      open_set = [start]
+      open_set = Day11::PriorityQueue.new
       g_score = {}
       f_score = {}
       came_from = {}
@@ -115,40 +117,24 @@ module Day11
 
       g_score[start.name] = 0
       f_score[start.name] = manhattan_distance(start, goal)
+      open_set.insert(start, f_score[start.name])
 
       until open_set.empty?
-        min = nil
-        min_idx = nil
 
-        open_set.each.with_index do |vertex, idx|
-          if min.nil?
-            min = f_score[vertex.name]
-            min_idx = idx
-            next
-          end
+        current = open_set.extract_min
+        return g_score[current.item.name] if current.item.name == goal.name
 
-          if f_score[vertex.name] < min
-            min = f_score[vertex.name]
-            min_idx = idx
-          end
-        end
-
-        current = open_set.delete_at(min_idx)
-        # puts current.name
-        return reconstruct_path(came_from, current) if current.name == goal.name
-
-        # puts "neighbor count: #{current.neighbors.count}"
-        current.neighbors.each.with_index do |neighbor, neighbor_idx|
-          tentative_g_score = g_score[current.name] + current.weights[neighbor_idx]
+        neighbors = vertices.select { |v| current.item.neighbors.map(&:name).include?(v.name) }
+        neighbors.each.with_index do |neighbor, neighbor_idx|
+          tentative_g_score = g_score[current.item.name] + current.item.weights[neighbor_idx]
 
           if tentative_g_score < g_score[neighbor.name]
-            came_from[neighbor.name] = current
+            came_from[neighbor.name] = current.item
             g_score[neighbor.name] = tentative_g_score
             f_score[neighbor.name] = tentative_g_score + manhattan_distance(neighbor, goal)
 
-            unless open_set.find { |v| v.name == neighbor.name }
-              # puts "Adding #{neighbor.name}"
-              open_set << vertices.find { |v| v.name == neighbor.name }
+            unless open_set.queue.find { |v| v.item.name == neighbor.name }
+              open_set.insert(neighbor, f_score[neighbor.name])
             end
           end
         end

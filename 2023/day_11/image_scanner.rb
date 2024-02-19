@@ -43,7 +43,7 @@ module Day11
     end
 
     def scan
-      expanded_image.each.with_index do |line, line_idx|
+      lines.each.with_index do |line, line_idx|
         line.scan(/[.|#]/).each.with_index do |_char, char_idx|
           vertex = Day11::Vertex.new([line_idx, char_idx])
           neighbor_locations = [
@@ -54,7 +54,7 @@ module Day11
           ]
 
           neighbor_locations.each do |y, x|
-            next if x < 0 || x >= width || y < 0 || y >= height
+            next if x < 0 || x >= original_width || y < 0 || y >= original_height
 
             neighbor = Day11::Vertex.new([y, x])
             vertex.add_neighbor_and_weight(neighbor, 1)
@@ -104,7 +104,7 @@ module Day11
         begin
           tmp = []
 
-          expanded_image.each.with_index do |line, line_idx|
+          lines.each.with_index do |line, line_idx|
             line.scan(/[.|#]/).each.with_index do |char, char_idx|
               if char == GALAXY
                 tmp << [line_idx, char_idx]

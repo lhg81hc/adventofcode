@@ -2,6 +2,8 @@ module Day11
   class PriorityQueue
     attr_reader :queue, :size
 
+    QueueItem = Struct.new(:item, :priority)
+
     def initialize(queue = [])
       @queue = queue
       @size = queue.length - 1
@@ -20,7 +22,7 @@ module Day11
     end
 
     def shift_up(i)
-      while i > 0 && queue[parent(i)] > queue[i]
+      while i > 0 && queue[parent(i)].priority > queue[i].priority
         swap(parent(i), i)
         i = parent(i)
       end
@@ -30,12 +32,12 @@ module Day11
       max_index = i
 
       l = left_child(i)
-      if l <= size && queue[l] < queue[max_index]
+      if l <= size && queue[l].priority < queue[max_index].priority
         max_index = l
       end
 
       r = right_child(i)
-      if r <= size && queue[r] < queue[max_index]
+      if r <= size && queue[r].priority < queue[max_index].priority
         max_index = r
       end
 
@@ -45,9 +47,9 @@ module Day11
       end
     end
 
-    def insert(p)
+    def insert(item, priority)
       @size += 1
-      queue[size] = p
+      queue[size] = QueueItem.new(item, priority)
 
       shift_up(size)
     end
@@ -57,6 +59,7 @@ module Day11
       queue[0] = queue[size]
       @size -= 1
       shift_down(0)
+      queue.delete_at(size + 1)
 
       r
     end
@@ -71,10 +74,13 @@ module Day11
       extract_min
     end
 
+    def empty?
+      queue.empty?
+    end
+
     private
 
     def swap(i, j)
-      puts "Calling swap(#{i}, #{j})"
       tmp = queue[i]
       queue[i] = queue[j]
       queue[j] = tmp
