@@ -1,7 +1,7 @@
 require_relative '../image_scanner'
 
 module Day11
-  module Part1
+  module Part2
     class Answer
       INPUT_FILE = '../input.txt'
 
@@ -33,7 +33,7 @@ module Day11
       end
 
       def image_scanner
-        @image_scanner ||= Day11::ImageScanner.new(input_path)
+        @image_scanner ||= Day11::ImageScanner.new(input_path, expansion: 1000000)
       end
 
       def galaxy_pairs

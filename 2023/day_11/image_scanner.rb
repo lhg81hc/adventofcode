@@ -5,10 +5,11 @@ module Day11
   class ImageScanner
     GALAXY = '#'.freeze
 
-    attr_reader :input_path
+    attr_reader :input_path, :expansion
 
-    def initialize(input_path)
+    def initialize(input_path, expansion: 2)
       @input_path = input_path
+      @expansion = expansion
     end
 
     def weighted_graph
@@ -130,6 +131,36 @@ module Day11
       end
 
       [tmp_rows_contain_no_galaxies, tmp_cols_contain_no_galaxies]
+    end
+
+    def shortest_distance_between_galaxies(first_galaxy, second_galaxy)
+      height_between_galaxies(first_galaxy, second_galaxy) + width_between_galaxies(first_galaxy, second_galaxy)
+    end
+
+    def height_between_galaxies(first_galaxy, second_galaxy)
+      height = (first_galaxy[0] - second_galaxy[0]).abs
+      min_height, max_height = [first_galaxy[0], second_galaxy[0]].sort
+
+      num_of_rows_contain_no_galaxies =
+        (min_height..max_height).inject(0) do |count, line_idx|
+          count += 1 if rows_contain_no_galaxies.include?(line_idx)
+          count
+        end
+
+      height - num_of_rows_contain_no_galaxies + (num_of_rows_contain_no_galaxies * expansion)
+    end
+
+    def width_between_galaxies(first_galaxy, second_galaxy)
+      width = (first_galaxy[1] - second_galaxy[1]).abs
+      min_width, max_width = [first_galaxy[1], second_galaxy[1]].sort
+
+      num_of_cols_contain_no_galaxies =
+        (min_width..max_width).inject(0) do |count, row_idx|
+          count += 1 if cols_contain_no_galaxies.include?(row_idx)
+          count
+        end
+
+      width - num_of_cols_contain_no_galaxies + (num_of_cols_contain_no_galaxies * expansion)
     end
   end
 end
