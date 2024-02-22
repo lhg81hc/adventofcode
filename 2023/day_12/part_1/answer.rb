@@ -1,14 +1,13 @@
 require_relative '../line_parser'
+require_relative '../arrangement_generator'
 
 module Day12
   module Part1
     class Answer
-      attr_reader :sum, :lines
+      attr_reader :sum
 
       def initialize
         @sum = 0
-        @count = 0
-        @lines = [nil]
       end
 
       def self.run
@@ -18,9 +17,15 @@ module Day12
       def run
         File.foreach(input_path) do |line|
           line_parser = Day12::LineParser.new(line.strip)
-          puts line
-          puts line_parser.size_of_each_contiguous_group_of_damaged_springs.join(', ')
+          damage_records = line_parser.damage_records
+          recorded_damaged_group_sizes = line_parser.size_of_each_contiguous_group_of_damaged_springs
+          arrangement_generator = Day12::ArrangementGenerator.new(damage_records, recorded_damaged_group_sizes)
+
+          puts "#{damage_records} - #{arrangement_generator.possible_arrangements.count} arrangements"
+          @sum += arrangement_generator.possible_arrangements.count
         end
+
+        puts sum
       end
 
       def input_path
