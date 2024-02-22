@@ -4,6 +4,7 @@ module Day12
   class ArrangementGenerator
     UNKNOWN = '?'
     DAMAGED = '#'
+    OPERATIONAL = '.'
 
     attr_reader :damaged_condition_records, :recorded_damaged_group_sizes
 
@@ -11,6 +12,7 @@ module Day12
       @damaged_condition_records = damaged_condition_records
       @recorded_damaged_group_sizes = recorded_damaged_group_sizes
       @arrangements = []
+      @count = 0
     end
 
     def possible_arrangements
@@ -24,32 +26,21 @@ module Day12
     def generate_arrangement(records, idx)
       # Base case: All '?' are replaced
       if idx == total_unknown_condition_springs
-        # puts "records: #{records}"
-        # puts "recorded_damaged_group_sizes #{recorded_damaged_group_sizes.join(', ')}"
-
         spring_condition_parser = Day12::SpringConditionParser.new(records)
         damaged_group_sizes = spring_condition_parser.damaged_group_sizes
-        # puts "damaged_group_sizes #{damaged_group_sizes.join(', ')}"
-        #
-        # puts "-------------"
-        # puts "\n"
         @arrangements << records.dup if damaged_group_sizes == recorded_damaged_group_sizes
 
         return true
       end
 
-      records[idx_of_unknown_condition_springs[idx]] = '.'
+      records[idx_of_unknown_condition_springs[idx]] = OPERATIONAL
       if possible_arrangement?(records)
         generate_arrangement(records, idx + 1)
-      else
-        records[idx_of_unknown_condition_springs[idx]] = '?'
       end
 
-      records[idx_of_unknown_condition_springs[idx]] = '#'
+      records[idx_of_unknown_condition_springs[idx]] = DAMAGED
       if possible_arrangement?(records)
         generate_arrangement(records, idx + 1)
-      else
-        records[idx_of_unknown_condition_springs[idx]] = '?'
       end
     end
 
