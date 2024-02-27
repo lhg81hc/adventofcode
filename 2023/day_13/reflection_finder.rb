@@ -7,10 +7,11 @@ module Day13
     end
 
     def find
-      lines.each.with_index.inject([]) do |found, (line, line_idx)|
-        found << line_idx + 1 if reflection_line?(line, line_idx)
-        found
+      lines.each.with_index do |line, line_idx|
+        return line_idx + 1 if reflection_line?(line, line_idx)
       end
+
+      nil
     end
 
     private
