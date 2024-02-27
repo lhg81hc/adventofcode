@@ -1,5 +1,7 @@
 module Day13
   class Pattern
+    attr_reader :input_lines
+
     def initialize(input_lines)
       @input_lines = input_lines
     end
@@ -20,7 +22,7 @@ module Day13
           rows_tmp = []
           cols_tmp = []
 
-          @input_lines.each do |line|
+          input_lines.each do |line|
             row = []
 
             line.each_char.with_index do |char, char_idx|
