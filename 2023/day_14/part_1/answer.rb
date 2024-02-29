@@ -21,14 +21,14 @@ module Day14
 
         tilted_platform_panel.rows.each do |row|
           puts row.map(&:char).join
-          length = row.length
 
-          row.each.with_index do |component, component_idx|
+          row.each do |component|
             next unless component.rounded_rock?
-            @sum += length - component_idx
+            @sum += tilted_platform_panel.height - component.position.y
           end
         end
 
+        puts "\n"
         puts "The total load on the north support beams: #{sum}"
       end
 

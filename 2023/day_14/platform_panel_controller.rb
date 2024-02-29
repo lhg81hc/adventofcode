@@ -11,41 +11,47 @@ module Day14
 
     def tilt_north
       dup = platform_panel.dup
-      dup.rows.map! { |row| tilt_row_north(row) }
+      dup.cols.each { |col| tilt_col_north!(col) }
 
       dup
     end
 
+    def tilt_north!
+      platform_panel.cols.each { |col| tilt_col_north!(col) }
+    end
+
     private
 
-    def tilt_row_north(row)
-      row_dup = row.dup
+    def tilt_col_north!(col)
+      1.upto(col.length - 1).each { |i| roll_rock_north(col, i) }
+    end
 
-      1.upto(row_dup.length - 1).each do |i|
-        component = row_dup[i]
+    def roll_rock_north(col, idx)
+      component = col[idx]
+      return unless component.can_roll?
 
-        if component.can_roll?
-          stopped_index = i
+      stopped_index = idx
 
-          (i - 1).downto(0).each do |j|
-            prev_component = row_dup[j]
+      (idx - 1).downto(0).each do |j|
+        prev_component = col[j]
 
-            if prev_component.rock?
-              break
-            else
-              stopped_index = j
-            end
-          end
-          if stopped_index != i
-            row_dup[stopped_index] = component
-            row_dup[i] = Day14::PlatformPanelComponent.new('.')
-          end
+        if prev_component.rock?
+          break
         else
-          next
+          stopped_index = j
         end
       end
 
-      row_dup
+      if stopped_index != idx
+        found = col[stopped_index]
+        tmp = component.dup
+        component.position = found.position
+        found.char = '.'
+        found.position = tmp.position
+
+        col[stopped_index] = component
+        col[idx] = found
+      end
     end
   end
 end

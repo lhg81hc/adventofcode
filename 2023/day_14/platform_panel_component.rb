@@ -1,9 +1,10 @@
 module Day14
   class PlatformPanelComponent
-    attr_reader :char
+    attr_accessor :char, :position
 
-    def initialize(char)
+    def initialize(char, position)
       @char = char
+      @position = position
     end
 
     def type
