@@ -20,20 +20,51 @@ module Day14
       platform_panel.cols.each { |col| tilt_col_north!(col) }
     end
 
+    def tilt_south!
+      platform_panel.cols.each { |col| tilt_col_south!(col) }
+    end
+
+    def tilt_west!
+      platform_panel.rows.each { |row| tilt_row_west!(row) }
+    end
+
+    def tilt_east!
+      platform_panel.rows.each { |row| tilt_row_east!(row) }
+    end
+
+    def spin!
+      tilt_north!
+      tilt_west!
+      tilt_south!
+      tilt_east!
+    end
+
     private
 
     def tilt_col_north!(col)
-      1.upto(col.length - 1).each { |i| roll_rock_north(col, i) }
+      1.upto(col.length - 1).each { |i| roll_rock(col, i, (i - 1).downto(0)) }
     end
 
-    def roll_rock_north(col, idx)
-      component = col[idx]
-      return unless component.can_roll?
+    def tilt_col_south!(col)
+      (col.length - 2).downto(0).each { |i| roll_rock(col, i, (i + 1).upto(col.length - 1)) }
+    end
 
-      stopped_index = idx
+    def tilt_row_west!(row)
+      1.upto(row.length - 1).each { |i| roll_rock(row, i, (i - 1).downto(0)) }
+    end
 
-      (idx - 1).downto(0).each do |j|
-        prev_component = col[j]
+    def tilt_row_east!(row)
+      (row.length - 2).downto(0).each { |i| roll_rock(row, i, (i + 1).upto(row.length - 1)) }
+    end
+
+    def roll_rock(arr, start_index, roll_to_indexes)
+      component = arr[start_index]
+      return if component.nil? || !component.can_roll?
+
+      stopped_index = start_index
+
+      roll_to_indexes.each do |j|
+        prev_component = arr[j]
 
         if prev_component.rock?
           break
@@ -42,15 +73,15 @@ module Day14
         end
       end
 
-      if stopped_index != idx
-        found = col[stopped_index]
+      if stopped_index != start_index
+        found = arr[stopped_index]
         tmp = component.dup
         component.position = found.position
         found.char = '.'
         found.position = tmp.position
 
-        col[stopped_index] = component
-        col[idx] = found
+        arr[stopped_index] = component
+        arr[start_index] = found
       end
     end
   end
