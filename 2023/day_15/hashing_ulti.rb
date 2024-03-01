@@ -1,12 +1,6 @@
 module Day15
-  class HashingService
-    attr_reader :str
-
-    def initialize(str)
-      @str = str
-    end
-
-    def hash
+  module HashingUtil
+    def hash(str)
       value = 0
 
       str.each_char do |char|

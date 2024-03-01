@@ -1,9 +1,11 @@
 require_relative '../initialization_sequence'
-require_relative '../hashing_service'
+require_relative '../hashing_ulti'
 
 module Day15
   module Part1
     class Answer
+      include HashingUtil
+
       INPUT_FILE = '../input.txt'
 
       attr_reader :sum
@@ -18,11 +20,10 @@ module Day15
 
       def run
         initialization_sequence.steps.each do |step|
-          hashing_service = Day15::HashingService.new(step)
-          @sum += hashing_service.hash
+          @sum += hash(step)
         end
 
-        puts sum
+        puts "Run the HASH algorithm on each step in the initialization sequence. The sum of the results: #{sum}"
       end
 
       def initialization_sequence
