@@ -25,5 +25,13 @@ module Day16
           end
         end
     end
+
+    def width
+      @width ||= grid.first.length
+    end
+
+    def height
+      @height ||= grid.length
+    end
   end
 end
