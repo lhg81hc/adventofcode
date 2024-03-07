@@ -33,5 +33,33 @@ module Day16
     def height
       @height ||= grid.length
     end
+
+    def top_row
+      @top_row ||= grid.first
+    end
+
+    def bottom_row
+      @bottom_row ||= grid.last
+    end
+
+    def leftmost_column
+      @leftmost_column ||=
+        begin
+          grid.inject([]) do |r, line|
+            r << line[0]
+            r
+          end
+        end
+    end
+
+    def rightmost_column
+      @leftmost_column ||=
+        begin
+          grid.inject([]) do |r, line|
+            r << line[-1]
+            r
+          end
+        end
+    end
   end
 end
