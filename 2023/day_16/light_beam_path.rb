@@ -6,10 +6,10 @@ module Day16
       @contraption = contraption
     end
 
-    def path(start_col_idx, start_row_idx, start_direction)
+    def path(start_row_idx, start_col_idx, start_direction)
       @visited = {}
       @stack = []
-      @last_visited = { row_idx: start_col_idx, col_idx: start_row_idx, direction: start_direction }
+      @last_visited = { row_idx: start_row_idx, col_idx: start_col_idx, direction: start_direction }
       @loop_count = 0
       @done = false
 
