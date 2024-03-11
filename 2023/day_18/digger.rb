@@ -7,14 +7,14 @@ module Day18
     end
 
     def dig
-      start_position_y = 0
-      start_position_x = 0
+      last_y = 0
+      last_x = 0
 
       lines.map do |line|
         direction, num_of_meters = line_parser(line)
 
-        trench = dig_by_direction(start_position_x, start_position_y, direction, num_of_meters)
-        start_position_x, start_position_y = trench[-1]
+        trench = dig_by_direction(last_x, last_y, direction, num_of_meters)
+        last_x, last_y = trench[-1]
 
         trench
       end
