@@ -1,5 +1,5 @@
 require_relative 'digger'
-require_relative '../lagoon'
+require_relative 'lagoon'
 
 module Day18
   module Part1
@@ -15,7 +15,7 @@ module Day18
       end
 
       def lagoon
-        @lagoon ||= Day18::Lagoon.new(trenches)
+        @lagoon ||= Day18::Part1::Lagoon.new(trenches)
       end
 
       def trenches
@@ -23,7 +23,7 @@ module Day18
       end
 
       def digger
-        @digger ||= Day18::Digger.new(lines)
+        @digger ||= Day18::Part1::Digger.new(lines)
       end
 
       def input_path
