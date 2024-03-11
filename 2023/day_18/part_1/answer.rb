@@ -1,4 +1,4 @@
-require_relative '../digger'
+require_relative 'digger'
 require_relative '../lagoon'
 
 module Day18
@@ -11,28 +11,7 @@ module Day18
       end
 
       def run
-        # trenches.each do |trench|
-        #   puts trench.map { |n| n.join(',') }.join(' | ')
-        # end
-        lagoon.sketch.each do |line|
-          puts line.join
-        end
-
-        puts "northernmost_lat: #{lagoon.northernmost_lat}"
-        puts "southernmost_lat: #{lagoon.southernmost_lat}"
-        puts "westernmost_lng: #{lagoon.westernmost_lng}"
-        puts "easternmost_lng: #{lagoon.easternmost_lng}"
-
-
-        lagoon.polygon_coordinates.each do |coordinate|
-          puts "#{coordinate.join(',')}"
-        end
-
-        a = lagoon.area_by_shoelace_formula + (trenches.map(&:length).sum / 2 + 1)
-        #
-        puts "The number of cubes that the laggon can hold: #{a}"
-        puts "trenches.map(&:length).sum: #{trenches.map(&:length).sum}"
-
+        puts "The number of cubes that the laggon can hold: #{lagoon.area}"
       end
 
       def lagoon
