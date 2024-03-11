@@ -9,15 +9,32 @@ module Day18
     def sketch
       @sketch ||=
         northernmost_lat.upto(southernmost_lat).inject([]) do |r, lat|
-          westernmost_lng.upto(easternmost_lng).each do |lng|
+          westernmost_lng.upto(easternmost_lng).each.with_index do |_lng, char_idx|
             line_idx = lat - northernmost_lat
 
-            r[line_idx] ||= []
-            r[line_idx] << (trenches_coordinates["#{lat},#{lng}"] ? "#" : '.')
+            r[line_idx] ||= Array.new(easternmost_lng)
+            r[line_idx][char_idx] = (trenches_coordinates["#{char_idx},#{lat}"] ? "#" : '.')
           end
 
           r
         end
+    end
+
+    def area_by_shoelace_formula
+      n = polygon_coordinates.length
+
+      area =
+        (0..polygon_coordinates.length - 1).inject(0.0) do |s, i|
+          j = (i + 1) % n
+
+          puts "i: #{i}, j: #{j}"
+          s += polygon_coordinates[i][0] * polygon_coordinates[j][1]
+          s -= polygon_coordinates[j][0] * polygon_coordinates[i][1]
+          puts "s: #{s}"
+          s
+        end
+
+      (area.abs / 2) + (trenches.map(&:length).sum / 2 + 1)
     end
 
     def area
