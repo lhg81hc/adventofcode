@@ -18,6 +18,15 @@ module Day19
       end
     end
 
+    def comparison
+      @comparision ||=
+        begin
+          return nil if non_comparison_rule?
+
+          [rating, rating_value].join(comparison_operator)
+        end
+    end
+
     def rating
       @rating ||=
         begin
@@ -48,7 +57,7 @@ module Day19
         begin
           return nil if non_comparison_rule?
 
-          matched = val.scan(/(\d+):/)[0]
+          matched = val.scan(/(\d+)/)[0]
 
           if matched.nil?
             nil
@@ -63,12 +72,14 @@ module Day19
         begin
           return val if non_comparison_rule?
 
-          val.match(/:(\w+)/)[1]
+          matched = val.match(/:(\w+)/)
+
+          matched.nil? ? nil : matched[1]
         end
     end
 
     def non_comparison_rule?
-      !val.include?(':')
+      @non_comparison_rule ||= !(val.include?('<') || val.include?('>'))
     end
   end
 end
