@@ -18,8 +18,6 @@ module Day19
       end
     end
 
-    private
-
     def rating
       @rating ||=
         begin
@@ -36,7 +34,13 @@ module Day19
     end
 
     def comparison_operator
-      @comparison_operator ||= non_comparison_rule? ? nil : val.scan(/>|</)[0]
+      @comparison_operator ||=
+        begin
+          return nil if non_comparison_rule?
+
+          matched = val.scan(/(<=)|(>=)|(>)|(<)/)[0]
+          matched[0] || matched[1] || matched[2] || matched[3]
+        end
     end
 
     def rating_value
