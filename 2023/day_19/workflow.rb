@@ -33,8 +33,10 @@ module Day19
 
         opposite_prev_rules = previous_rules.map { |pr| opposite_rule(pr) }
         curr_rules = opposite_prev_rules << rule
+        condition = rules_to_key(curr_rules)
+        condition = "{#{condition}}"
 
-        r << { rules: curr_rules, next_workflow: rule.next_workflow }
+        r << { rules: curr_rules, next_workflow: rule.next_workflow, condition: condition }
         r
       end
     end
@@ -44,12 +46,17 @@ module Day19
       raise "Unknown comparison operator #{rule.comparison_operator}" unless OPPOSITE_COMPARISONS.keys.include?(rule.comparison_operator)
 
       opposite_comparison_operator = OPPOSITE_COMPARISONS[rule.comparison_operator]
-      opposite_rule_str = rule.val.sub(rule.comparison_operator, opposite_comparison_operator)
+      opposite_rule_str = [rule.rating, rule.rating_value].join(opposite_comparison_operator)
       Day19::WorkflowRule.new(opposite_rule_str)
     end
 
     def name
       @name ||= val.match(/(\w+){/)[1]
+    end
+
+    def rules_to_key(rules)
+      comparisons = rules.map { |r| r.comparison }.select { |r| !r.nil? }
+      "#{comparisons.join(',')}"
     end
 
     def rules
