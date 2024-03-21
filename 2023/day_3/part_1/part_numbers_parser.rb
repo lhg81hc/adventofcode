@@ -3,62 +3,47 @@ module Day3
     class PartNumbersParser
       NUMBER_CHARS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].freeze
 
-      attr_reader :lines, :numbers
+      attr_reader :lines
 
       ParsedNumber = Struct.new(:chars, :integer_value, :start_index, :length_of_chars, :surrounding_chars)
 
       def initialize(lines)
         @lines = lines
-        @numbers = []
       end
 
-      def prev_line
-        @prev_line ||= lines[0]
-      end
+      def numbers
+        @numbers ||=
+          begin
+            number_chars = []
 
-      def curr_line
-        @curr_line ||= lines[1]
-      end
+            curr_line.each_char.with_index.inject([]) do |r, (char, idx)|
+              if NUMBER_CHARS.include?(char)
+                number_chars << char
+              else
+                length = number_chars.length
+                unless length.zero?
+                  parsed_number =
+                    ParsedNumber.new(
+                      number_chars.dup,
+                      number_chars.join.to_i,
+                      idx - length,
+                      number_chars.length,
+                      surrounding_chars(idx - length, number_chars.length)
+                    )
 
-      def next_line
-        @next_line ||= lines[2]
+                  r << parsed_number
+                  number_chars.clear
+                end
+              end
+
+              r
+            end
+          end
       end
 
       def part_numbers
         @part_numbers ||=
-          numbers.select do |parsed_number|
-            parsed_number.surrounding_chars.values.flatten.any? { |c| !c.nil? && c != '.' }
-            # parsed_number.surrounding_chars.values.flatten.any? { |c| NUMBER_CHARS.include?(c) }
-          end
-      end
-
-      def parse
-        number_chars = []
-
-        curr_line.each_char.with_index do |char, idx|
-          if NUMBER_CHARS.include?(char)
-            number_chars << char
-          else
-            length = number_chars.length
-            if !length.zero?
-              process_number_chars(number_chars, idx - length)
-              number_chars.clear
-            else
-              next
-            end
-          end
-        end
-      end
-
-      def process_number_chars(number_chars, start_index)
-        @numbers <<
-          ParsedNumber.new(
-            number_chars.dup,
-            number_chars.join.to_i,
-            start_index,
-            number_chars.length,
-            surrounding_chars(start_index, number_chars.length)
-          )
+          numbers.select { |number| number.surrounding_chars.values.flatten.any? { |c| !c.nil? && c != '.' } }
       end
 
       def surrounding_chars(start_index, length)
@@ -96,24 +81,32 @@ module Day3
         return Array.new(length, nil) if prev_line.nil?
 
         # Left to right
-        r = []
-        for idx in (0 .. (length - 1)) do
+        (0 .. (length - 1)).each.inject([]) do |r, idx|
           r << prev_line[start_index + idx]
+          r
         end
-
-        r
       end
 
       def bottom_surrounding_chars(start_index, length)
         return Array.new(length, nil) if next_line.nil?
 
         # Left to right
-        r = []
-        for idx in (0 .. (length - 1)) do
+        (0 .. (length - 1)).each.inject([]) do |r, idx|
           r << next_line[start_index + idx]
+          r
         end
+      end
 
-        r
+      def prev_line
+        lines[0]
+      end
+
+      def curr_line
+        lines[1]
+      end
+
+      def next_line
+        lines[2]
       end
 
       def first_line?
