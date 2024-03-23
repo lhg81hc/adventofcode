@@ -47,7 +47,7 @@ module Day3
       end
 
       def input_path
-        File.join(File.dirname(__FILE__), '/input.txt')
+        File.join(File.dirname(__FILE__), '../input.txt')
       end
     end
   end
