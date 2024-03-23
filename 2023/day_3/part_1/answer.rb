@@ -19,27 +19,20 @@ module Day3
           triplet << line
           next if triplet.length != 3
 
-          @count += parse_triplet_and_get_sum(triplet)
+          @count += sum_of_part_numbers(triplet)
           triplet.shift
 
           next unless line_idx == last_line_idx
 
           triplet << nil
-          @count += parse_triplet_and_get_sum(triplet)
+          @count += sum_of_part_numbers(triplet)
         end
 
-        puts "COUNT: #{@count}"
+        puts "The sum of all of the gear ratios in your engine schematic: #{@count}"
       end
 
-      def parse_triplet_and_get_sum(triplet)
+      def sum_of_part_numbers(triplet)
         parser = Day3::Part1::PartNumbersParser.new(triplet)
-        numbers = parser.numbers.map(&:integer_value)
-        part_numbers = parser.part_numbers.map(&:integer_value)
-
-        puts "numbers: [#{numbers.join(' ')}]"
-        puts "part numbers: [#{part_numbers.join(' ')}]"
-        puts "\n"
-
         parser.part_numbers.map(&:integer_value).sum
       end
 

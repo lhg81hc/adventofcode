@@ -15,23 +15,22 @@ module Day3
         @numbers ||=
           begin
             number_chars = []
+            last_idx = curr_line.length - 1
 
             curr_line.each_char.with_index.inject([]) do |r, (char, idx)|
-              if NUMBER_CHARS.include?(char)
-                number_chars << char
-              else
-                length = number_chars.length
-                unless length.zero?
-                  parsed_number =
-                    ParsedNumber.new(
-                      number_chars.dup,
-                      number_chars.join.to_i,
-                      idx - length,
-                      number_chars.length,
-                      surrounding_chars(idx - length, number_chars.length)
-                    )
+              is_number_char = NUMBER_CHARS.include?(char)
 
-                  r << parsed_number
+              number_chars << char if is_number_char
+
+              if !is_number_char || (idx == last_idx && is_number_char)
+                length = number_chars.length
+
+                unless length.zero?
+                  start_idx = idx - length
+                  start_idx = idx - length + 1 if idx == last_idx && is_number_char
+                  number = ParsedNumber.new(number_chars.dup, number_chars.join.to_i, start_idx, length, surrounding_chars(start_idx, length))
+
+                  r << number
                   number_chars.clear
                 end
               end
@@ -42,15 +41,14 @@ module Day3
       end
 
       def part_numbers
-        @part_numbers ||=
-          numbers.select { |number| number.surrounding_chars.values.flatten.any? { |c| !c.nil? && c != '.' } }
+        @part_numbers ||= numbers.select { |number| number.surrounding_chars.values.flatten.any? { |c| !c.nil? && c != '.' } }
       end
 
       def surrounding_chars(start_index, length)
         {
           left_surrounding_chars: left_surrounding_chars(start_index),
-          top_surrounding_chars: right_surrounding_chars(start_index, length),
-          right_surrounding_chars: top_surrounding_chars(start_index, length),
+          top_surrounding_chars: top_surrounding_chars(start_index, length),
+          right_surrounding_chars: right_surrounding_chars(start_index, length),
           bottom_surrounding_chars: bottom_surrounding_chars(start_index, length)
         }
       end
@@ -67,7 +65,7 @@ module Day3
       end
 
       def right_surrounding_chars(start_index, length)
-        return Array.new(3, nil) if start_index + length >= curr_line.length
+        return Array.new(3, nil) if start_index + length >= curr_line.length - 1
 
         # Top to bottom
         [
