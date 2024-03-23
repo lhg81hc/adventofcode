@@ -16,19 +16,18 @@ module Day3
       @numbers ||=
         begin
           number_chars = []
-          last_idx = curr_line_value.length - 1
 
           curr_line_value.each_char.with_index.inject([]) do |r, (char, char_idx)|
             is_number_char = NUMBER_CHARS.include?(char)
 
             number_chars << char if is_number_char
 
-            if !is_number_char || (char_idx == last_idx && is_number_char)
+            if !is_number_char || (char_idx == last_index && is_number_char)
               length = number_chars.length
 
               unless length.zero?
                 start_idx = char_idx - length
-                start_idx += 1 if char_idx == last_idx && is_number_char
+                start_idx += 1 if char_idx == last_index && is_number_char
 
                 number_chars_list = number_chars.map.with_index { |c, c_idx| Day3::SchematicCharacter.new(c, curr_line_index, start_idx + c_idx) }
                 number = ParsedNumber.new(number_chars_list, number_chars.join.to_i, adjacent_chars(start_idx, length))

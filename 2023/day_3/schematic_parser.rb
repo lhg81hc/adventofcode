@@ -46,5 +46,21 @@ module Day3
     def part_numbers
       @part_numbers ||= numbers.select { |n| n.adjacent_chars.any? { |c| !c.nil? && c.value != '.' } }
     end
+
+    def star_symbols_map
+      @star_symbols_map ||=
+        part_numbers.inject({}) do |m, n|
+          star_adjacent_characters = n.adjacent_chars.select { |ac| ac&.value == '*' }
+
+          unless star_adjacent_characters.empty?
+            star_adjacent_characters.each do |sac|
+              m["#{sac.line_index},#{sac.char_index}"] ||= []
+              m["#{sac.line_index},#{sac.char_index}"] << n
+            end
+          end
+
+          m
+        end
+    end
   end
 end
