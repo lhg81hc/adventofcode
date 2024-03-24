@@ -1,4 +1,5 @@
 require_relative '../land_scape'
+require_relative '../loop_finder'
 
 module Day10
   module Part2
@@ -16,23 +17,15 @@ module Day10
       end
 
       def run
-        list = []
-        land_scape.map.each do |line|
-          line.each do |component|
-            next unless component.ground?
-            if land_scape.position_compare_to_main_loop(component.location).positive?
-              @sum +=1
-              list << component.location
-            end
-          end
-        end
-
-        puts "sum: #{sum}"
-        puts "list: #{list}"
+        puts "The number of tiles that are enclosed by the main loop #{loop_finder.total_points_inside_main_loop}"
       end
 
       def land_scape
-        @land_scape ||= LandScape.new(input_path)
+        @land_scape ||= Day10::LandScape.new(input_path)
+      end
+
+      def loop_finder
+        @loop_finder ||= Day10::LoopFinder.new(land_scape)
       end
 
       def input_path
