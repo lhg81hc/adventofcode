@@ -11,35 +11,35 @@ module Day17
     def city_blocks
       @city_blocks ||=
         curr_line_value.each_char.with_index.inject([]) do |r, (char, char_idx)|
-          r << Day17::CityBlock.new(curr_line_index, char_idx, char.to_i, adjacent_city_blocks(char_idx))
+          r << Day17::CityBlock.new(curr_line_index, char_idx, char.to_i, adjacent_blocks(char_idx))
           r
         end
     end
 
-    def adjacent_city_blocks(curr_index)
+    def adjacent_blocks(curr_index)
       # Clockwise starting from top
       [
         top_adjacent_city_block(curr_index),
         right_adjacent_city_block(curr_index),
         bottom_adjacent_city_block(curr_index),
         left_adjacent_city_block(curr_index)
-      ]
+      ].compact
     end
 
     def top_adjacent_city_block(curr_index)
-      prev_line.nil? ? nil : prev_line_value[curr_index]
+      prev_line.nil? ? nil : Day17::CityBlock.new(prev_line_index, curr_index, prev_line_value[curr_index].to_i, [])
     end
 
     def right_adjacent_city_block(curr_index)
-      curr_index == last_index ? nil : curr_line_value[curr_index + 1]
+      curr_index == last_index ? nil : Day17::CityBlock.new(curr_line_index, curr_index + 1, curr_line_value[curr_index + 1].to_i, [])
     end
 
     def bottom_adjacent_city_block(curr_index)
-      next_line.nil? ? nil : next_line_value[curr_index]
+      next_line.nil? ? nil : Day17::CityBlock.new(next_line_index, curr_index, next_line_value[curr_index].to_i, [])
     end
 
     def left_adjacent_city_block(curr_index)
-      curr_index.zero? ? nil : curr_line_value[curr_index - 1]
+      curr_index.zero? ? nil : Day17::CityBlock.new(curr_line_index, curr_index - 1, curr_line_value[curr_index - 1].to_i, [])
     end
 
     def prev_line

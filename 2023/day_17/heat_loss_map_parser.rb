@@ -10,13 +10,13 @@ module Day17
       @filepath = filepath
     end
 
-    def map
-      @map ||=
+    def heat_loss_map
+      @heat_loss_map ||=
         begin
           line_idx = 0
           triplet = [nil]
 
-          list =
+          map =
             File.foreach(filepath).inject([]) do |r, str|
               triplet << Line.new(line_idx, str.strip)
               line_idx += 1
@@ -34,10 +34,10 @@ module Day17
               triplet << nil
             end
 
-            list << Day17::LineParser.new(triplet).city_blocks
+            map << Day17::LineParser.new(triplet).city_blocks
           end
 
-          list
+          map
         end
     end
   end
