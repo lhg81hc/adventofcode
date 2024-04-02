@@ -1,3 +1,5 @@
+require_relative '../heat_loss_map_parser'
+
 module Day17
   module Part1
     class Answer
@@ -8,40 +10,16 @@ module Day17
       end
 
       def run
-        light_beam_path = Day16::LightBeamPath.new(contraption)
-        visited_locations_and_directions = light_beam_path.path(0, 0, 'right')
-
-        visited_locations = {}
-        visited_locations_and_directions.keys.each do |k|
-          visited_locations[k.split.first] = true
-        end
-
-        puts_energized_contraption(visited_locations)
+        puts heat_loss_map_parser.map.first.last.heat_loss_amount
+        # puts_energized_contraption(visited_locations)
       end
 
-      def contraption
-        @contraption ||= Day16::Contraption.new(input_path)
+      def heat_loss_map_parser
+        @heat_loss_map_parser ||= Day17::HeatLossMapParser.new(input_path)
       end
 
       def input_path
         File.join(File.dirname(__FILE__), INPUT_FILE)
-      end
-
-      def puts_energized_contraption(visited_locations)
-        contraption.grid.each do |grid_row|
-          line =
-            grid_row.map do |component|
-              if visited_locations["#{component.location.y},#{component.location.x}"]
-                '#'
-              else
-                '.'
-              end
-            end
-
-          puts line.join
-        end
-
-        puts "Total number of energized tiles: #{visited_locations.keys.count}"
       end
     end
   end
