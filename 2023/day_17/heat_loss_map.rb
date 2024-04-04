@@ -17,5 +17,13 @@ module Day17
     def height
       blocks.length
     end
+
+    def last_row_index
+      height - 1
+    end
+
+    def last_col_index
+      width - 1
+    end
   end
 end

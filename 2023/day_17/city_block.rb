@@ -9,5 +9,9 @@ module Day17
       @heat_loss_amount = heat_loss_amount
       @adjacent_blocks = adjacent_blocks
     end
+
+    def location
+      [line_idx, char_idx]
+    end
   end
 end

@@ -6,38 +6,69 @@ module Day17
 
     def initialize(heat_lost_map)
       @heat_lost_map = heat_lost_map
+      @count = 0
     end
 
+    # Idea:
+    # Start in the TOP LEFT block
+    # If all possible paths have been tried return true
+    # Try all possible next blocks
+    #   If the block is valid for next move
+    #     Then mark this [row, column] as part of the solution and recursively check if this block leads to a solution.
+    #       If the current block is a part of a solution then return true.
+    #       If the current block doesn’t lead to a solution then unmark this [row, column] then backtrack and try other blocks.
+    #       If all blocks have been tried and valid solution is not found return false to trigger backtracking.
     def find_all_paths
+      traversal_history = []
+      find_paths(traversal_history, start_location)
 
     end
 
-    def minimum_heat_lost(last_three_locations, m, n)
-      if n < 0 || m < 0
-        max_possible_heat_lost
-      elsif n.zero? && m.zero?
-        heat_lost_map.find_block_by_location(start_location).heat_loss_amount
-      else
-        curr_block = heat_lost_map.find_block_by_location([m, n])
-        curr_block.heat_loss_amount + [
+    def find_minimum_heat_loss_path
 
-        ].min
+    end
+
+    def find_paths(traversal_history, curr_location)
+      return if @count > 1000
+      @count += 1
+
+      # Base case: if m == last row and n == last col
+      # if curr_location == goal_location
+      #   return true
+      # end
+
+      curr_block = heat_lost_map.find_block_by_location(curr_location)
+      next_locations = next_valid_locations(traversal_history, curr_block)
+
+      if next_locations.any? { |l| l == goal_location }
+        puts "found"
+        puts "#{traversal_history.map { |t| "[#{t.join(',')}]" }.join(" ")}"
+        return true
       end
-      last_three_locations = []
-      curr_block = heat_lost_map.find_block_by_location(start_location)
 
-      next_valid_locations(last_three_locations, curr_block)
+      next_locations.each do |next_location|
+        traversal_history << curr_location
+        return true if find_paths(traversal_history, next_location)
+        traversal_history.pop
+      end
+
+      false
     end
 
-    def next_valid_locations(last_three_locations, curr_block)
-      last_location = last_three_locations[-1]
+    def next_valid_locations(traversal_history, curr_block)
+      # last_three_locations = [traversal_history[-3], traversal_history[-2], traversal_history[-1]].compact
+      last_visited_location = traversal_history[-1]
+      most_recent_locations = [traversal_history[-2], traversal_history[-1], curr_block.location].compact
       possible_locations = curr_block.adjacent_blocks.map { |b| [b.line_idx, b.char_idx] }
 
-      # puts "last_location: [#{last_location.join(',')}]"
-      # puts "possible_locations: #{possible_locations.map { |l| "[#{l.join(', ')}]" }.join(' ')}"
-      possible_locations = possible_locations.select { |l| l != last_location } if last_location
-      possible_locations = possible_locations.select { |l| l[0] != last_location[0] } if three_horizontal_consecutive_blocks?(last_three_locations)
-      possible_locations = possible_locations.select { |l| l[1] != last_location[1] } if three_vertical_consecutive_blocks?(last_three_locations)
+      puts "traversal_history: #{traversal_history.map { |t| "[#{t.join(',')}]" }.join(" ")}"
+      puts "current location: [#{curr_block.line_idx},#{curr_block.char_idx}]"
+
+      possible_locations = possible_locations.select { |l| !traversal_history.include?(l) }
+      possible_locations = possible_locations.select { |l| l[0] != last_visited_location[0] } if three_horizontal_consecutive_blocks?(most_recent_locations)
+      possible_locations = possible_locations.select { |l| l[1] != last_visited_location[1] } if three_vertical_consecutive_blocks?(most_recent_locations)
+      puts "possible_locations: #{possible_locations.map { |l| "[#{l.join(', ')}]" }.join(' ')}"
+      puts "\n"
       possible_locations
     end
 
@@ -61,8 +92,8 @@ module Day17
 
     def goal_location
       @goal_location ||= [
-        heat_lost_map.height - 1,
-        heat_lost_map.width - 1
+        heat_lost_map.last_row_index,
+        heat_lost_map.last_col_index,
       ]
     end
 
