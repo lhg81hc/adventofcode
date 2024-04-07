@@ -100,5 +100,48 @@ module Day17
     def max_possible_heat_lost
       @max_possible_heat_lost ||= 9 * heat_lost_map.height * heat_lost_map.width
     end
+
+    def dijkstra(source_name)
+      dist = {}
+      q = []
+
+      vertices.each do |vertex|
+        dist[vertex.name] = Float::INFINITY
+        q << vertex
+      end
+
+      dist[source_name] = 0
+
+      until q.empty?
+        min = nil
+        u_idx = nil
+
+        q.each.with_index do |vertex, idx|
+          if min.nil?
+            min = dist[vertex.name]
+            u_idx = idx
+            next
+          end
+
+          if dist[vertex.name] < min
+            min = dist[vertex.name]
+            u_idx = idx
+          end
+        end
+
+        u = q.delete_at(u_idx)
+
+        u.neighbors.each.with_index do |neighbor, neighbor_idx|
+          next unless q.find { |v| v.name == neighbor.name }
+          alt = dist[u.name] + u.weights[neighbor_idx]
+
+          if alt < dist[neighbor.name]
+            dist[neighbor.name] = alt
+          end
+        end
+      end
+
+      dist
+    end
   end
 end
