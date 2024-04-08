@@ -13,5 +13,9 @@ module Day17
     def location
       [line_idx, char_idx]
     end
+
+    def name
+      "#{line_idx},#{char_idx}"
+    end
   end
 end
