@@ -21,11 +21,7 @@ module Day20
     end
 
     def flip_state
-      if on?
-        @state = OFF
-      else
-        @state = ON
-      end
+      @state = on? ? OFF : ON
     end
 
     def communicate(incoming_pulse)
