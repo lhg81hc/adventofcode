@@ -3,7 +3,7 @@ module Day20
     LOW_PULSE = :low_pulse
     HIGH_PULSE = :high_pulse
 
-    attr_reader :value
+    attr_reader :value, :from_module_name, :to_module_name
 
     def initialize(value, from_module_name, to_module_name)
       @value = value
