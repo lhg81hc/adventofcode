@@ -14,7 +14,7 @@ module Day20
     end
 
     def remember_input_module_value(input_module_name, input_module_value)
-      @input_modules[input_module_name] ||= input_module_value
+      @input_modules[input_module_name] = input_module_value
     end
 
     def high_pulses_for_all_inputs?
