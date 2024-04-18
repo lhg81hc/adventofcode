@@ -65,8 +65,30 @@ module Day20
       [total_low_pulses, total_high_pulses]
     end
 
-    def start_module
-      module_dict['button']
+    def push_button_until_first_low_pulse_between_modules(from_module_name, to_module_name)
+      count = 1
+      low_pulse_sent = false
+      module_dict_copy = module_dict.clone
+
+      until low_pulse_sent
+        pulse_queue = [start_pulse]
+
+        until pulse_queue.empty?
+          curr_pulse = pulse_queue.shift
+          curr_module_name = curr_pulse.to_module_name
+          curr_module = module_dict_copy[curr_module_name]
+
+          return count if curr_pulse.low? &&
+            curr_pulse.from_module_name == from_module_name &&
+            curr_pulse.to_module_name == to_module_name
+
+          next if curr_module.nil?
+
+          curr_module.communicate(curr_pulse).each { |outgoing_pulse| pulse_queue << outgoing_pulse }
+        end
+
+        count += 1
+      end
     end
 
     def start_pulse
