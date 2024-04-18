@@ -28,7 +28,7 @@ module Day20
     end
 
     def communicate(incoming_pulse)
-      remember_input_module_value(incoming_pulse.name, incoming_pulse.value)
+      remember_input_module_value(incoming_pulse.from_module_name, incoming_pulse.value)
 
       destination_modules_names.map do |dest_module_name|
         Day20::Pulse.new(outgoing_pulse_value, name, dest_module_name)
