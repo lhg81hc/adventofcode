@@ -15,18 +15,16 @@ module Day20
         sum_high_pulses = 0
 
         (1..1000).each do |n|
-          puts n
           total_low_pulses, total_high_pulses = module_configuration.push_button_module
-          puts "\n"
 
           sum_low_pulses += total_low_pulses
           sum_high_pulses += total_high_pulses
 
+          puts "##{n}"
           puts "low: #{sum_low_pulses}"
           puts "high: #{sum_high_pulses}"
+          puts "\n"
         end
-
-        puts "\n"
       end
 
       def module_configuration
