@@ -17,7 +17,7 @@ module Day21
       @adjacent_components << component
     end
 
-    def stepable_adjacent_components
+    def reachable_adjacent_plots
       @adjacent_components.select { |c| !c.rock? }
     end
 
