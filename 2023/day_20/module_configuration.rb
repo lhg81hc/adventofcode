@@ -68,7 +68,7 @@ module Day20
     def push_button_until_first_low_pulse_between_modules(from_module_name, to_module_name)
       count = 1
       low_pulse_sent = false
-      module_dict_copy = module_dict.clone
+      cloned_module_dict = clone_module_dict
 
       until low_pulse_sent
         pulse_queue = [starting_pulse]
@@ -76,12 +76,14 @@ module Day20
         until pulse_queue.empty?
           curr_pulse = pulse_queue.shift
           curr_module_name = curr_pulse.to_module_name
-          curr_module = module_dict_copy[curr_module_name]
+          curr_module = cloned_module_dict[curr_module_name]
 
-          return count if curr_pulse.low? &&
+          low_pulse_sent =
+            curr_pulse.low? &&
             curr_pulse.from_module_name == from_module_name &&
             curr_pulse.to_module_name == to_module_name
 
+          break if low_pulse_sent
           next if curr_module.nil?
 
           curr_module.communicate(curr_pulse).each { |outgoing_pulse| pulse_queue << outgoing_pulse }
@@ -89,6 +91,12 @@ module Day20
 
         count += 1
       end
+
+      count
+    end
+
+    def clone_module_dict
+      Marshal.load(Marshal.dump(module_dict))
     end
 
     def starting_pulse

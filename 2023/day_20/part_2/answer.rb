@@ -31,15 +31,12 @@ module Day20
         num_of_button_presses_for_nh_to_send_low_to_ph = module_configuration.push_button_until_first_low_pulse_between_modules('nh', 'ph')
         puts "For '&nh' to send its first LOW pulse to '&ph': #{num_of_button_presses_for_nh_to_send_low_to_ph} button presses"
 
-        module_configuration = build_module_configuration
         num_of_button_presses_for_mf_to_send_low_to_vn = module_configuration.push_button_until_first_low_pulse_between_modules('mf', 'vn')
         puts "For '&mf' to send its first LOW pulse to '&vn': #{num_of_button_presses_for_mf_to_send_low_to_vn} button presses"
 
-        module_configuration = build_module_configuration
         num_of_button_presses_for_fd_to_send_low_to_kt = module_configuration.push_button_until_first_low_pulse_between_modules('fd', 'kt')
         puts "For '&fd' to send its first LOW pulse to '&kt': #{num_of_button_presses_for_fd_to_send_low_to_kt} button presses"
 
-        module_configuration = build_module_configuration
         num_of_button_presses_for_kb_to_send_low_to_hn = module_configuration.push_button_until_first_low_pulse_between_modules('kb', 'hn')
         puts "For '&kb' to send its first LOW pulse to '&hn': #{num_of_button_presses_for_kb_to_send_low_to_hn} button presses"
 
