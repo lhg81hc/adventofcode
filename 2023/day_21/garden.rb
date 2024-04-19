@@ -51,6 +51,10 @@ module Day21
       found
     end
 
+    def find_component_by_location(location)
+      two_d_map.dig(location[0], location[1])
+    end
+
     def height
       two_d_map.length
     end
