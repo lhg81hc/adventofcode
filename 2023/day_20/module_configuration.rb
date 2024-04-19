@@ -39,8 +39,8 @@ module Day20
       end
     end
 
-    def push_button_module
-      pulse_queue = [start_pulse]
+    def push_button_module!
+      pulse_queue = [starting_pulse]
 
       total_low_pulses = 0
       total_high_pulses = 0
@@ -71,7 +71,7 @@ module Day20
       module_dict_copy = module_dict.clone
 
       until low_pulse_sent
-        pulse_queue = [start_pulse]
+        pulse_queue = [starting_pulse]
 
         until pulse_queue.empty?
           curr_pulse = pulse_queue.shift
@@ -91,7 +91,7 @@ module Day20
       end
     end
 
-    def start_pulse
+    def starting_pulse
       Day20::Pulse.new(:low_pulse, 'button', 'broadcaster')
     end
   end

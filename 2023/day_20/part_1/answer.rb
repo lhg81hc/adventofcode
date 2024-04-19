@@ -15,7 +15,7 @@ module Day20
         sum_high_pulses = 0
 
         (1..1000).each do |n|
-          total_low_pulses, total_high_pulses = module_configuration.push_button_module
+          total_low_pulses, total_high_pulses = module_configuration.push_button_module!
 
           sum_low_pulses += total_low_pulses
           sum_high_pulses += total_high_pulses
