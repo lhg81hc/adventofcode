@@ -10,25 +10,11 @@ module Day20
       end
 
       def run
-        parse_input_file_and_build_module_configuration
-        sum_low_pulses = 0
-        sum_high_pulses = 0
+        module_configuration = build_module_configuration
+        total_low_pulses, total_high_pulses = module_configuration.push_button_module(1000)
 
-        (1..1000).each do |n|
-          total_low_pulses, total_high_pulses = module_configuration.push_button_module!
-
-          sum_low_pulses += total_low_pulses
-          sum_high_pulses += total_high_pulses
-
-          puts "##{n}"
-          puts "low: #{sum_low_pulses}"
-          puts "high: #{sum_high_pulses}"
-          puts "\n"
-        end
-      end
-
-      def module_configuration
-        @module_configuration ||= ModuleConfiguration.new({ button_module.name => button_module })
+        puts "Total low pulses: #{total_low_pulses}"
+        puts "Total high pulses: #{total_high_pulses}"
       end
 
       def button_module
@@ -39,11 +25,15 @@ module Day20
         File.join(File.dirname(__FILE__), '../input.txt')
       end
 
-      def parse_input_file_and_build_module_configuration
+      def build_module_configuration
+        configuration = ModuleConfiguration.new({ button_module.name => button_module })
+
         File.foreach(input_path) do |line|
           communication_module = Day20::ModuleConfigurationLineParser.new(line.strip).parse
-          module_configuration.add_communication_module(communication_module)
+          configuration.add_communication_module(communication_module)
         end
+
+        configuration
       end
     end
   end

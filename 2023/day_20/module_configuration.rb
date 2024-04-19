@@ -39,27 +39,30 @@ module Day20
       end
     end
 
-    def push_button_module!
-      pulse_queue = [starting_pulse]
-
+    def push_button_module(n = 1)
       total_low_pulses = 0
       total_high_pulses = 0
+      cloned_module_dict = clone_module_dict
 
-      until pulse_queue.empty?
-        curr_pulse = pulse_queue.shift
-        curr_module_name = curr_pulse.to_module_name
-        curr_module = module_dict[curr_module_name]
+      n.times do
+        pulse_queue = [starting_pulse]
 
-        if curr_pulse.low?
-          total_low_pulses += 1
-        else
-          total_high_pulses += 1
+        until pulse_queue.empty?
+          curr_pulse = pulse_queue.shift
+          curr_module_name = curr_pulse.to_module_name
+          curr_module = cloned_module_dict[curr_module_name]
+
+          if curr_pulse.low?
+            total_low_pulses += 1
+          else
+            total_high_pulses += 1
+          end
+
+          puts "#{curr_pulse.from_module_name} -#{curr_pulse.value}-> #{curr_pulse.to_module_name.to_s}"
+          next if curr_module.nil?
+
+          curr_module.communicate(curr_pulse).each { |outgoing_pulse| pulse_queue << outgoing_pulse }
         end
-
-        puts "#{curr_pulse.from_module_name} -#{curr_pulse.value}-> #{curr_pulse.to_module_name.to_s}"
-        next if curr_module.nil?
-
-        curr_module.communicate(curr_pulse).each { |outgoing_pulse| pulse_queue << outgoing_pulse }
       end
 
       [total_low_pulses, total_high_pulses]
