@@ -1,4 +1,5 @@
 require_relative '../garden_map_builder'
+require_relative '../garden_plot_counter'
 
 module Day21
   module Part1
@@ -8,10 +9,11 @@ module Day21
       end
 
       def run
-        starting_component = garden_map.find_component_by_char('S')
-        starting_component.adjacent_components.each do |adjacent_component|
-          puts "#{adjacent_component.location} -> #{adjacent_component.char}"
-        end
+        puts garden_plot_counter.no_of_reachable_plots_after_n_steps(64)
+      end
+
+      def garden_plot_counter
+        @garden_plot_counter ||= Day21::GardenPlotCounter.new(garden_map)
       end
 
       def garden_map
