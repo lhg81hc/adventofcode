@@ -17,11 +17,7 @@ module Day17
       end
 
       def heat_loss_map
-        @heat_loss_map ||= Day17::InputParser.new(input_path).heat_loss_map
-      end
-
-      def path_finder
-        @path_finder ||= Day17::MinHeatLossPathFinder.new(heat_loss_map)
+        @heat_loss_map ||= Day17::HeatLossMapBuilder.build(input_path)
       end
 
       def input_path
