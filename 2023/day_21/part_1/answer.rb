@@ -9,7 +9,27 @@ module Day21
       end
 
       def run
-        puts garden_plot_counter.no_of_reachable_plots_after_n_steps(64)
+        (1..64).each do |n|
+          next unless n == 2 || n >= 4
+          reachable_plots_after_n_steps = garden_plot_counter.find_reachable_plots_after_n_steps(n)
+
+          puts "\n\n"
+          puts "n = #{n}"
+          garden_map.two_d_map.each do |line|
+            line.each do |component|
+              if reachable_plots_after_n_steps[component.location]
+                print '0'
+              else
+                print component.char
+              end
+            end
+
+            print "\n"
+          end
+        end
+
+        puts "\n"
+        puts "Starting from the garden plot marked S on your map, the number of garden plots can the Elf reach in exactly 64 steps: #{garden_plot_counter.find_reachable_plots_after_n_steps(64).keys.count}"
       end
 
       def garden_plot_counter
