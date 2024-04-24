@@ -135,3 +135,7 @@
 #
 # Figure how the blocks will settle based on the snapshot. Once they've settled, consider disintegrating a single brick;
 # how many bricks could be safely chosen as the one to get disintegrated?
+
+require_relative 'answer'
+
+Day22::Part1::Answer.run
