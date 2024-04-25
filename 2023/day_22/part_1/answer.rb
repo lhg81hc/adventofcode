@@ -1,4 +1,5 @@
 require_relative '../snapshot_parser'
+require_relative '../bricks_arrangement'
 
 module Day22
   module Part1
@@ -12,11 +13,43 @@ module Day22
       end
 
       def run
-        puts bricks.first.first_coordinates_set
+        # p bricks.first.first_coordinates_set
+        # p bricks.first.second_coordinates_set
+        # p bricks.first.num_of_cubes
+        #
+        # p bricks_arrangement.axis_perspective
+        axis_perspective = bricks_arrangement.y_axis_perspective
+        blank_row = Array.new(axis_perspective.first.length, ['.'])
+        max_length = blank_row.length
+        # axis_perspective.first.length.each do |n|
+        #   printed_row =
+        # end
+        # puts axis_perspective.first.length
+        axis_perspective.reverse.each do |row|
+          printed_row = row
+          printed_row = blank_row if row.nil?
+
+          (0..(max_length - 1)).each do |cell_idx|
+            cell = printed_row[cell_idx]
+            if cell.nil?
+              print '.'
+            else
+              if cell.length > 1
+                print '?'
+              else
+                print(cell.first || '.')
+              end
+            end
+
+            print ' '
+          end
+
+          print "\n"
+        end
       end
 
-      def bricks
-        @bricks ||= Day22::SnapshotParser.parse(filepath)
+      def bricks_arrangement
+        @bricks_arrangement ||= Day22::SnapshotParser.parse(filepath)
       end
 
       def filepath

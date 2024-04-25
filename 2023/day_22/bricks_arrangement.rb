@@ -2,8 +2,12 @@ module Day22
   class BricksArrangement
     attr_reader :bricks
 
-    def initialize(bricks)
+    def initialize(bricks = [])
       @bricks = bricks
+    end
+
+    def add_brick(brick)
+      @bricks << brick
     end
 
     def x_axis_perspective
