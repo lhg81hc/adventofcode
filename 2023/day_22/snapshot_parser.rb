@@ -13,16 +13,13 @@ module Day22
     end
 
     def parse
-      bricks = []
-
-      File.foreach(filepath).with_index do |line, line_index|
+      File.foreach(filepath).with_index.reduce([]) do |r, (line, line_index)|
         brick_name = line_index + 1
         first_coordinates_set, second_coordinates_set = line.split('~').map { |s| s.split(',').map(&:to_i) }
 
-        bricks << Day22::Brick.new(brick_name, first_coordinates_set, second_coordinates_set)
+        r << Day22::Brick.new(brick_name, first_coordinates_set, second_coordinates_set)
+        r
       end
-
-      bricks
     end
   end
 end
