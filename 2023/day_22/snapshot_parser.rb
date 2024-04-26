@@ -1,5 +1,5 @@
 require_relative 'brick'
-require_relative 'bricks_arrangement'
+require_relative 'snapshot_perspective'
 
 module Day22
   class SnapshotParser
@@ -14,16 +14,16 @@ module Day22
     end
 
     def parse
-      bricks_arrangement = Day22::BricksArrangement.new
+      snapshot_perspective = Day22::SnapshotPerspective.new
 
       File.foreach(filepath).with_index.reduce([]) do |r, (line, line_index)|
         brick_name = line_index + 1
         first_coordinates_set, second_coordinates_set = line.split('~').map { |s| s.split(',').map(&:to_i) }
 
-        bricks_arrangement.add_brick(Day22::Brick.new(brick_name, first_coordinates_set, second_coordinates_set))
+        snapshot_perspective.add_brick(Day22::Brick.new(brick_name, first_coordinates_set, second_coordinates_set))
       end
 
-      bricks_arrangement
+      snapshot_perspective
     end
   end
 end

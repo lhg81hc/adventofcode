@@ -1,5 +1,5 @@
 module Day22
-  class BricksArrangement
+  class SnapshotPerspective
     attr_reader :bricks
 
     def initialize(bricks = [])
