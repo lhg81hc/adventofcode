@@ -44,7 +44,11 @@ module Day22
       define_method("length_according_to_#{coordinate_name}_axis_perspective") do
         send("end_#{coordinate_name}_coordinate") - send("start_#{coordinate_name}_coordinate") + 1
       end
+    end
 
+    def occupied_coordinates_according_to_z_axis_perspective
+      ((start_x_coordinate..end_x_coordinate).to_a).
+        product((start_y_coordinate..end_y_coordinate).to_a)
     end
   end
 end
