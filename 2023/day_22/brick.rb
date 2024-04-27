@@ -6,7 +6,7 @@ module Day22
       @name = name
       @first_coordinates_set = first_coordinates_set
       @second_coordinates_set = second_coordinates_set
-      @num_of_cubes = calculate_num_of_cubes
+      @num_of_cubes = get_num_of_cubes
     end
 
     def update_start_z_coordinate(z_coordinate)
@@ -19,7 +19,7 @@ module Day22
 
     end
 
-    def calculate_num_of_cubes
+    def get_num_of_cubes
       differences =
         first_coordinates_set.each.with_index.inject([]) do |r, (coordinate, idx)|
           r << (second_coordinates_set[idx] - coordinate + 1) if second_coordinates_set[idx] != coordinate
@@ -28,10 +28,14 @@ module Day22
 
       num_of_diff = differences.length
 
-      return 1 if num_of_diff.zero?
-      return differences.first if num_of_diff == 1
+      if num_of_diff.zero?
+        1
+      elsif num_of_diff == 1
+        differences.first
+      else
+        raise "Invalid brick coordinates #{name}"
+      end
 
-      raise "Invalid brick coordinates #{name}"
     end
   end
 end
