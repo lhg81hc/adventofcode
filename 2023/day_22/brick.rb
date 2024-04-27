@@ -9,8 +9,14 @@ module Day22
       @num_of_cubes = calculate_num_of_cubes
     end
 
-    def position
-      [first_coordinates_set, second_coordinates_set]
+    def update_start_z_coordinate(z_coordinate)
+      @first_coordinates_set.last = z_coordinate
+    end
+
+    def update_end_z_coordinate(z_coordinate)
+      @first_coordinates_set.last = z_coordinate
+    end
+
     end
 
     def calculate_num_of_cubes
