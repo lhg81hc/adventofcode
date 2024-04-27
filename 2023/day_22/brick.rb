@@ -9,11 +9,11 @@ module Day22
     end
 
     def update_start_z_coordinate(z_coordinate)
-      @first_coordinates_set.last = z_coordinate
+      @first_coordinates_set[2] = z_coordinate
     end
 
     def update_end_z_coordinate(z_coordinate)
-      @first_coordinates_set.last = z_coordinate
+      @second_coordinates_set[2] = z_coordinate
     end
 
     { 'x': 0, 'y': 1, 'z': 2 }.each do |coordinate_name, idx|
