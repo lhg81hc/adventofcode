@@ -16,7 +16,7 @@ module Day22
       File.foreach(filepath).with_index.reduce([]) do |r, (line, line_index)|
         brick_name = line_index + 1
         first_coordinates_set, second_coordinates_set = line.split('~').map { |s| s.split(',').map(&:to_i) }
-        brick = Brick.new(brick_name, first_coordinates_set, second_coordinates_set)
+        brick = Brick.new(brick_name.to_s, first_coordinates_set, second_coordinates_set)
 
         r << brick
         r
