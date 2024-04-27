@@ -17,7 +17,7 @@ module Day22
     private
 
     def axis_perspective(axis_index)
-      raise ArgumentError, 'Only accept 1 or 2 as argument value' if axis_index != 1 && axis_index != 2
+      raise ArgumentError, 'Only accept 1 or 2 as argument value' if axis_index != 1 && axis_index != 0
 
       result = []
       max_index = 0
@@ -28,7 +28,7 @@ module Day22
         (brick.start_z_coordinate..brick.end_z_coordinate).each do |z_coordinate|
           result[z_coordinate] ||= []
 
-          from_coordinate, to_coordinate = axis_index == 1 ? brick.ordered_x_coordinates : brick.ordered_y_coordinates
+          from_coordinate, to_coordinate = axis_index == 0 ? brick.ordered_x_coordinates : brick.ordered_y_coordinates
           max_index = to_coordinate if max_index < to_coordinate
 
           (from_coordinate..to_coordinate).each do |coordinate|
