@@ -1,13 +1,9 @@
 module Day22
-  class SnapshotPerspective
+  class Snapshot
     attr_reader :bricks
 
     def initialize(bricks = [])
       @bricks = bricks
-    end
-
-    def add_brick(brick)
-      @bricks << brick
     end
 
     def x_axis_perspective
@@ -21,19 +17,18 @@ module Day22
     private
 
     def axis_perspective(axis_index)
+      raise ArgumentError, 'Only accept 1 or 2 as argument value' if axis_index != 1 && axis_index != 2
+
       result = []
       max_index = 0
 
       bricks.each do |brick|
         brick_name = brick.name
-        first_coordinates_set = brick.first_coordinates_set
-        second_coordinates_set = brick.second_coordinates_set
 
-        from_z_coordinate, to_z_coordinate = [first_coordinates_set.last, second_coordinates_set.last].minmax
-        (from_z_coordinate..to_z_coordinate).each do |z_coordinate|
+        (brick.start_z_coordinate..brick.end_z_coordinate).each do |z_coordinate|
           result[z_coordinate] ||= []
 
-          from_coordinate, to_coordinate = [first_coordinates_set[axis_index], second_coordinates_set[axis_index]].minmax
+          from_coordinate, to_coordinate = axis_index == 1 ? brick.ordered_x_coordinates : brick.ordered_y_coordinates
           max_index = to_coordinate if max_index < to_coordinate
 
           (from_coordinate..to_coordinate).each do |coordinate|
