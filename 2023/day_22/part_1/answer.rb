@@ -1,55 +1,30 @@
+require_relative '../brick_landing_position_finder'
+require_relative '../disintegratable_bricks_finder'
 require_relative '../snapshot_parser'
-require_relative '../snapshot_perspective'
+require_relative '../snapshot'
 
 module Day22
   module Part1
     class Answer
-      def initialize
-
-      end
-
       def self.run
         new.run
       end
 
       def run
-        # p bricks.first.first_coordinates_set
-        # p bricks.first.second_coordinates_set
-        # p bricks.first.num_of_cubes
-        #
-        # p snapshot_perspective.axis_perspective
-        axis_perspective = snapshot_perspective.y_axis_perspective
-        blank_row = Array.new(axis_perspective.first.length, ['.'])
-        max_length = blank_row.length
-        # axis_perspective.first.length.each do |n|
-        #   printed_row =
-        # end
-        # puts axis_perspective.first.length
-        axis_perspective.reverse.each do |row|
-          printed_row = row
-          printed_row = blank_row if row.nil?
-
-          (0..(max_length - 1)).each do |cell_idx|
-            cell = printed_row[cell_idx]
-            if cell.nil?
-              print '.'
-            else
-              if cell.length > 1
-                print '?'
-              else
-                print(cell.first || '.')
-              end
-            end
-
-            print ' '
-          end
-
-          print "\n"
-        end
+        puts "\n"
+        puts "Number of bricks that could be safely get disintegrated: #{disintergratable_bricks_counter.disinteratable_bricks.count}"
       end
 
-      def snapshot_perspective
-        @snapshot_perspective ||= Day22::SnapshotParser.parse(filepath)
+      def landed_bricks
+        @bricks_landed_position ||= Day22::BrickLandingPositionFinder.new(falling_bricks).land
+      end
+
+      def falling_bricks
+        @falling_bricks ||= Day22::SnapshotParser.parse(filepath)
+      end
+
+      def disintergratable_bricks_counter
+        @disintergratable_bricks_counter ||= Day22::DisintegratableBricksFinder.new(landed_bricks)
       end
 
       def filepath
