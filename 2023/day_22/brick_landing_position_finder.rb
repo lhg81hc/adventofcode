@@ -9,9 +9,9 @@ module Day22
     end
 
     def land
-      r = []
+      bricks_order_by_z_index.inject([]) do |r, falling_brick|
+        puts "Landing brick #{falling_brick.name}..."
 
-      bricks_order_by_z_index.each do |falling_brick|
         last_landed_brick = r.last
         start_z_coordinate = falling_brick.start_z_coordinate
 
@@ -29,24 +29,24 @@ module Day22
 
         r << clone
       end
-
-      r
     end
 
     def bricks_order_by_z_index
       bricks.sort_by { |brick| [brick.first_coordinates_set.last, brick.second_coordinates_set.last] }
     end
 
+
+    # Idea:
+    # Check if the falling brick can be SETTLED at a specific level, if it can then move down to the next level
+    # and repeat the checking process until it can not be moved down any further.
+    #
+    # Steps:
+    # 1. set current level equals to the start z coordinate of the falling brick
+    # 2. Check if there are any cubes that occupied on the same position of the falling brick
+    # 3. If false, repeat step 2 for the next level (current level -= 1) until there is no level to try (hits the ground)
+    # 4. If true returns current level + 1 (since it can not be settle at the current level, it has to be 1 level up)
     def find_new_z_coordinates(falling_brick, curr_landed_bricks)
       current_level = falling_brick.start_z_coordinate
-
-      # Idea: Check if the falling brick can be SETTLED at a specific level, if it can then move down to the next level
-      # and repeat the checking process until it can not be moved down further.
-      #
-      # 1. set current level equals to the start z coordinate of the falling brick
-      # 2. Check if there are any cubes that occupied on the same position of the falling brick
-      # 3. If false, repeat step 2 for the next level (current level -= 1) until there is no level to try (hits the ground)
-      # 4. If true returns current level + 1 (since it can not be settle at the current level, it has to be 1 level up)
 
       while current_level >= MIN_Z_COORDINATE
         occupied_coordinates_on_current_level = occupied_coordinates(curr_landed_bricks, current_level)
