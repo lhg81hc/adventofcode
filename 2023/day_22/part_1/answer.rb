@@ -12,19 +12,19 @@ module Day22
 
       def run
         puts "\n"
-        puts "Number of bricks that could be safely get disintegrated: #{disintergratable_bricks_counter.disinteratable_bricks.count}"
+        puts "Number of bricks that could be safely get disintegrated: #{disintergratable_bricks_finder.disinteratable_bricks.count}"
       end
 
       def landed_bricks
-        @bricks_landed_position ||= Day22::BrickLandingPositionFinder.new(falling_bricks).land
+        @landed_bricks ||= Day22::BrickLandingPositionFinder.new(falling_bricks).land
       end
 
       def falling_bricks
         @falling_bricks ||= Day22::SnapshotParser.parse(filepath)
       end
 
-      def disintergratable_bricks_counter
-        @disintergratable_bricks_counter ||= Day22::DisintegratableBricksFinder.new(landed_bricks)
+      def disintergratable_bricks_finder
+        @disintergratable_bricks_finder ||= Day22::DisintegratableBricksFinder.new(landed_bricks)
       end
 
       def filepath
