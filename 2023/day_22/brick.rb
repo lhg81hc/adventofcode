@@ -8,14 +8,6 @@ module Day22
       @second_coordinates_set = second_coordinates_set
     end
 
-    def update_start_z_coordinate(z_coordinate)
-      @first_coordinates_set[2] = z_coordinate
-    end
-
-    def update_end_z_coordinate(z_coordinate)
-      @second_coordinates_set[2] = z_coordinate
-    end
-
     # #ordered_x_coordinates(),
     # #ordered_y_coordinates(),
     # #ordered_z_coordinates(),
@@ -28,7 +20,7 @@ module Day22
     # #length_according_to_x_axis_perspective(),
     # #length_according_to_y_axis_perspective(),
     # #length_according_to_z_axis_perspective(),
-    { 'x': 0, 'y': 1, 'z': 2 }.each do |coordinate_name, idx|
+    %w[x y z].each.with_index do |coordinate_name, idx|
       define_method("ordered_#{coordinate_name}_coordinates") do
         [first_coordinates_set[idx], second_coordinates_set[idx]].minmax
       end
@@ -47,8 +39,8 @@ module Day22
     end
 
     def occupied_coordinates_according_to_z_axis_perspective
-      ((start_x_coordinate..end_x_coordinate).to_a).
-        product((start_y_coordinate..end_y_coordinate).to_a)
+      ((start_x_coordinate..end_x_coordinate).to_a)
+        .product((start_y_coordinate..end_y_coordinate).to_a)
     end
   end
 end
