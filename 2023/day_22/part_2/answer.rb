@@ -1,5 +1,5 @@
 require_relative '../snapshot_parser'
-require_relative '../test'
+require_relative '../falling_bricks_counter'
 
 module Day22
   module Part2
@@ -10,7 +10,7 @@ module Day22
 
       def run
         puts "\n"
-        puts Day22::Test.new(falling_bricks).count
+        puts Day22::FallingBricksCounter.new(falling_bricks).total_falling_bricks_if_disintegrate_all_bricks_one_by_one
       end
 
       def falling_bricks
