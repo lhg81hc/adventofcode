@@ -1,7 +1,5 @@
 module Day22
   class BrickLandingPositionFinder
-    MIN_Z_COORDINATE = 1
-
     attr_reader :bricks
 
     def initialize(bricks)
@@ -20,21 +18,21 @@ module Day22
         end
 
         start_z_coordinate, end_z_coordinate = find_new_z_coordinates(falling_brick, r)
-        clone = falling_brick.clone
+        first_coordinates_set = falling_brick.first_coordinates_set[0..1] + [start_z_coordinate] # first_coordinates_set[2] = start_z_coordinate
+        second_coordinates_set = falling_brick.second_coordinates_set[0..1] + [end_z_coordinate]
 
-        if start_z_coordinate != falling_brick.start_z_coordinate || end_z_coordinate != falling_brick.end_z_coordinate
-          clone.update_start_z_coordinate(start_z_coordinate)
-          clone.update_end_z_coordinate(end_z_coordinate)
-        end
-
-        r << clone
+        r << Day22::Brick.new(falling_brick.name, first_coordinates_set, second_coordinates_set)
       end
     end
 
     def bricks_order_by_z_index
-      bricks.sort_by { |brick| [brick.first_coordinates_set.last, brick.second_coordinates_set.last] }
+      @bricks_order_by_z_index ||=
+        bricks.sort_by { |brick| [brick.first_coordinates_set.last, brick.second_coordinates_set.last] }
     end
 
+    def base_level
+      @base_level ||= bricks_order_by_z_index.first.start_z_coordinate
+    end
 
     # Idea:
     # Check if the falling brick can be SETTLED at a specific level, if it can then move down to the next level
@@ -43,12 +41,12 @@ module Day22
     # Steps:
     # 1. set current level equals to the start z coordinate of the falling brick
     # 2. Check if there are any cubes that occupied on the same position of the falling brick
-    # 3. If false, repeat step 2 for the next level (current level -= 1) until there is no level to try (hits the ground)
+    # 3. If false, repeat step 2 for the next level (current level -= 1) until there is no level to try (hits the base_level)
     # 4. If true returns current level + 1 (since it can not be settle at the current level, it has to be 1 level up)
     def find_new_z_coordinates(falling_brick, curr_landed_bricks)
       current_level = falling_brick.start_z_coordinate
 
-      while current_level >= MIN_Z_COORDINATE
+      while current_level >= base_level
         occupied_coordinates_on_current_level = occupied_coordinates(curr_landed_bricks, current_level)
 
         if occupied_coordinates_on_current_level.any?
@@ -59,7 +57,7 @@ module Day22
           end
         end
 
-        break if current_level == MIN_Z_COORDINATE
+        break if current_level == base_level
 
         current_level -= 1
       end
