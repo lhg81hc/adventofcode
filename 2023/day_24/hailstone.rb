@@ -8,6 +8,10 @@ module Day24
       @velocity = velocity
     end
 
+    def to_s
+      name
+    end
+
     def x
       position[0]
     end
