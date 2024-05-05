@@ -33,5 +33,10 @@ module Day24
 
       tmax > tmin && tmax > 0
     end
+
+    def include?(coordinates)
+      coordinates[0].between?(lower_bound, upper_bound) &&
+        coordinates[1].between?(lower_bound, upper_bound)
+    end
   end
 end
