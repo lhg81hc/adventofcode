@@ -1,13 +1,13 @@
 module Day25
   class WiringDiagram
-    attr_reader :list
+    attr_reader :connections
 
-    def initialize(list = [])
-      @list = list
+    def initialize(connections = [])
+      @connections = connections
     end
 
-    def add_component(component)
-      @list << component
+    def add_connection(connection)
+      @connections << connection
     end
   end
 end

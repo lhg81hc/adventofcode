@@ -48,4 +48,4 @@
 
 require_relative 'answer'
 
-Day24::Part2::Answer.run
+Day24::Part1::Answer.run

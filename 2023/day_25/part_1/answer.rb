@@ -3,16 +3,16 @@ require_relative '../wiring_diagram_parser'
 module Day25
   module Part1
     class Answer
-      # def initialize
-      #
-      # end
-
       def self.run
         new.run
       end
 
       def run
-        puts wiring_diagram.list.last.name
+        # wiring_diagram.connections.each do |c|
+        #   puts "#{c.first_component.name}, #{c.second_component.name}"
+        # end
+
+        puts wiring_diagram.connections.count
       end
 
       def wiring_diagram
