@@ -19,12 +19,7 @@ module Day19
     end
 
     def comparison
-      @comparision ||=
-        begin
-          return nil if non_comparison_rule?
-
-          [rating, rating_value].join(comparison_operator)
-        end
+      @comparision ||= non_comparison_rule? ? nil : [rating, rating_value].join(comparison_operator)
     end
 
     def rating

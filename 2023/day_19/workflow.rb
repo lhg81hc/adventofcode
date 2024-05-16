@@ -33,8 +33,7 @@ module Day19
 
         opposite_prev_rules = previous_rules.map { |pr| opposite_rule(pr) }
         curr_rules = opposite_prev_rules << rule
-        condition = rules_to_key(curr_rules)
-        condition = "{#{condition}}"
+        condition = "{#{rules_to_key(curr_rules)}}"
 
         r << { rules: curr_rules, next_workflow: rule.next_workflow, condition: condition }
         r
@@ -54,11 +53,6 @@ module Day19
       @name ||= val.match(/(\w+){/)[1]
     end
 
-    def rules_to_key(rules)
-      comparisons = rules.map { |r| r.comparison }.select { |r| !r.nil? }
-      "#{comparisons.join(',')}"
-    end
-
     def rules
       @rules ||=
         begin
@@ -67,6 +61,12 @@ module Day19
             Day19::WorkflowRule.new(rule_str)
           end
         end
+    end
+
+    private
+
+    def rules_to_key(rules)
+      rules.map { |r| r.comparison }.select { |r| !r.nil? }.join(',')
     end
   end
 end
