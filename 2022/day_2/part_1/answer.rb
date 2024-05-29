@@ -1,4 +1,4 @@
-require_relative '../round'
+require_relative '../first_strategy'
 
 module Day2
   module Part1
@@ -10,7 +10,7 @@ module Day2
       def run
         total_score =
           File.foreach(filepath).inject(0) do |r, line|
-            round = Day2::Round.new(line.strip)
+            round = Day2::FirstStrategy.new(line.strip)
             puts round.outcome_to_s
 
             r += round.score

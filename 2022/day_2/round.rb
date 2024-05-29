@@ -1,48 +1,33 @@
 module Day2
   class Round
-    OPPONENT_OPTIONS = { 'A' => :rock, 'B' => :paper, 'C' => :scissors }
-    SELF_OPTIONS = { 'X' => :rock, 'Y' => :paper, 'Z' => :scissors }
-    SHAPES = {
-      rock: {
-        value: 0,
-        score: 1
-      },
-      paper: {
-        value: 1,
-        score: 2
-      },
-      scissors: {
-        value: 2,
-        score: 3
-      },
-    }
+    SHAPE_VALUES = { rock: 0, paper: 1, scissors: 2 }.freeze
 
     def initialize(str)
       @str = str
     end
 
     def opponent_selected_char
-      @str[0]
+      raise NotImplementedError
     end
 
     def self_selected_char
-      @str[-1]
+      raise NotImplementedError
     end
 
     def self_selected_shape
-      SELF_OPTIONS[self_selected_char]
+      raise NotImplementedError
     end
 
     def opponent_selected_shape
-      OPPONENT_OPTIONS[opponent_selected_char]
+      raise NotImplementedError
     end
 
     # 0 means draw, -1 means opponent wins, 1 means you win
     def outcome
       return 0 if self_selected_shape == opponent_selected_shape
 
-      opponent_selected_shape_value = SHAPES[opponent_selected_shape][:value]
-      self_selected_shape_value = SHAPES[self_selected_shape][:value]
+      opponent_selected_shape_value = SHAPE_VALUES[opponent_selected_shape]
+      self_selected_shape_value = SHAPE_VALUES[self_selected_shape]
 
       if (opponent_selected_shape_value + 1) % 3 == self_selected_shape_value
         1
@@ -59,7 +44,7 @@ module Day2
     end
 
     def score_by_selected_shape
-      SHAPES[self_selected_shape][:score]
+      SHAPE_VALUES[self_selected_shape] + 1
     end
 
     def score_by_outcome
