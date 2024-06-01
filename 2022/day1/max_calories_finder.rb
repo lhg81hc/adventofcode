@@ -7,14 +7,11 @@ module Day1
     end
 
     def find_max
-      max = calories_group.first.sum
-
-      calories_group.each do |calories|
+      calories_group.reduce(calories_group.first.sum) do |max, calories|
         sum_of_calories = calories.sum
         max = sum_of_calories if max < sum_of_calories
+        max
       end
-
-      max
     end
 
     def find_top_three
