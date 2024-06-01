@@ -10,7 +10,7 @@ module Day1
 
       def run
         top_three_most_calories = max_calories_finder.find_top_three
-        puts "The top three Elves carrying the most Calories: #{top_three_most_calories.join(" + ")} = #{top_three_most_calories.sum}"
+        puts "The top three Elves carrying the most Calories: #{top_three_most_calories.join(' + ')} = #{top_three_most_calories.sum}"
       end
 
       def calories_group

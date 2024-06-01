@@ -21,12 +21,11 @@ module Day1
         sum_of_calories = calories.sum
 
         if heap.length == 3
-          if sum_of_calories > heap.first
-            heap.shift
-            heap.append(sum_of_calories)
-          else
-            next
-          end
+          next unless sum_of_calories > heap.first
+
+          heap.shift
+          heap.append(sum_of_calories)
+
         else
           heap.append(sum_of_calories)
         end
@@ -35,7 +34,7 @@ module Day1
 
         while index > 0 && heap[(index - 1) / 2] > heap[index]
           heap[(index - 1) / 2], heap[index] = heap[index], heap[(index - 1) / 2]
-          index = ( index - 1) / 2
+          index = (index - 1) / 2
         end
       end
 
