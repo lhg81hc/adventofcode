@@ -28,10 +28,6 @@ module Year2022
       def second_compartment
         supply_items[(middle_index + 1)..-1]
       end
-
-      def common_item_types
-        first_compartment.map(&:type) & second_compartment.map(&:type)
-      end
     end
   end
 end

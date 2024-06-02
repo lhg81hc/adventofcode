@@ -1,5 +1,5 @@
 require 'test/unit'
-require '../year2022/day3/rucksack'
+require './year2022/day3/rucksack'
 
 module Year2022
   module Day3
@@ -29,10 +29,6 @@ module Year2022
         assert_equal(12, @rucksack.second_compartment.length)
         assert_equal('h', @rucksack.second_compartment.first.type)
         assert_equal('p', @rucksack.second_compartment.last.type)
-      end
-
-      def test_common_item_types
-        assert_equal(['p'], @rucksack.common_item_types)
       end
     end
   end
