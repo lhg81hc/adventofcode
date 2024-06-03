@@ -19,9 +19,9 @@ module Year2022
         session_ids[1]
       end
 
-      def contain?(another_assigned_sessions)
-        start_session_id <= another_assigned_sessions.start_session_id &&
-          end_session_id >= another_assigned_sessions.end_session_id
+      def contain?(another_assignment_sessions)
+        start_session_id <= another_assignment_sessions.start_session_id &&
+          end_session_id >= another_assignment_sessions.end_session_id
       end
     end
   end
