@@ -1,6 +1,6 @@
 module Year2022
   module Day4
-    class AssignedSessions
+    class AssignmentSessions
       attr_reader :range_str
 
       def initialize(range_str)

@@ -1,17 +1,16 @@
 require 'test/unit'
-require_relative '../../../year2022/day4/assigned_sessions'
-# require './year2022/day4/assigned_sessions'
+require_relative '../../../year2022/day4/assignment_sessions'
 
 module Year2022
   module Day4
-    class AssignedSessionsTest < Test::Unit::TestCase
+    class AssignmentSessionsTest < Test::Unit::TestCase
       def setup
         @str1 = '2-4'
         @str2 = '5-7'
         @str3 = '6-6'
-        @assigned_sessions1 = Year2022::Day4::AssignedSessions.new(@str1)
-        @assigned_sessions2 = Year2022::Day4::AssignedSessions.new(@str2)
-        @assigned_sessions3 = Year2022::Day4::AssignedSessions.new(@str3)
+        @assigned_sessions1 = Year2022::Day4::AssignmentSessions.new(@str1)
+        @assigned_sessions2 = Year2022::Day4::AssignmentSessions.new(@str2)
+        @assigned_sessions3 = Year2022::Day4::AssignmentSessions.new(@str3)
       end
 
       def test_start_session_id
