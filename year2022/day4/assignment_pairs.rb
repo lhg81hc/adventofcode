@@ -25,6 +25,10 @@ module Year2022
         first_assignment_session.contain?(second_assignment_session) ||
           second_assignment_session.contain?(first_assignment_session)
       end
+
+      def overlapping_pairs?
+        first_assignment_session.overlaps?(second_assignment_session)
+      end
     end
   end
 end

@@ -34,6 +34,18 @@ module Year2022
         refute(@assignment_sessions3.contain?(@assignment_sessions1))
         refute(@assignment_sessions3.contain?(@assignment_sessions2))
       end
+
+      def test_include?
+        assert(@assignment_sessions1.include?(3))
+        assert(@assignment_sessions1.include?(2))
+        refute(@assignment_sessions1.include?(5))
+      end
+
+      def test_overlaps?
+        refute(@assignment_sessions1.overlaps?(@assignment_sessions2))
+        refute(@assignment_sessions1.overlaps?(@assignment_sessions3))
+        assert(@assignment_sessions2.overlaps?(@assignment_sessions3))
+      end
     end
   end
 end

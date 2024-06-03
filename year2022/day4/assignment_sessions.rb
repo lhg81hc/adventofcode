@@ -23,6 +23,15 @@ module Year2022
         start_session_id <= another_assignment_sessions.start_session_id &&
           end_session_id >= another_assignment_sessions.end_session_id
       end
+
+      def include?(session_id)
+        start_session_id <= session_id && session_id <= end_session_id
+      end
+
+      def overlaps?(another_assignment_sessions)
+        include?(another_assignment_sessions.start_session_id) ||
+          another_assignment_sessions.include?(start_session_id)
+      end
     end
   end
 end
