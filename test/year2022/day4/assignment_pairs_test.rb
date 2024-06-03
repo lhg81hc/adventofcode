@@ -1,6 +1,6 @@
 require 'test/unit'
 require_relative '../../../year2022/day4/assignment_pairs'
-require_relative '../../../year2022/day4/assignment_pairs'
+require_relative '../../../year2022/day4/assignment_sessions'
 
 module Year2022
   module Day4
@@ -12,19 +12,19 @@ module Year2022
         @assignment_pairs2 = Year2022::Day4::AssignmentPairs.new(@str2)
       end
 
-      def test_session_assignments
-        assert_equal(2, @assignment_pairs1.session_assignments.length)
-        assert_equal(2, @assignment_pairs2.session_assignments.length)
+      def test_assignment_sessions
+        assert_equal(2, @assignment_pairs1.assignment_sessions.length)
+        assert_equal(2, @assignment_pairs2.assignment_sessions.length)
       end
 
-      def test_first_session_assignment
-        assert(@assignment_pairs1.first_session_assignment.is_a?(Year2022::Day4::AssignmentSessions))
-        assert(@assignment_pairs2.first_session_assignment.is_a?(Year2022::Day4::AssignmentSessions))
+      def test_first_assignment_session
+        assert(@assignment_pairs1.first_assignment_session.is_a?(Year2022::Day4::AssignmentSessions))
+        assert(@assignment_pairs2.first_assignment_session.is_a?(Year2022::Day4::AssignmentSessions))
       end
 
-      def test_second_session_assignment
-        assert(@assignment_pairs1.second_session_assignment.is_a?(Year2022::Day4::AssignmentSessions))
-        assert(@assignment_pairs2.second_session_assignment.is_a?(Year2022::Day4::AssignmentSessions))
+      def test_second_assignment_session
+        assert(@assignment_pairs1.second_assignment_session.is_a?(Year2022::Day4::AssignmentSessions))
+        assert(@assignment_pairs2.second_assignment_session.is_a?(Year2022::Day4::AssignmentSessions))
       end
 
       def test_one_range_contain_the_other?

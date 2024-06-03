@@ -9,21 +9,21 @@ module Year2022
         @str = str
       end
 
-      def session_assignments
+      def assignment_sessions
         @str.split(',').map { |assignment_sessions_str| Year2022::Day4::AssignmentSessions.new(assignment_sessions_str) }
       end
 
-      def first_session_assignment
-        session_assignments[0]
+      def first_assignment_session
+        assignment_sessions[0]
       end
 
-      def second_session_assignment
-        session_assignments[1]
+      def second_assignment_session
+        assignment_sessions[1]
       end
 
       def one_range_contain_the_other?
-        first_session_assignment.contain?(second_session_assignment) ||
-          second_session_assignment.contain?(first_session_assignment)
+        first_assignment_session.contain?(second_assignment_session) ||
+          second_assignment_session.contain?(first_assignment_session)
       end
     end
   end
