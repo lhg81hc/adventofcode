@@ -20,6 +20,15 @@ module Year2022
 
         dup_stacks
       end
+
+      def move_multiple_at_once
+        dup_stacks = Marshal.load(Marshal.dump(stacks))
+
+        rearrangement_steps.each_with_index do |step|
+          from_stack = dup_stacks[step.from_stack_index]
+          to_stack = dup_stacks[step.to_stack_index]
+
+          to_stack.concat(from_stack.pop(step.number_of_crates))
         end
 
         dup_stacks
