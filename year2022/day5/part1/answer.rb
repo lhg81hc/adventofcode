@@ -12,7 +12,7 @@ module Year2022
         def run
           input_parser.parse
           rearrangement_procedure = Year2022::Day5::RearrangementProcedure.new(input_parser.stacks, input_parser.rearrangement_steps)
-          rearranged_stacks = rearrangement_procedure.perform
+          rearranged_stacks = rearrangement_procedure.move_one_by_one
 
           puts "After the rearrangement procedure completes: #{rearranged_stacks.map { |stack| stack.last }.join}"
         end

@@ -8,17 +8,18 @@ module Year2022
         @rearrangement_steps = rearrangement_steps
       end
 
-      def perform
+      def move_one_by_one
         dup_stacks = Marshal.load(Marshal.dump(stacks))
 
         rearrangement_steps.each_with_index do |step|
-          step.number_of_crates.times do
-            from_stack = dup_stacks[step.from_stack_index]
-            to_stack = dup_stacks[step.to_stack_index]
-            to_stack = dup_stacks[step.to_stack_index]
+          from_stack = dup_stacks[step.from_stack_index]
+          to_stack = dup_stacks[step.to_stack_index]
 
-            to_stack.push(from_stack.pop)
-          end
+          step.number_of_crates.times { to_stack.push(from_stack.pop) }
+        end
+
+        dup_stacks
+      end
         end
 
         dup_stacks
