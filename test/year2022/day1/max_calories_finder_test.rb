@@ -1,5 +1,5 @@
 require 'test/unit'
-require './year2022/day1/max_calories_finder'
+require_relative '../../../year2022/day1/max_calories_finder'
 
 module Day1
   class MaxCaloriesFinderTest < Test::Unit::TestCase

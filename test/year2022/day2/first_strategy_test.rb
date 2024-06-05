@@ -1,5 +1,5 @@
 require 'test/unit'
-require './year2022/day2/first_strategy'
+require_relative '../../../year2022/day2/first_strategy'
 
 module Year2022
   module Day2

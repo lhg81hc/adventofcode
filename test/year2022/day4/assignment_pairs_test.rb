@@ -4,7 +4,7 @@ require_relative '../../../year2022/day4/assignment_sessions'
 
 module Year2022
   module Day4
-    class AssignmentSessionsTest < Test::Unit::TestCase
+    class AssignmentPairsTest < Test::Unit::TestCase
       def setup
         @str1 = '2-3,4-5'
         @str2 = '6-6,4-6'

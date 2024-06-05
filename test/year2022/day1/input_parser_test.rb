@@ -1,5 +1,5 @@
 require 'test/unit'
-require './year2022/day1/input_parser'
+require_relative '../../../year2022/day1/input_parser'
 
 module Day1
   class InputParserTest < Test::Unit::TestCase

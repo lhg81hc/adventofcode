@@ -1,6 +1,6 @@
 require 'test/unit'
-require './year2022/day3/common_item_types_finder'
-require './year2022/day3/rucksack'
+require_relative '../../../year2022/day3/common_item_types_finder'
+require_relative '../../../year2022/day3/rucksack'
 
 module Year2022
   module Day3
