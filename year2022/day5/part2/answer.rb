@@ -1,5 +1,5 @@
 require_relative '../input_parser'
-require_relative '../rearrangement_procedure'
+require_relative '../crane'
 
 module Year2022
   module Day5
@@ -10,15 +10,15 @@ module Year2022
         end
 
         def run
-          input_parser.parse
-          rearrangement_procedure = Year2022::Day5::RearrangementProcedure.new(input_parser.stacks, input_parser.rearrangement_steps)
-          rearranged_stacks = rearrangement_procedure.move_multiple_at_once
+          dup_stacks = Marshal.load(Marshal.dump(input_parser.stacks))
+          crane = Year2022::Day5::Crane.new(dup_stacks)
+          input_parser.rearrangement_steps.each { |step| crane.move_multiple_at_once(step) }
 
-          puts "After the rearrangement procedure completes: #{rearranged_stacks.map { |stack| stack.last }.join}"
+          puts "After the rearrangement procedure completes: #{dup_stacks.map { |stack| stack.last }.join}"
         end
 
         def input_parser
-          @input_parser ||= Year2022::Day5::InputParser.new(filepath)
+          @input_parser ||= Year2022::Day5::InputParser.parse(filepath)
         end
 
         def filepath

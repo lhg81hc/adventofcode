@@ -28,6 +28,8 @@ module Year2022
             build_stacks(chomped_line)
           end
         end
+
+        self
       end
 
       def add_rearrangement_step(line)
