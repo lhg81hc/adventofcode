@@ -10,16 +10,26 @@ module Year2022
         @datastream3 = 'nppdvjthqldpwncqszvftbrmjlhg'
         @datastream4 = 'nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg'
         @datastream5 = 'zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw'
+        @datastream6 = 'zcfzawbdqerljgfkmnopg'
 
         @subroutine = Year2022::Day6::Subroutine.new
       end
 
       def test_find_marker_position
-        assert_equal(7, @subroutine.find_marker_position(@datastream1))
-        assert_equal(5, @subroutine.find_marker_position(@datastream2))
-        assert_equal(6, @subroutine.find_marker_position(@datastream3))
-        assert_equal(10, @subroutine.find_marker_position(@datastream4))
-        assert_equal(11, @subroutine.find_marker_position(@datastream5))
+        assert_equal(7, @subroutine.find_marker_position(datastream: @datastream1, num_of_distinct_chars: 4))
+        assert_equal(5, @subroutine.find_marker_position(datastream: @datastream2, num_of_distinct_chars: 4))
+        assert_equal(6, @subroutine.find_marker_position(datastream: @datastream3, num_of_distinct_chars: 4))
+        assert_equal(10, @subroutine.find_marker_position(datastream: @datastream4, num_of_distinct_chars: 4))
+        assert_equal(11, @subroutine.find_marker_position(datastream: @datastream5, num_of_distinct_chars: 4))
+        assert_equal(11, @subroutine.find_marker_position(datastream: @datastream5, num_of_distinct_chars: 4))
+        assert_equal(17, @subroutine.find_marker_position(datastream: @datastream6, num_of_distinct_chars: 14))
+      end
+
+      def test_all_different_characters
+        assert(@subroutine.all_different_characters('abcde'))
+        assert(@subroutine.all_different_characters('wzlrfnpq'))
+        refute(@subroutine.all_different_characters('mjqj'))
+        refute(@subroutine.all_different_characters('zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw'))
       end
     end
   end

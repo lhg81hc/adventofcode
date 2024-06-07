@@ -2,7 +2,7 @@ require_relative '../subroutine'
 
 module Year2022
   module Day6
-    module Part1
+    module Part2
       class Answer
         def self.run
           new.run
@@ -10,7 +10,7 @@ module Year2022
 
         def run
           datastream = File.open(filepath).read.chomp
-          marker_position = Year2022::Day6::Subroutine.new.find_marker_position(datastream: datastream, num_of_distinct_chars: 4)
+          marker_position = Year2022::Day6::Subroutine.new.find_marker_position(datastream: datastream, num_of_distinct_chars: 14)
 
           puts "The number of characters need to be processed before the first start-of-packet marker is detected: #{marker_position ? marker_position : 'Not Found'}"
         end
