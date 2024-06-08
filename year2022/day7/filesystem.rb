@@ -87,8 +87,6 @@ module Year2022
           if child_node.directory?
             post_traversal(child_node, current_full_path, result)
             child_full_path = directory_full_path(current_full_path, child_node.to_s)
-
-            puts child_full_path
             result[current_full_path] += result[child_full_path]
           end
 
