@@ -7,8 +7,8 @@ module Year2022
 
         until start_index > end_index
           if start_index >= num_of_distinct_chars
-            str = datastream[(start_index - (num_of_distinct_chars - 1))..start_index]
-            return (start_index + 1) unless string_has_duplicate?(str)
+            sub_string = datastream[(start_index - (num_of_distinct_chars - 1))..start_index]
+            return (start_index + 1) unless string_has_duplicate?(sub_string)
           end
 
           start_index += 1
@@ -20,14 +20,11 @@ module Year2022
       def string_has_duplicate?(str)
         hash = {}
 
-        str.each_char do |char|
+        str.each_char.any? do |char|
           hash[char] ||= 0
           hash[char] += 1
-
-          return true if hash[char] > 1
+          hash[char] > 1
         end
-
-        false
       end
     end
   end
