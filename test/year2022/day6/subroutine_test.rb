@@ -15,14 +15,14 @@ module Year2022
         @subroutine = Year2022::Day6::Subroutine.new
       end
 
-      def test_find_marker_position
-        assert_equal(7, @subroutine.find_marker_position(datastream: @datastream1, num_of_distinct_chars: 4))
-        assert_equal(5, @subroutine.find_marker_position(datastream: @datastream2, num_of_distinct_chars: 4))
-        assert_equal(6, @subroutine.find_marker_position(datastream: @datastream3, num_of_distinct_chars: 4))
-        assert_equal(10, @subroutine.find_marker_position(datastream: @datastream4, num_of_distinct_chars: 4))
-        assert_equal(11, @subroutine.find_marker_position(datastream: @datastream5, num_of_distinct_chars: 4))
-        assert_equal(11, @subroutine.find_marker_position(datastream: @datastream5, num_of_distinct_chars: 4))
-        assert_equal(17, @subroutine.find_marker_position(datastream: @datastream6, num_of_distinct_chars: 14))
+      def test_first_marker_position
+        assert_equal(7, @subroutine.first_marker_position(datastream: @datastream1, num_of_distinct_chars: 4))
+        assert_equal(5, @subroutine.first_marker_position(datastream: @datastream2, num_of_distinct_chars: 4))
+        assert_equal(6, @subroutine.first_marker_position(datastream: @datastream3, num_of_distinct_chars: 4))
+        assert_equal(10, @subroutine.first_marker_position(datastream: @datastream4, num_of_distinct_chars: 4))
+        assert_equal(11, @subroutine.first_marker_position(datastream: @datastream5, num_of_distinct_chars: 4))
+        assert_equal(11, @subroutine.first_marker_position(datastream: @datastream5, num_of_distinct_chars: 4))
+        assert_equal(17, @subroutine.first_marker_position(datastream: @datastream6, num_of_distinct_chars: 14))
       end
 
       def test_string_has_duplicate?

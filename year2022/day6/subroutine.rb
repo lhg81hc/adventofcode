@@ -1,7 +1,7 @@
 module Year2022
   module Day6
     class Subroutine
-      def find_marker_position(datastream:, num_of_distinct_chars:)
+      def first_marker_position(datastream:, num_of_distinct_chars:)
         start_index = 0
         end_index = datastream.length - 1
 
