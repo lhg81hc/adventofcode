@@ -34,7 +34,7 @@ module Year2022
         command_type == :list
       end
 
-      def target_directory_nanme
+      def target_directory_name
         return nil unless change_directory_command?
 
         split_string[-1]

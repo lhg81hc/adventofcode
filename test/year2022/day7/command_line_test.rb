@@ -26,8 +26,8 @@ module Year2022
           refute(@command_line.list_command?)
         end
 
-        def test_target_directory_nanme
-          assert_equal('tjtccqtm', @command_line.target_directory_nanme)
+        def test_target_directory_name
+          assert_equal('tjtccqtm', @command_line.target_directory_name)
         end
       end
 
@@ -53,8 +53,8 @@ module Year2022
           assert(@command_line.list_command?)
         end
 
-        def test_target_directory_nanme
-          assert_nil(@command_line.target_directory_nanme)
+        def test_target_directory_name
+          assert_nil(@command_line.target_directory_name)
         end
       end
 
@@ -80,7 +80,7 @@ module Year2022
           assert_raises(ArgumentError) { @command_line.command_type }
         end
 
-        def test_target_directory_nanme
+        def test_target_directory_name
           assert_raises(ArgumentError) { @command_line.command_type }
         end
       end
