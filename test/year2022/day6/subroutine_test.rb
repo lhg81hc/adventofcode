@@ -25,11 +25,11 @@ module Year2022
         assert_equal(17, @subroutine.find_marker_position(datastream: @datastream6, num_of_distinct_chars: 14))
       end
 
-      def test_all_different_characters
-        assert(@subroutine.all_different_characters('abcde'))
-        assert(@subroutine.all_different_characters('wzlrfnpq'))
-        refute(@subroutine.all_different_characters('mjqj'))
-        refute(@subroutine.all_different_characters('zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw'))
+      def test_string_has_duplicate?
+        refute(@subroutine.string_has_duplicate?('abcde'))
+        refute(@subroutine.string_has_duplicate?('wzlrfnpq'))
+        assert(@subroutine.string_has_duplicate?('mjqj'))
+        assert(@subroutine.string_has_duplicate?('zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw'))
       end
     end
   end
