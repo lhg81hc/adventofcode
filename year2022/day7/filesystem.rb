@@ -17,48 +17,43 @@ module Year2022
 
       def browse(line)
         if command_line?(line)
-          command_line = Year2022::Day7::CommandLine.new(line)
-          execute_command(command_line)
-          return
+          execute_command(Year2022::Day7::CommandLine.new(line))
+        elsif terminal_output?(line)
+          save_terminal_output(Year2022::Day7::TerminalOutput.new(line))
         end
-
-        if terminal_output?(line)
-          terminal_output_line = Year2022::Day7::TerminalOutput.new(line)
-          save_terminal_output(terminal_output_line)
-          return
-        end
-
-        nil
       end
 
       def analyze_disk_usage
-        r = {}
-        post_traversal(root_node, nil, r)
-        r
-      end
-
-      def execute_command(command_line)
-        change_directory(command_line.target_directory_name) if command_line.change_directory_command?
-      end
-
-      def save_terminal_output(terminal_output_line)
-        node = Year2022::Day7::FilesystemNode.new(terminal_output_line.entity_name, terminal_output_line.entity_size, @current_node)
-
-        @current_node.add_child_nodes(node)
+        result = {}
+        post_traversal(@root_node, nil, result)
+        result
       end
 
       private
+
+      def execute_command(command_line)
+        return unless command_line.change_directory_command?
+
+        change_directory(command_line.target_directory_name)
+      end
+
+      def save_terminal_output(terminal_output_line)
+        node =
+          Year2022::Day7::FilesystemNode.new(
+            terminal_output_line.entity_name,
+            terminal_output_line.entity_size,
+            @current_node
+          )
+
+        @current_node.add_child_nodes(node)
+      end
 
       def find_node(directory_name)
         case directory_name
         when ROOT_DIRECTORY_NAME
           @root_node
         when PARENT_DIRECTORY_INDICATOR
-          if @current_node.root?
-            @root_node
-          else
-            @current_node.parent_node
-          end
+          @current_node.root? ? @root_node : @current_node.parent_node
         else
           @current_node.child_nodes.find { |node| node.name == directory_name }
         end
@@ -84,26 +79,21 @@ module Year2022
         result[current_full_path] ||= 0
 
         node.child_nodes.each do |child_node|
+          child_full_path = directory_full_path(current_full_path, child_node.to_s)
           if child_node.directory?
             post_traversal(child_node, current_full_path, result)
-            child_full_path = directory_full_path(current_full_path, child_node.to_s)
             result[current_full_path] += result[child_full_path]
-          end
-
-          if child_node.file?
+          elsif child_node.file?
             result[current_full_path] += child_node.size
           end
         end
       end
 
       def directory_full_path(parent_directory, current_directory)
-        if parent_directory.nil?
-          ROOT_DIRECTORY_NAME
-        elsif parent_directory == ROOT_DIRECTORY_NAME
-          parent_directory + current_directory
-        else
-          [parent_directory, current_directory].join('/')
-        end
+        return ROOT_DIRECTORY_NAME if parent_directory.nil?
+        return "#{ROOT_DIRECTORY_NAME}#{current_directory}" if parent_directory == ROOT_DIRECTORY_NAME
+
+        "#{parent_directory}/#{current_directory}"
       end
     end
   end
