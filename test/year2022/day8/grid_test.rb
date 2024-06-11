@@ -26,6 +26,38 @@ module Year2022
         assert_equal(new_tree, @grid.trees[10][1])
         assert_equal(1, @grid.trees[10].compact.length)
       end
+
+      def test_row
+        assert_equal(nil, @grid.row(0))
+
+        first_tree = Year2022::Day8::Tree.new(0, 0, 3)
+        @grid.add_tree(0, 0, first_tree)
+
+        assert_equal(1, @grid.row(0).length)
+        assert_equal([first_tree], @grid.row(0))
+
+        second_tree = Year2022::Day8::Tree.new(1, 0, 3)
+        @grid.add_tree(0, 1, second_tree)
+
+        assert_equal(2, @grid.row(0).length)
+        assert_equal([first_tree, second_tree], @grid.row(0))
+      end
+
+      def test_column
+        assert_equal(nil, @grid.column(1))
+
+        first_tree = Year2022::Day8::Tree.new(1, 0, 5)
+        @grid.add_tree(0, 1, first_tree)
+
+        assert_equal(1, @grid.column(1).length)
+        assert_equal([first_tree], @grid.column(1))
+
+        second_tree = Year2022::Day8::Tree.new(1, 1, 3)
+        @grid.add_tree(1, 1, second_tree)
+
+        assert_equal(2, @grid.row(0).length)
+        assert_equal([first_tree, second_tree], @grid.column(1))
+      end
     end
   end
 end
