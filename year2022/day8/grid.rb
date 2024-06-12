@@ -18,6 +18,7 @@ module Year2022
         @trees[line_index].insert(char_index, tree)
         @height = line_index + 1 if line_index + 1 >= @height
         @width = char_index + 1 if char_index + 1 >= @width
+        @columns = nil # reset columns
       end
 
       def total_trees
@@ -30,13 +31,16 @@ module Year2022
       alias :rows :trees
 
       def columns
-        return [] if width.zero?
+        @columns ||=
+          begin
+            return [] if width.zero?
 
-        (0..width - 1).inject([]) do |l, column_index|
-          l[column_index] = []
-          rows.each { |row| l[column_index] << (row.nil? ? row : row[column_index]) }
-          l
-        end
+            (0..width - 1).inject([]) do |l, column_index|
+              l[column_index] = []
+              rows.each { |row| l[column_index] << (row.nil? ? row : row[column_index]) }
+              l
+            end
+          end
       end
 
       def row(row_index)
