@@ -1,6 +1,10 @@
+require_relative 'grid_utils'
+
 module Year2022
   module Day8
     class Grid
+      include GridUtils
+
       attr_reader :trees, :width, :height
 
       def initialize(trees = [])
@@ -23,19 +27,28 @@ module Year2022
         end
       end
 
+      alias :rows :trees
+
+      def columns
+        return [] if width.zero?
+
+        (0..width - 1).inject([]) do |l, column_index|
+          l[column_index] = []
+          rows.each { |row| l[column_index] << (row.nil? ? row : row[column_index]) }
+          l
+        end
+      end
+
       def row(row_index)
         return nil unless row_index >= 0 && row_index < height
 
-        trees[row_index]
+        rows[row_index]
       end
 
       def column(column_index)
         return nil unless column_index >= 0 && column_index < width
 
-        trees.inject([]) do |s, row|
-          s << row[column_index]
-          s
-        end
+        columns[column_index]
       end
     end
   end
