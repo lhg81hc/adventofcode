@@ -1,7 +1,7 @@
 module Year2022
   module Day8
     module GridUtils
-      def total_visible_trees
+      def total_visible_trees_from_outside
         list = {}
         count = 0
 

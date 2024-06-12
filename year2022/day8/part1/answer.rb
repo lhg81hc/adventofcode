@@ -1,4 +1,3 @@
-require_relative '../visible_tree_counter'
 require_relative '../input_parser'
 
 module Year2022
@@ -10,7 +9,7 @@ module Year2022
         end
 
         def run
-          puts "The number of trees that are visible from outside the grid #{Year2022::Day8::VisibleTreeCounter.new(grid).count}"
+          puts "The number of trees that are visible from outside the grid #{grid.total_visible_trees_from_outside}"
         end
 
         def grid
