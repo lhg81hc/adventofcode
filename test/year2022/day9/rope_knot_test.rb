@@ -13,10 +13,13 @@ module Year2022
           @rope_knot = Year2022::Day9::RopeKnot.new(@char_index, @line_index, @type)
         end
 
-        def test_location_and_location=
+        def test_last_location_and_location_and_location=
           assert_equal([10, 5], @rope_knot.location)
+          assert_equal(nil, @rope_knot.last_location)
+
           @rope_knot.location = [4, 4]
           assert_equal([4, 4], @rope_knot.location)
+          assert_equal([10, 5], @rope_knot.last_location)
         end
 
         def test_type_abbreviation
@@ -37,10 +40,13 @@ module Year2022
           @rope_knot = Year2022::Day9::RopeKnot.new(@char_index, @line_index, @type)
         end
 
-        def test_location_and_location=
+        def test_last_location_and_location_and_location=
           assert_equal([1, 1], @rope_knot.location)
+          assert_equal(nil, @rope_knot.last_location)
+
           @rope_knot.location = [4, 4]
           assert_equal([4, 4], @rope_knot.location)
+          assert_equal([1, 1], @rope_knot.last_location)
         end
 
         def test_type_abbreviation
