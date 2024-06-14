@@ -3,45 +3,13 @@ module Year2022
     module GridUtils
       def total_visible_trees_from_outside
         list = {}
-        count = 0
 
-        rows.each do |row|
-          row.inject([]) do |arr, tree|
-            visible_trees(arr, tree, list)
-            arr
-          end
-
-          row.reverse_each.inject([]) do |arr, tree|
-            visible_trees(arr, tree, list)
-            arr
-          end
-        end
-
-        columns.each do |column|
-          column.inject([]) do |arr, tree|
-            visible_trees(arr, tree, list)
-            arr
-          end
-
-          column.reverse_each.inject([]) do |arr, tree|
-            visible_trees(arr, tree, list)
-            arr
-          end
-        end
+        process_rows_or_columns(rows, list)
+        process_rows_or_columns(rows.map(&:reverse), list)
+        process_rows_or_columns(columns, list)
+        process_rows_or_columns(columns.map(&:reverse), list)
 
         list.keys.count
-      end
-
-      def visible_trees(arr, tree, list)
-        if arr.empty?
-          arr << tree
-          list[tree.to_s] = tree unless list[tree.to_s]
-        else
-          if tree.height > arr.last.height
-            arr << tree
-            list[tree.to_s] = tree unless list[tree.to_s]
-          end
-        end
       end
 
       def highest_scenic_score
@@ -59,59 +27,58 @@ module Year2022
         max
       end
 
-      def scenic_score_for_tree(tree)
-        west_viewing_distance(tree) *
-          east_viewing_distance(tree) *
-          north_viewing_distance(tree) *
-          south_viewing_distance(tree)
+      private
+
+      def process_rows_or_columns(rows_or_columns, list)
+        rows_or_columns.each do |line|
+          line.inject([]) { |visible, tree| add_visible_tree(visible, tree, list) }
+        end
       end
 
-      def west_viewing_distance(tree)
-        blockage_index = west_view_blockage_index(tree)
-        blockage_index.nil? ? tree.char_index : (tree.char_index - blockage_index)
+      def add_visible_tree(visible, tree, list)
+        if visible.empty? || tree.height > visible.last.height
+          visible << tree
+          list[tree.to_s] ||= true
+        end
+
+        visible
+      end
+
+      def scenic_score_for_tree(tree)
+        [:west, :east, :north, :south].inject(1) { |score, direction| score * distance_to_blockage(tree, direction) }
+      end
+
+      def distance_to_blockage(tree, direction)
+        blockage_index = send("#{direction}_view_blockage_index", tree)
+
+        case direction
+        when :west
+          blockage_index.nil? ? tree.char_index : (tree.char_index - blockage_index)
+        when :east
+          blockage_index.nil? ? (width - tree.char_index - 1) : (blockage_index - tree.char_index)
+        when :north
+          blockage_index.nil? ? tree.line_index : (tree.line_index - blockage_index)
+        when :south
+          blockage_index.nil? ? (height - tree.line_index - 1) : (blockage_index - tree.line_index)
+        else
+          0 # never happen
+        end
       end
 
       def west_view_blockage_index(tree)
-        (tree.char_index - 1).downto(0).find do |i|
-          curr_tree = rows[tree.line_index][i]
-          curr_tree.height >= tree.height
-        end
-      end
-
-      def east_viewing_distance(tree)
-        blockage_index = east_view_blockage_index(tree)
-        blockage_index.nil? ? (width - 1 - tree.char_index) : (blockage_index - tree.char_index)
+        (tree.char_index - 1).downto(0).find { |i| rows[tree.line_index][i].height >= tree.height }
       end
 
       def east_view_blockage_index(tree)
-        ((tree.char_index + 1)..(width - 1)).find do |i|
-          curr_tree = rows[tree.line_index][i]
-          curr_tree.height >= tree.height
-        end
-      end
-
-      def north_viewing_distance(tree)
-        blockage_index = north_view_blockage_index(tree)
-        blockage_index.nil? ? tree.line_index : (tree.line_index - blockage_index)
+        ((tree.char_index + 1)...width).find { |i| rows[tree.line_index][i].height >= tree.height }
       end
 
       def north_view_blockage_index(tree)
-        (tree.line_index - 1).downto(0).find do |i|
-          curr_tree = columns[tree.char_index][i]
-          curr_tree.height >= tree.height
-        end
-      end
-
-      def south_viewing_distance(tree)
-        blockage_index = south_view_blockage_index(tree)
-        blockage_index.nil? ? (height - 1 - tree.line_index) : (blockage_index - tree.line_index)
+        (tree.line_index - 1).downto(0).find { |i| columns[tree.char_index][i].height >= tree.height }
       end
 
       def south_view_blockage_index(tree)
-        ((tree.line_index + 1)..(height - 1)).find do |i|
-          curr_tree = columns[tree.char_index][i]
-          curr_tree.height >= tree.height
-        end
+        ((tree.line_index + 1)...height).find { |i| columns[tree.char_index][i].height >= tree.height }
       end
     end
   end
