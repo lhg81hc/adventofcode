@@ -2,11 +2,14 @@ module Year2022
   module Day9
     class Knot
       attr_reader :line_index, :char_index, :ordinal_number
+      attr_accessor :prev_knot, :next_knot
 
-      def initialize(char_index, line_index, ordinal_number)
+      def initialize(char_index, line_index, ordinal_number, prev_knot = nil, next_knot = nil)
         @char_index = char_index
         @line_index = line_index
         @ordinal_number = ordinal_number
+        @prev_knot = prev_knot
+        @next_knot = next_knot
       end
 
       def last_location
@@ -24,6 +27,10 @@ module Year2022
 
       def to_s
         ordinal_number.to_s
+      end
+
+      def touching_with_adjacent_knots?
+        [prev_knot, next_knot].compact.all? { |k| touching_another?(k) }
       end
 
       def distance_to_another(another_knot)

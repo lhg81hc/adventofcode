@@ -10,10 +10,14 @@ module Year2022
           @line_index = 5
           @ordinal_number = 1
 
-          @knot = Year2022::Day9::Knot.new(@char_index, @line_index, @ordinal_number)
           @second_knot = Year2022::Day9::Knot.new(10, 5, 2)
           @third_knot = Year2022::Day9::Knot.new(10, 6, 3)
           @fourth_knot = Year2022::Day9::Knot.new(7, 7, 4)
+          @knot = Year2022::Day9::Knot.new(@char_index, @line_index, @ordinal_number, @third_knot, @second_knot)
+        end
+
+        def test_touching_with_adjacent_knots?
+          assert(@knot.touching_with_adjacent_knots?)
         end
 
         def test_last_location_and_location_and_location=

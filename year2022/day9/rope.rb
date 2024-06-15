@@ -3,52 +3,74 @@
 module Year2022
   module Day9
     class Rope
-      attr_reader :knots
+      attr_reader :head, :tail, :length
 
-      def initialize(knots)
-        @knots = knots
+      def initialize(head)
+        @head = head
+        @tail = head
+        @length = 1
       end
 
-      def head
-        @knots[0]
+      def append_knot(knot)
+        if @tail.prev_knot.nil?
+          @tail = knot
+          @head.next_knot = knot
+          knot.prev_knot = @head
+        else
+          @tail.next_knot = knot
+          knot.prev_knot = @tail
+          @tail = knot
+        end
+
+        @length += 1
+        @tail
       end
 
-      def tail
-        @knots[-1]
-      end
+      def find_knot_by_location(location)
+        curr_knot = head
 
-      def current_head_location
-        head.location
+        while curr_knot do
+          return curr_knot if curr_knot.location == location
+
+          curr_knot = curr_knot.next_knot
+        end
+
+        nil
       end
 
       def move(direction)
-        prev_knot = nil
+        curr_knot = head
 
-        knots.each do |knot|
-          if prev_knot.nil?
-            knot.location = next_head_location(direction).dup
+        while curr_knot do
+          if curr_knot.prev_knot.nil?
+            curr_knot.location = next_location_by_direction(curr_knot.location, direction)
           else
-            if prev_knot.touching_another?(knot)
-              break
+            candidate_next_location = next_location_by_direction(curr_knot.location, direction)
+
+            if candidate_next_location != curr_knot.prev_knot.last_location
+              curr_knot.location = candidate_next_location
+              curr_knot.location = curr_knot.prev_knot.last_location.dup unless curr_knot.touching_with_adjacent_knots?
             else
-              knot.location = prev_knot.last_location.dup
+              curr_knot.location = curr_knot.prev_knot.last_location.dup
             end
           end
 
-          prev_knot = knot
+          break if curr_knot.touching_with_adjacent_knots?
+
+          curr_knot = curr_knot.next_knot
         end
       end
 
-      def next_head_location(direction)
+      def next_location_by_direction(location, direction)
         case direction
         when 'U'
-          [current_head_location[0], current_head_location[1] + 1]
+          [location[0], location[1] + 1]
         when 'D'
-          [current_head_location[0], current_head_location[1] - 1]
+          [location[0], location[1] - 1]
         when 'R'
-          [current_head_location[0] + 1, current_head_location[1]]
+          [location[0] + 1, location[1]]
         when 'L'
-          [current_head_location[0] - 1, current_head_location[1]]
+          [location[0] - 1, location[1]]
         else
           raise ArgumentError, "Invalid direction: #{direction}"
         end
