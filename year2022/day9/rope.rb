@@ -1,43 +1,57 @@
-require_relative 'step_utils'
+# require_relative 'step_utils'
 
 module Year2022
   module Day9
     class Rope
-      include StepUtils
+      attr_reader :knots
 
-      attr_accessor :head, :tail
-
-      def initialize(head, tail)
-        @head = head
-        @tail = tail
+      def initialize(knots)
+        @knots = knots
       end
 
-      def length
-        if two_ends_overlapping?
-          0
-        elsif horizontal_diff_between_head_and_tail > vertical_diff_between_head_and_tail
-          horizontal_diff_between_head_and_tail
-        else
-          vertical_diff_between_head_and_tail
+      def head
+        @knots[0]
+      end
+
+      def tail
+        @knots[-1]
+      end
+
+      def current_head_location
+        head.location
+      end
+
+      def move(direction)
+        prev_knot = nil
+
+        knots.each do |knot|
+          if prev_knot.nil?
+            knot.location = next_head_location(direction).dup
+          else
+            if prev_knot.touching_another?(knot)
+              break
+            else
+              knot.location = prev_knot.last_location.dup
+            end
+          end
+
+          prev_knot = knot
         end
       end
 
-      def head_covers_tail?
-        head.char_index == tail.char_index && head.line_index == tail.line_index
-      end
-
-      alias :two_ends_overlapping? :head_covers_tail?
-
-      def two_ends_touching?
-        length <= 1
-      end
-
-      def horizontal_diff_between_head_and_tail
-        (head.char_index - tail.char_index).abs
-      end
-
-      def vertical_diff_between_head_and_tail
-        (tail.line_index - head.line_index).abs
+      def next_head_location(direction)
+        case direction
+        when 'U'
+          [current_head_location[0], current_head_location[1] + 1]
+        when 'D'
+          [current_head_location[0], current_head_location[1] - 1]
+        when 'R'
+          [current_head_location[0] + 1, current_head_location[1]]
+        when 'L'
+          [current_head_location[0] - 1, current_head_location[1]]
+        else
+          raise ArgumentError, "Invalid direction: #{direction}"
+        end
       end
     end
   end
