@@ -37,15 +37,20 @@ module Year2022
         end
 
         def rope
-          @rope ||= Year2022::Day9::Rope.new([head, tail])
+          @rope ||=
+            begin
+              r = Year2022::Day9::Rope.new(head)
+              r.append_knot(tail)
+              r
+            end
         end
 
         def head
-          Year2022::Day9::Knot.new(0, 0, 'head')
+          Year2022::Day9::Knot.new(0, 0, 'H')
         end
 
         def tail
-          Year2022::Day9::Knot.new(0, 0, 'tail')
+          Year2022::Day9::Knot.new(0, 0, 'T')
         end
 
         def filepath

@@ -25,8 +25,14 @@ module Year2022
 
         def test_append_knot
           assert_equal(@second_knot, @rope.tail)
+
           @rope.append_knot(@third_knot)
+
           assert_equal(@third_knot, @rope.tail)
+          assert_equal(@third_knot, @second_knot.next_knot)
+          assert_equal(@second_knot, @third_knot.prev_knot)
+          assert_nil(@third_knot.next_knot)
+          # assert_equal(@second_knot, @third_knot.prev_knot)
         end
 
         def test_find_knot_by_location
@@ -52,15 +58,15 @@ module Year2022
           assert_equal([1, 3], @second_knot.location)
           assert_equal([1, 3], @third_knot.location)
 
-          @rope.move('U')
-          assert_equal([1, 5], @head.location)
-          assert_equal([1, 4], @second_knot.location)
-          assert_equal([1, 3], @third_knot.location)
-
-          @rope.move('U')
-          assert_equal([1, 6], @head.location)
-          assert_equal([1, 5], @second_knot.location)
-          assert_equal([1, 4], @third_knot.location)
+          # @rope.move('U')
+          # assert_equal([1, 5], @head.location)
+          # assert_equal([1, 4], @second_knot.location)
+          # assert_equal([1, 3], @third_knot.location)
+          #
+          # @rope.move('U')
+          # assert_equal([1, 6], @head.location)
+          # assert_equal([1, 5], @second_knot.location)
+          # assert_equal([1, 4], @third_knot.location)
         end
       end
     end

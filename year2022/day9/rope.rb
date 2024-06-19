@@ -1,5 +1,3 @@
-# require_relative 'step_utils'
-
 module Year2022
   module Day9
     class Rope
@@ -44,18 +42,27 @@ module Year2022
         while curr_knot do
           if curr_knot.prev_knot.nil?
             curr_knot.location = next_location_by_direction(curr_knot.location, direction)
+            break if curr_knot.touching_another?(curr_knot.next_knot)
           else
-            candidate_next_location = next_location_by_direction(curr_knot.location, direction)
+            break if curr_knot.touching_another?(curr_knot.prev_knot)
 
-            if candidate_next_location != curr_knot.prev_knot.last_location
-              curr_knot.location = candidate_next_location
-              curr_knot.location = curr_knot.prev_knot.last_location.dup unless curr_knot.touching_with_adjacent_knots?
+            if curr_knot.next_knot.nil?
+              curr_knot.location = curr_knot.prev_knot.last_location.dup
             else
               curr_knot.location = curr_knot.prev_knot.last_location.dup
             end
+
+
+            # candidate_next_location = next_location_by_direction(curr_knot.location, direction)
+
+            # if candidate_next_location != curr_knot.prev_knot.last_location
+            #   curr_knot.location = candidate_next_location
+            #   curr_knot.location = curr_knot.prev_knot.last_location.dup unless curr_knot.touching_with_adjacent_knots?
+            # else
+            #
+            # end
           end
 
-          break if curr_knot.touching_with_adjacent_knots?
 
           curr_knot = curr_knot.next_knot
         end
