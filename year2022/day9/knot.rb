@@ -41,6 +41,11 @@ module Year2022
               head_knot.char_index,
               head_knot.line_index > line_index ? head_knot.line_index - 1 : head_knot.line_index + 1
             ]
+          elsif horizontal_distance == 2 && vertical_distance == 2
+            [
+              head_knot.char_index > char_index ? head_knot.char_index - 1 : head_knot.char_index + 1,
+              head_knot.line_index > line_index ? head_knot.line_index - 1 : head_knot.line_index + 1
+            ]
           elsif horizontal_distance == 1 && vertical_distance == 1
             location
           else
