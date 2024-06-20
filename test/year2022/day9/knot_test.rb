@@ -8,59 +8,81 @@ module Year2022
         def setup
           @char_index = 10
           @line_index = 5
-          @ordinal_number = 1
+          @name = 1
 
           @second_knot = Year2022::Day9::Knot.new(10, 5, 2)
           @third_knot = Year2022::Day9::Knot.new(10, 6, 3)
           @fourth_knot = Year2022::Day9::Knot.new(7, 7, 4)
-          @knot = Year2022::Day9::Knot.new(@char_index, @line_index, @ordinal_number, @third_knot, @second_knot)
+          @knot = Year2022::Day9::Knot.new(@char_index, @line_index, @name, @third_knot, @second_knot)
         end
 
-        def test_touching_with_adjacent_knots?
-          assert(@knot.touching_with_adjacent_knots?)
-        end
-
-        def test_last_location_and_location_and_location=
+        def test_location_and_location=
           assert_equal([10, 5], @knot.location)
-          assert_equal(nil, @knot.last_location)
 
           @knot.location = [4, 4]
           assert_equal([4, 4], @knot.location)
-          assert_equal([10, 5], @knot.last_location)
         end
 
         def test_to_s
           assert_equal('1', @knot.to_s)
         end
 
-        def test_distance_to_another
-          assert_equal(0, @knot.distance_to_another(@second_knot))
-          assert_equal(1, @knot.distance_to_another(@third_knot))
-          assert_equal(3, @knot.distance_to_another(@fourth_knot))
+        def test_overlapping_with_another_knot?
+          assert(@knot.overlapping_with_another_knot?(@second_knot))
+          refute(@knot.overlapping_with_another_knot?(@third_knot))
+          refute(@knot.overlapping_with_another_knot?(@fourth_knot))
         end
 
-        def test_overlapping_with_another?
-          assert(@knot.overlapping_with_another?(@second_knot))
-          refute(@knot.overlapping_with_another?(@third_knot))
-          refute(@knot.overlapping_with_another?(@fourth_knot))
+        def test_horizontal_distance_to_another_knot
+          assert_equal(0, @knot.horizontal_distance_to_another_knot(@second_knot))
+          assert_equal(0, @knot.horizontal_distance_to_another_knot(@third_knot))
+          assert_equal(3, @knot.horizontal_distance_to_another_knot(@fourth_knot))
         end
 
-        def test_touching_another?
-          assert(@knot.touching_another?(@second_knot))
-          assert(@knot.touching_another?(@third_knot))
-          refute(@knot.touching_another?(@fourth_knot))
+        def test_vertical_distance_to_another_knot
+          assert_equal(0, @knot.vertical_distance_to_another_knot(@second_knot))
+          assert_equal(1, @knot.vertical_distance_to_another_knot(@third_knot))
+          assert_equal(2, @knot.vertical_distance_to_another_knot(@fourth_knot))
         end
 
-        def test_horizontal_distance_to_another
-          assert_equal(0, @knot.horizontal_distance_to_another(@second_knot))
-          assert_equal(0, @knot.horizontal_distance_to_another(@third_knot))
-          assert_equal(3, @knot.horizontal_distance_to_another(@fourth_knot))
+        def test_next_location_by_direction
+          assert_equal([10, 6], @knot.next_location_by_direction('U'))
+          assert_equal([10, 4], @knot.next_location_by_direction('D'))
+          assert_equal([9, 5], @knot.next_location_by_direction('L'))
+          assert_equal([11, 5], @knot.next_location_by_direction('R'))
         end
 
-        def test_vertical_distance_to_another
-          assert_equal(0, @knot.vertical_distance_to_another(@second_knot))
-          assert_equal(1, @knot.vertical_distance_to_another(@third_knot))
-          assert_equal(2, @knot.vertical_distance_to_another(@fourth_knot))
+        def test_next_location_to_follow_head_knot
+          head_knot = Year2022::Day9::Knot.new(10, 5, 'H')
+          assert_equal([10, 5], @knot.next_location_to_follow_head_knot(head_knot))
+
+          # Horizontal differences
+          head_knot = Year2022::Day9::Knot.new(8, 5, 'H')
+          assert_equal([9, 5], @knot.next_location_to_follow_head_knot(head_knot))
+
+          head_knot = Year2022::Day9::Knot.new(12, 5, 'H')
+          assert_equal([11, 5], @knot.next_location_to_follow_head_knot(head_knot))
+
+          # vertical differences
+          head_knot = Year2022::Day9::Knot.new(10, 3, 'H')
+          assert_equal([10, 4], @knot.next_location_to_follow_head_knot(head_knot))
+
+          head_knot = Year2022::Day9::Knot.new(10, 7, 'H')
+          assert_equal([10, 6], @knot.next_location_to_follow_head_knot(head_knot))
+
+          # touching
+          head_knot = Year2022::Day9::Knot.new(11, 6, 'H')
+          assert_equal([10, 5], @knot.next_location_to_follow_head_knot(head_knot))
+
+          # diagonal differences
+          head_knot = Year2022::Day9::Knot.new(12, 6, 'H')
+          assert_equal([11, 6], @knot.next_location_to_follow_head_knot(head_knot))
+
+          head_knot = Year2022::Day9::Knot.new(9, 3, 'H')
+          assert_equal([9, 4], @knot.next_location_to_follow_head_knot(head_knot))
+
+          head_knot = Year2022::Day9::Knot.new(12, 7, 'H')
+          assert_raises(ArgumentError) { @knot.next_location_to_follow_head_knot(head_knot) }
         end
       end
     end

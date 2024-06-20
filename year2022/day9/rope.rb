@@ -10,14 +10,10 @@ module Year2022
       end
 
       def append_knot(knot)
-        if @tail.prev_knot.nil?
-          @tail = knot
-          @head.next_knot = knot
-          knot.prev_knot = @head
+        if head_only?
+          append_knot_to_head(knot)
         else
-          @tail.next_knot = knot
-          knot.prev_knot = @tail
-          @tail = knot
+          append_knot_to_tail(knot)
         end
 
         @length += 1
@@ -40,47 +36,39 @@ module Year2022
         curr_knot = head
 
         while curr_knot do
-          if curr_knot.prev_knot.nil?
-            curr_knot.location = next_location_by_direction(curr_knot.location, direction)
-            break if curr_knot.touching_another?(curr_knot.next_knot)
-          else
-            break if curr_knot.touching_another?(curr_knot.prev_knot)
+          prev_knot = curr_knot.prev_knot
+          next_knot = curr_knot.next_knot
 
-            if curr_knot.next_knot.nil?
-              curr_knot.location = curr_knot.prev_knot.last_location.dup
+          next_location =
+            if prev_knot.nil?
+              curr_knot.next_location_by_direction(direction)
             else
-              curr_knot.location = curr_knot.prev_knot.last_location.dup
+              curr_knot.next_location_to_follow_head_knot(prev_knot)
             end
 
+          break if next_location == curr_knot.location
 
-            # candidate_next_location = next_location_by_direction(curr_knot.location, direction)
-
-            # if candidate_next_location != curr_knot.prev_knot.last_location
-            #   curr_knot.location = candidate_next_location
-            #   curr_knot.location = curr_knot.prev_knot.last_location.dup unless curr_knot.touching_with_adjacent_knots?
-            # else
-            #
-            # end
-          end
-
-
-          curr_knot = curr_knot.next_knot
+          curr_knot.location = next_location
+          curr_knot = next_knot
         end
       end
 
-      def next_location_by_direction(location, direction)
-        case direction
-        when 'U'
-          [location[0], location[1] + 1]
-        when 'D'
-          [location[0], location[1] - 1]
-        when 'R'
-          [location[0] + 1, location[1]]
-        when 'L'
-          [location[0] - 1, location[1]]
-        else
-          raise ArgumentError, "Invalid direction: #{direction}"
-        end
+      private
+
+      def head_only?
+        tail.object_id == head.object_id
+      end
+
+      def append_knot_to_head(knot)
+        @tail = knot
+        @head.next_knot = @tail
+        @tail.prev_knot = @head
+      end
+
+      def append_knot_to_tail(knot)
+        @tail.next_knot = knot
+        knot.prev_knot = @tail
+        @tail = knot
       end
     end
   end
