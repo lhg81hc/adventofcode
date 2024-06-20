@@ -82,7 +82,7 @@ module Year2022
           assert_equal([9, 4], @knot.next_location_to_follow_head_knot(head_knot))
 
           head_knot = Year2022::Day9::Knot.new(12, 7, 'H')
-          assert_raises(ArgumentError) { @knot.next_location_to_follow_head_knot(head_knot) }
+          assert_equal([11, 6], @knot.next_location_to_follow_head_knot(head_knot))
         end
       end
     end

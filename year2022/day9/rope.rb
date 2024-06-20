@@ -20,18 +20,6 @@ module Year2022
         @tail
       end
 
-      def find_knot_by_location(location)
-        curr_knot = head
-
-        while curr_knot do
-          return curr_knot if curr_knot.location == location
-
-          curr_knot = curr_knot.next_knot
-        end
-
-        nil
-      end
-
       def move(direction)
         curr_knot = head
 

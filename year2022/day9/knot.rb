@@ -28,29 +28,7 @@ module Year2022
         if overlapping_with_another_knot?(head_knot)
           location
         else
-          horizontal_distance = horizontal_distance_to_another_knot(head_knot)
-          vertical_distance = vertical_distance_to_another_knot(head_knot)
-
-          if horizontal_distance > vertical_distance
-            [
-              head_knot.char_index > char_index ? head_knot.char_index - 1 : head_knot.char_index + 1,
-              head_knot.line_index
-            ]
-          elsif horizontal_distance < vertical_distance
-            [
-              head_knot.char_index,
-              head_knot.line_index > line_index ? head_knot.line_index - 1 : head_knot.line_index + 1
-            ]
-          elsif horizontal_distance == 2 && vertical_distance == 2
-            [
-              head_knot.char_index > char_index ? head_knot.char_index - 1 : head_knot.char_index + 1,
-              head_knot.line_index > line_index ? head_knot.line_index - 1 : head_knot.line_index + 1
-            ]
-          elsif horizontal_distance == 1 && vertical_distance == 1
-            location
-          else
-            raise ArgumentError, 'Invalid head location'
-          end
+          next_location_based_on_distances(head_knot)
         end
       end
 
@@ -79,6 +57,39 @@ module Year2022
         else
           raise ArgumentError, "Invalid direction: #{direction}"
         end
+      end
+
+      private
+
+      def next_location_based_on_distances(head_knot)
+        horizontal_distance = horizontal_distance_to_another_knot(head_knot)
+        vertical_distance = vertical_distance_to_another_knot(head_knot)
+
+        case
+        when horizontal_distance > vertical_distance
+          [
+            adjust_index(head_knot.char_index, char_index),
+            head_knot.line_index
+          ]
+        when horizontal_distance < vertical_distance
+          [
+            head_knot.char_index,
+            adjust_index(head_knot.line_index, line_index)
+          ]
+        when horizontal_distance == 2 && vertical_distance == 2
+          [
+            adjust_index(head_knot.char_index, char_index),
+            adjust_index(head_knot.line_index, line_index)
+          ]
+        when horizontal_distance == 1 && vertical_distance == 1
+          location
+        else
+          raise ArgumentError, 'Invalid head location'
+        end
+      end
+
+      def adjust_index(head_index, current_index)
+        head_index > current_index ? head_index - 1 : head_index + 1
       end
     end
   end

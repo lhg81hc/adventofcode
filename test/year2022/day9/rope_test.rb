@@ -25,14 +25,6 @@ module Year2022
         assert_nil(@second_knot.next_knot)
       end
 
-      def test_find_knot_by_location
-        assert_equal(@head, @rope.find_knot_by_location([0, 0]))
-        assert_nil(@rope.find_knot_by_location([1, 2]))
-
-        @rope.append_knot(@second_knot)
-        assert_equal(@second_knot, @rope.find_knot_by_location([1, 2]))
-      end
-
       def test_move_when_2_knots
         tail = Year2022::Day9::Knot.new(0, 0, 'T')
         @rope.append_knot(tail)
