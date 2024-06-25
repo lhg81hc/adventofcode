@@ -3,6 +3,9 @@ module Year2022
     class CathodeRayTubeScreen
       WIDTH = 40
       HEIGHT = 6
+      LIT_PIXEL = '#'.freeze
+      DARK_PIXEL = '.'.freeze
+      INITIAL_SPRITE_POSITIONS = [0, 1, 2].freeze
 
       attr_reader :pixel_map
       attr_accessor :sprite_pixel_horizontal_positions
@@ -32,9 +35,9 @@ module Year2022
         line_index = cycle_to_line_index(cycle_ordinal_number)
 
         if ([char_index] & @sprite_pixel_horizontal_positions).any?
-          @pixel_map[line_index][char_index] = '#'
+          @pixel_map[line_index][char_index] = LIT_PIXEL
         else
-          @pixel_map[line_index][char_index] = '.'
+          @pixel_map[line_index][char_index] = DARK_PIXEL
         end
       end
 
@@ -44,7 +47,7 @@ module Year2022
       end
 
       def setup
-        @pixel_map = Array.new(HEIGHT) { Array.new(WIDTH, '.') }
+        @pixel_map = Array.new(HEIGHT) { Array.new(WIDTH, DARK_PIXEL) }
         @sprite_pixel_horizontal_positions = [0, 1, 2]
       end
     end
