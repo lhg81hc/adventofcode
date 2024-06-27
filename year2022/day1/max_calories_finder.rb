@@ -25,7 +25,6 @@ module Day1
 
           heap.shift
           heap.append(sum_of_calories)
-
         else
           heap.append(sum_of_calories)
         end
