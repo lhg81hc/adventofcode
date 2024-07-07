@@ -7,7 +7,7 @@ module Year2022
         attr_reader :number_of_rounds
 
         def initialize
-          @number_of_rounds = 20
+          @number_of_rounds = 10000
         end
 
         def self.run
@@ -28,15 +28,6 @@ module Year2022
           end
         end
 
-        def play_a_keep_away_round
-          monkeys.each do |_monkey_name, monkey|
-            monkey.inspect_and_throw_all_holding_items!.each do |next_item_value, next_monkey_name|
-              next_monkey = monkeys[next_monkey_name]
-              next_monkey.catch_item(next_item_value)
-            end
-          end
-        end
-
         def puts_round_result(round_number)
           puts "== After round #{round_number} =="
 
@@ -45,6 +36,15 @@ module Year2022
           end
 
           puts "\n"
+        end
+
+        def play_a_keep_away_round
+          monkeys.each do |_monkey_name, monkey|
+            monkey.inspect_and_throw_all_holding_items!(absolute_limit).each do |next_item_value, next_monkey_name|
+              next_monkey = monkeys[next_monkey_name]
+              next_monkey.catch_item(next_item_value)
+            end
+          end
         end
 
         def monkeys
@@ -67,8 +67,16 @@ module Year2022
             end
         end
 
+        def absolute_limit
+          @absolute_limit ||=
+            monkeys.values.inject(1) do |p, monkey|
+              p *= monkey.rule.divisible_by
+              p
+            end
+        end
+
         def add_monkey(list, monkey_attribute_lines)
-          monkey = Year2022::Day11::MonkeyParser.parse(monkey_attribute_lines, true)
+          monkey = Year2022::Day11::MonkeyParser.parse(monkey_attribute_lines, false)
           list[monkey.name] = monkey
         end
 
