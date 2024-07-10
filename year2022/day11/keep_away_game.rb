@@ -14,12 +14,12 @@ module Year2022
         end
       end
 
-      def play_several_rounds!(number_of_rounds)
+      def play_several_rounds!(number_of_rounds, print_round_result: false)
         number_of_rounds.times do |n|
-          round_number = (n + 1)
+          round_number = n + 1
 
           play_one_round!
-          puts_round_result(round_number) if printable_round(round_number)
+          puts_round_result(round_number) if printable_round(round_number) && print_round_result
         end
       end
 

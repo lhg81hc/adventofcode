@@ -16,15 +16,18 @@ module Year2022
         end
 
         def run
-          game.play_several_rounds!(number_of_rounds)
-          inspections = monkeys.map(&:total_inspections).sort.reverse
+          game.play_several_rounds!(number_of_rounds, print_round_result: true)
 
           puts "The level of monkey business after #{number_of_rounds} rounds of stuff-slinging simian shenanigans: " +
-                 "#{inspections[0] * inspections[1]}"
+               "#{inspections[0] * inspections[1]}"
         end
 
         def game
           @game ||= Year2022::Day11::KeepAwayGame.new(monkeys)
+        end
+
+        def inspections
+          monkeys.map(&:total_inspections).sort.reverse
         end
 
         def monkeys
