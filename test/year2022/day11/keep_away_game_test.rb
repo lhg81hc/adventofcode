@@ -50,7 +50,7 @@ module Year2022
       end
 
       def test_play_several_rounds!
-        @game.play_several_rounds!(20)
+        20.times { @game.play! }
 
         assert_equal(101, @monkey_0.total_inspections)
         assert_equal(95, @monkey_1.total_inspections)
