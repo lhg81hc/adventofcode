@@ -1,5 +1,5 @@
 require 'test/unit'
-require_relative '../../../year2022/day11/rule.rb'
+require_relative '../../../year2022/day11/rule'
 
 module Year2022
   module Day11
