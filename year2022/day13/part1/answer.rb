@@ -1,7 +1,7 @@
 require_relative '../input_parser'
 
 module Year2022
-  module Day11
+  module Day13
     module Part1
       class Answer
         def self.run
@@ -11,12 +11,19 @@ module Year2022
         def run
           pairs = Year2022::Day13::InputParser.parse(input_path)
 
-          first_pair =  pairs.first
-          # first_package = first_pair.first
-          # second_package = first_pair.last
+          sum =
+            pairs.each.with_index.inject(0) do |s, (pair, index)|
+              if pair.right_order?
+                s += index + 1
+                puts "Pair #{index + 1}: Right Order"
+              else
+                puts "Pair #{index + 1}: Wrong Order"
+              end
 
-          # [[],[[[0],[8,10,2,8],[4]],[[7,7,2,2],10,1,2,[]]],[[[6,1,6,8,10],[8,6,4],[],[],2]]]
-          puts first_pair.first_package.items
+              s
+            end
+
+          puts "The sum of the indices of those pairs: #{sum}"
         end
 
         def input_path

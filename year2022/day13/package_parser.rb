@@ -1,10 +1,16 @@
 require_relative 'group_item'
 require_relative 'stand_alone_item'
+require_relative 'package'
 
 module Year2022
   module Day13
     class PackageParser
       def parse(line)
+        items = parse_package_items(line)
+        Year2022::Day13::Package.new(items)
+      end
+
+      def parse_package_items(line)
         stack = []
         curr_num_str = ''
         curr_group_item = nil

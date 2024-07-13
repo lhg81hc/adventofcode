@@ -11,7 +11,7 @@ module Year2022
       end
 
       def test_parse_with_only_integers_input
-        result = @parser.parse('[1,1,3,1,1]')
+        result = @parser.parse_package_items('[1,1,3,1,1]')
 
         assert(result.is_a?(Array))
         assert_equal(5, result.length)
@@ -22,7 +22,7 @@ module Year2022
       end
 
       def test_parse_with_nested_non_empty_arrays_input
-        result = @parser.parse('[[1],[2,3,4]]')
+        result = @parser.parse_package_items('[[1],[2,3,4]]')
         assert_equal(2, result.length)
 
         last_item = result.last
@@ -32,7 +32,7 @@ module Year2022
       end
 
       def test_parse_with_nested_empty_arrays_input
-        result = @parser.parse('[[[]]]')
+        result = @parser.parse_package_items('[[[]]]')
         assert_equal(1, result.length)
 
         group_item = result.first
@@ -45,7 +45,7 @@ module Year2022
       end
 
       def test_parse_with_complicated_input
-        result = @parser.parse('[1,[2,[3,[4,[5,6,0]]]],8,10]')
+        result = @parser.parse_package_items('[1,[2,[3,[4,[5,6,0]]]],8,10]')
 
         assert_equal(4, result.length)
 

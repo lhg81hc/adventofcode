@@ -1,8 +1,6 @@
-require_relative 'package_item'
-
 module Year2022
   module Day13
-    class GroupItem < PackageItem
+    class GroupItem
       attr_accessor :stand_alone_items
 
       def initialize(stand_alone_items = [])

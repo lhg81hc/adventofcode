@@ -20,20 +20,20 @@ module Year2022
         current_pair = []
 
         File.foreach(input_path) do |line|
-          parse_line(line.strip, pairs, current_pair) unless line.empty?
+          striped_line = line.strip
+          parse_line(striped_line, pairs, current_pair) unless striped_line.empty?
         end
 
         pairs
       end
 
       def parse_line(line, pairs, current_pair)
-        current_pair << build_package(line)
+        current_pair << parse_package_from_line(line)
         pairs << Year2022::Day13::Pair.new(current_pair.shift, current_pair.shift) if current_pair.length == 2
       end
 
-      def build_package(line)
-        items = Year2022::Day13::PackageParser.new.parse(line)
-        Year2022::Day13::Package.new(items)
+      def parse_package_from_line(line)
+        Year2022::Day13::PackageParser.new.parse(line)
       end
     end
   end
