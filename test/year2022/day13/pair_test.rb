@@ -19,58 +19,58 @@ module Year2022
         assert_equal(@second_package, @pair.second_package)
       end
 
-      def test_compare_when_items_are_all_integers
-        assert_equal(-1, @pair.compare)
+      def test_right_order_when_items_are_all_integers
+        assert(@pair.right_order?)
       end
 
-      def test_compare_when_right_package_runs_out_of_item_first
+      def test_right_order_when_right_package_runs_out_of_item_first
         left = @parser.parse('[7,7,7,7]')
         right = @parser.parse('[7,7,7]')
         another_pair = Year2022::Day13::Pair.new(left, right)
 
-        assert_equal(1, another_pair.compare)
+        refute(another_pair.right_order?)
       end
 
-      def test_compare_when_left_package_runs_out_of_item_first
+      def test_right_order_when_left_package_runs_out_of_item_first
         left = @parser.parse('[[4,4],4,4]')
         right = @parser.parse('[[4,4],4,4,4]')
         another_pair = Year2022::Day13::Pair.new(left, right)
 
-        assert_equal(-1, another_pair.compare)
+        assert(another_pair.right_order?)
       end
 
-      def test_compare_when_left_package_is_empty_but_right_package_is_not
+      def test_right_order_when_left_package_is_empty_but_right_package_is_not
         left = @parser.parse('[]')
         right = @parser.parse('[3]')
         another_pair = Year2022::Day13::Pair.new(left, right)
 
-        assert_equal(-1, another_pair.compare)
+        assert(another_pair.right_order?)
       end
 
-      def test_compare_when_items_are_mixed_of_complicated_nested_array_and_integers
+      def test_right_order_when_items_are_mixed_of_complicated_nested_array_and_integers
         left = @parser.parse('[[1],[2,3,4]]')
         right = @parser.parse('[[1],4]')
-        another_pair = Year2022::Day13::Pair.new(left, right)
+        @pair = Year2022::Day13::Pair.new(left, right)
 
-        assert_equal(-1, another_pair.compare)
+        assert(@pair.right_order?)
 
         left = @parser.parse('[9]')
         right = @parser.parse('[[8,7,6]]')
         @pair = Year2022::Day13::Pair.new(left, right)
 
-        assert_equal(1, @pair.compare)
+        refute(@pair.right_order?)
 
         left = @parser.parse('[[[]]]')
         right = @parser.parse('[[]]')
         @pair = Year2022::Day13::Pair.new(left, right)
 
-        assert_equal(1, @pair.compare)
+        refute(@pair.right_order?)
 
         left = @parser.parse('[1,[2,[3,[4,[5,6,7]]]],8,9]')
         right = @parser.parse('[1,[2,[3,[4,[5,6,0]]]],8,9]')
         @pair = Year2022::Day13::Pair.new(left, right)
 
-        assert_equal(1, @pair.compare)
+        refute(@pair.right_order?)
       end
     end
   end
