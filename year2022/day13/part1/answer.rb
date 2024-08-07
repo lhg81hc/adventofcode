@@ -9,8 +9,6 @@ module Year2022
         end
 
         def run
-          pairs = Year2022::Day13::InputParser.parse(input_path)
-
           sum =
             pairs.each.with_index.inject(0) do |s, (pair, index)|
               if pair.right_order?
@@ -24,6 +22,11 @@ module Year2022
             end
 
           puts "The sum of the indices of those pairs: #{sum}"
+        end
+
+
+        def pairs
+          Year2022::Day13::InputParser.parse_pairs(input_path)
         end
 
         def input_path

@@ -1,5 +1,4 @@
 require_relative 'package_parser'
-require_relative 'package'
 require_relative 'pair'
 
 module Year2022
@@ -11,11 +10,15 @@ module Year2022
         @input_path = input_path
       end
 
-      def self.parse(*args)
-        new(*args).parse
+      def self.parse_pairs(*args)
+        new(*args).parse_pairs
       end
 
-      def parse
+      def self.parse_packages(*args)
+        new(*args).parse_packages
+      end
+
+      def parse_pairs
         pairs = []
         current_pair = []
 
@@ -25,6 +28,15 @@ module Year2022
         end
 
         pairs
+      end
+
+      def parse_packages
+        File.foreach(input_path).inject([]) do |r, line|
+          striped_line = line.strip
+
+          r << parse_package_from_line(striped_line) unless striped_line.empty?
+          r
+        end
       end
 
       def parse_line(line, pairs, current_pair)

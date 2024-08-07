@@ -6,8 +6,7 @@ module Year2022
   module Day13
     class PackageParser
       def parse(line)
-        items = parse_package_items(line)
-        Year2022::Day13::Package.new(items)
+        Year2022::Day13::Package.new(parse_package_items(line), line)
       end
 
       def parse_package_items(line)
