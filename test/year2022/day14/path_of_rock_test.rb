@@ -12,13 +12,13 @@ module Year2022
         assert_equal('525,75 -> 525,77 -> 517,77 -> 517,83 -> 532,83 -> 532,77 -> 531,77 -> 531,75', @path_of_rock.str)
       end
 
-      def test_points
-        points = @path_of_rock.points
+      def test_rocks
+        rocks = @path_of_rock.rocks
 
-        assert_equal(8, points.length)
-        assert_equal('525,75', points[0].str)
-        assert_equal('517,83', points[3].str)
-        assert_equal('531,75', points[7].str)
+        assert_equal(8, rocks.length)
+        assert_equal('525,75', rocks[0].coordinates)
+        assert_equal('517,83', rocks[3].coordinates)
+        assert_equal('531,75', rocks[7].coordinates)
       end
 
       def test_lines_of_rock
@@ -26,12 +26,12 @@ module Year2022
         assert_equal(7, lines_of_rock.length)
 
         first_line_of_rock = lines_of_rock.first
-        assert_equal('525,75', first_line_of_rock.starting_point.str)
-        assert_equal('525,77', first_line_of_rock.ending_point.str)
+        assert_equal('525,75', first_line_of_rock.first_rock.coordinates)
+        assert_equal('525,77', first_line_of_rock.last_rock.coordinates)
 
         last_line_of_rock = lines_of_rock.last
-        assert_equal('531,77', last_line_of_rock.starting_point.str)
-        assert_equal('531,75', last_line_of_rock.ending_point.str)
+        assert_equal('531,77', last_line_of_rock.first_rock.coordinates)
+        assert_equal('531,75', last_line_of_rock.last_rock.coordinates)
       end
     end
   end

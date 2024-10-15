@@ -142,4 +142,4 @@
 
 require_relative 'answer'
 
-Year2022::Day13::Part1::Answer.run
+Year2022::Day14::Part1::Answer.run

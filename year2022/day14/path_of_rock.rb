@@ -1,4 +1,5 @@
-require_relative 'point'
+require_relative 'rock'
+require_relative 'line_of_rock'
 
 module Year2022
   module Day14
@@ -11,17 +12,17 @@ module Year2022
         @str = str
       end
 
-      def points
-        @points ||= str.split(POINT_DIVIDER).map { |point_coordinates| Year2022::Day14::Point.new(point_coordinates) }
+      def rocks
+        @rocks ||= str.split(POINT_DIVIDER).map { |rock_coordinates| Year2022::Day14::Rock.new(rock_coordinates) }
       end
 
       def lines_of_rock
         @lines_of_rock ||=
           begin
-            if points.length <= 1
+            if rocks.length <= 1
               []
             else
-              (0..points.length - 2).map { |point_idx| LineOfRock.new(points[point_idx], points[point_idx + 1]) }
+              (0..rocks.length - 2).map { |idx| LineOfRock.new(rocks[idx], rocks[idx + 1]) }
             end
           end
       end

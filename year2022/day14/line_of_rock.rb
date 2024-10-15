@@ -1,13 +1,20 @@
-require_relative 'point'
+require_relative 'rock'
+require_relative 'bresenham_line'
 
 module Year2022
   module Day14
     class LineOfRock
-      attr_reader :starting_point, :ending_point
+      include BresenhamLine
 
-      def initialize(starting_point, ending_point)
-        @starting_point = starting_point
-        @ending_point = ending_point
+      attr_reader :first_rock, :last_rock
+
+      def initialize(first_rock, last_rock)
+        @first_rock = first_rock
+        @last_rock = last_rock
+      end
+
+      def points
+        plot_line(first_rock.x, first_rock.y, last_rock.x, last_rock.y)
       end
     end
   end
