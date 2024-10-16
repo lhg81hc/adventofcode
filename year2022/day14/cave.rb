@@ -6,16 +6,18 @@ module Year2022
     class Cave
       ROCK_CHAR = '#'
       SAND_CHAR = 'o'
+      AIR_CHAR = '.'
 
-      attr_accessor :input_path, :min_x, :max_x, :min_y, :max_y, :two_dimensional_vertical_slice
+      attr_accessor :input_path, :min_x, :max_x, :min_y, :max_y, :floor, :two_dimensional_vertical_slice
 
-      def initialize(input_path)
+      def initialize(input_path, floor: false)
         @input_path = input_path
         @scanned = false
         @min_x = nil
         @max_x = nil
         @min_y = nil
         @max_y = nil
+        @floor = floor
         @two_dimensional_vertical_slice = []
       end
 
@@ -39,7 +41,9 @@ module Year2022
           end
         end
 
+        @max_y += 2 if floor
         @scanned = true
+
         nil
       end
 
@@ -48,13 +52,18 @@ module Year2022
 
         (0..max_y).each do |y|
           if two_dimensional_vertical_slice[y].nil?
-            puts Array.new((max_x + 1) - (min_x - 1), '.').join
+            if floor && y == max_y
+              puts Array.new((max_x + 1) - (min_x - 1) + 1, ROCK_CHAR).join
+            else
+              puts Array.new((max_x + 1) - (min_x - 1) + 1, AIR_CHAR).join
+            end
+
             next
           end
 
           line =
             ((min_x - 1)..(max_x + 1)).map do |x|
-              two_dimensional_vertical_slice[y][x] || '.'
+              two_dimensional_vertical_slice[y][x] || AIR_CHAR
             end
 
           puts line.join
@@ -78,6 +87,25 @@ module Year2022
           @two_dimensional_vertical_slice[sand.y] ||= []
           @two_dimensional_vertical_slice[sand.y][sand.x] = SAND_CHAR
         end
+
+        sand
+      end
+
+      def pour_sand_with_floor
+        sand = Year2022::Day14::Sand.new
+
+        next_coordinates = sand.next_coordinates.find { |x, y| (two_dimensional_vertical_slice[y].nil? || two_dimensional_vertical_slice[y][x].nil?) && y < max_y }
+
+        while next_coordinates
+          next_coordinates = sand.next_coordinates.find { |x, y| (two_dimensional_vertical_slice[y].nil? || two_dimensional_vertical_slice[y][x].nil?) && y < max_y }
+          sand.coordinates = next_coordinates.dup unless next_coordinates.nil?
+        end
+
+        @min_x = sand.x if @min_x.nil? || @min_x > sand.x
+        @max_x = sand.x if @max_x.nil? || @max_x < sand.x
+
+        @two_dimensional_vertical_slice[sand.y] ||= []
+        @two_dimensional_vertical_slice[sand.y][sand.x] = SAND_CHAR
 
         sand
       end

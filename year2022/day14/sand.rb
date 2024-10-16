@@ -33,6 +33,10 @@ module Year2022
       def y
         @coordinates[1]
       end
+
+      def at_starting_position?
+        @coordinates[0] == STARTING_POSITION[0] && @coordinates[1] == STARTING_POSITION[1]
+      end
     end
   end
 end

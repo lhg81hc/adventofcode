@@ -1,8 +1,9 @@
 require_relative '../cave'
+require_relative '../sand'
 
 module Year2022
   module Day14
-    module Part1
+    module Part2
       class Answer
         def self.run
           new.run
@@ -14,18 +15,15 @@ module Year2022
           count = 0
 
           loop do
-            sand = cave.pour_sand
+            sand = cave.pour_sand_with_floor
+            count += 1
 
-            if sand.flew_into_abyss?
-              break
-            else
-              count += 1
-            end
+            break if sand.at_starting_position?
           end
 
           cave.draw
 
-          puts "The number of units of sand come to rest before sand starts flowing into the abyss below: #{count}"
+          puts "The number of units of sand come to rest until the source of the sand becomes blocked: #{count}"
         end
 
         def input_path
@@ -33,7 +31,7 @@ module Year2022
         end
 
         def cave
-          @cave ||= Year2022::Day14::Cave.new(input_path)
+          @cave ||= Year2022::Day14::Cave.new(input_path, floor: true)
         end
       end
     end
