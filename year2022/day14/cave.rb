@@ -1,5 +1,6 @@
 require_relative 'path_of_rock'
 require_relative 'sand'
+require_relative 'cave_drawing'
 
 module Year2022
   module Day14
@@ -7,6 +8,8 @@ module Year2022
       ROCK_CHAR = '#'
       SAND_CHAR = 'o'
       AIR_CHAR = '.'
+
+      include CaveDrawing
 
       attr_accessor :input_path, :min_x, :max_x, :min_y, :max_y, :floor, :two_dimensional_vertical_slice
 
@@ -47,42 +50,26 @@ module Year2022
         nil
       end
 
-      def draw
-        raise StandardError, "Can not draw until scanned" unless scanned?
-
-        (0..max_y).each do |y|
-          if two_dimensional_vertical_slice[y].nil?
-            if floor && y == max_y
-              puts Array.new((max_x + 1) - (min_x - 1) + 1, ROCK_CHAR).join
-            else
-              puts Array.new((max_x + 1) - (min_x - 1) + 1, AIR_CHAR).join
-            end
-
-            next
-          end
-
-          line =
-            ((min_x - 1)..(max_x + 1)).map do |x|
-              two_dimensional_vertical_slice[y][x] || AIR_CHAR
-            end
-
-          puts line.join
+      def pour_sand
+        if floor
+          pour_sand_with_floor
+        else
+          pour_sand_without_floor
         end
       end
 
-      def pour_sand
+      def pour_sand_without_floor
         sand = Year2022::Day14::Sand.new
 
-        next_coordinates = sand.next_coordinates.find { |x, y| (two_dimensional_vertical_slice[y].nil? || two_dimensional_vertical_slice[y][x].nil?) && x.between?(min_x, max_x) && y <= max_y }
-
-        while next_coordinates
+        loop do
           next_coordinates = sand.next_coordinates.find { |x, y| (two_dimensional_vertical_slice[y].nil? || two_dimensional_vertical_slice[y][x].nil?) && x.between?(min_x, max_x) && y <= max_y }
           sand.coordinates = next_coordinates.dup unless next_coordinates.nil?
+
+          break if next_coordinates.nil?
         end
 
         if sand.next_coordinates.find { |x, y| (two_dimensional_vertical_slice[y].nil? || two_dimensional_vertical_slice[y][x].nil?) }
           sand.coordinates = [nil, nil]
-          sand.flew_into_abyss = true
         else
           @two_dimensional_vertical_slice[sand.y] ||= []
           @two_dimensional_vertical_slice[sand.y][sand.x] = SAND_CHAR
@@ -94,11 +81,11 @@ module Year2022
       def pour_sand_with_floor
         sand = Year2022::Day14::Sand.new
 
-        next_coordinates = sand.next_coordinates.find { |x, y| (two_dimensional_vertical_slice[y].nil? || two_dimensional_vertical_slice[y][x].nil?) && y < max_y }
-
-        while next_coordinates
+        loop do
           next_coordinates = sand.next_coordinates.find { |x, y| (two_dimensional_vertical_slice[y].nil? || two_dimensional_vertical_slice[y][x].nil?) && y < max_y }
           sand.coordinates = next_coordinates.dup unless next_coordinates.nil?
+
+          break if next_coordinates.nil?
         end
 
         @min_x = sand.x if @min_x.nil? || @min_x > sand.x

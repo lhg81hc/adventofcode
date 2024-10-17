@@ -12,21 +12,32 @@ module Year2022
         assert_equal([500, 0], @sand.coordinates)
       end
 
-      def test_next_potential_coordinates
+      def test_next_coordinates
         # in case of starting position
-        assert_equal([[500, 1], [499, 1], [501, 1]], @sand.next_potential_coordinates)
+        assert_equal([[500, 1], [499, 1], [501, 1]], @sand.next_coordinates)
 
         # in case of custom position
         @sand.coordinates = [45, 67]
-        assert_equal([[45, 68], [44, 68], [46, 68]], @sand.next_potential_coordinates)
+        assert_equal([[45, 68], [44, 68], [46, 68]], @sand.next_coordinates)
       end
 
       def test_flew_into_abyss?
-        @sand.flew_into_abyss = true
+        @sand.coordinates = [nil, nil]
         assert(@sand.flew_into_abyss?)
 
-        @sand.flew_into_abyss = false
+        @sand.coordinates = [1, 1]
         refute(@sand.flew_into_abyss?)
+      end
+
+      def test_at_starting_position?
+        @sand.coordinates = [nil, nil]
+        refute(@sand.at_starting_position?)
+
+        @sand.coordinates = [1, 1]
+        refute(@sand.at_starting_position?)
+
+        @sand.coordinates = [500, 0]
+        assert(@sand.at_starting_position?)
       end
     end
   end

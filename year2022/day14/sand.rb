@@ -3,11 +3,10 @@ module Year2022
     class Sand
       STARTING_POSITION = [500, 0]
 
-      attr_accessor :coordinates, :flew_into_abyss
+      attr_accessor :coordinates
 
       def initialize
         @coordinates = STARTING_POSITION
-        @flew_into_abyss = false
       end
 
       def next_coordinates
@@ -22,10 +21,6 @@ module Year2022
         ]
       end
 
-      def flew_into_abyss?
-        @flew_into_abyss
-      end
-
       def x
         @coordinates[0]
       end
@@ -34,8 +29,12 @@ module Year2022
         @coordinates[1]
       end
 
+      def flew_into_abyss?
+        x.nil? && y.nil?
+      end
+
       def at_starting_position?
-        @coordinates[0] == STARTING_POSITION[0] && @coordinates[1] == STARTING_POSITION[1]
+        x == STARTING_POSITION[0] && y == STARTING_POSITION[1]
       end
     end
   end
