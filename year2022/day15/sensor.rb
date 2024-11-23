@@ -36,6 +36,18 @@ module Year2022
         max_x_index_of_covered_range = x + (distance_to_closest_beacon - distance_to_projection_on_row)
         (min_x_index_of_covered_range..max_x_index_of_covered_range)
       end
+
+      def coordinate_of_maximum_reachable_points
+        raise ArgumentError, 'Closest beacon must not be nil!' if closest_beacon.nil?
+
+        # In clockwise order: top, right, bottom, left
+        [
+          [x, y - manhattan_distance_to_closest_beacon],
+          [x + manhattan_distance_to_closest_beacon, y],
+          [x, y + manhattan_distance_to_closest_beacon],
+          [x - manhattan_distance_to_closest_beacon, y],
+        ]
+      end
     end
   end
 end

@@ -35,14 +35,11 @@ module Year2022
       def total_positions_on_row_cannot_contain_a_beacon(row_idx)
         raise ArgumentError unless row_idx.is_a?(Integer)
 
-        ranges =
-          sensors.filter_map do |sensor|
-            r = sensor.covered_range_on_a_row(row_idx)
-            [r.first, r.last] unless r.nil?
-          end
-
+        # Gather the ranges that cover by all sensors on the given row
+        ranges = covered_ranges_on_a_row(row_idx)
+        # Merge the ranges together
         merged_ranges = merge_overlap(ranges)
-
+        # Gather the x indexes that already occupied by sensors in order to exclude later
         occupied_x_indexes_on_current_row = occupied_x_indexes_on_row(row_idx)
 
         merged_ranges.inject(0) do |sum, range|
@@ -66,6 +63,13 @@ module Year2022
 
           arr |= t
           arr
+        end
+      end
+
+      def covered_ranges_on_a_row(row_idx)
+        sensors.filter_map do |sensor|
+          r = sensor.covered_range_on_a_row(row_idx)
+          [r.first, r.last] unless r.nil?
         end
       end
 

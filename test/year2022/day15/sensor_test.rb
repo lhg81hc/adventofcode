@@ -70,6 +70,17 @@ module Year2022
 
         assert_nil(@sensor.covered_range_on_a_row(40))
       end
+
+      def test_coordinate_of_maximum_reachable_points_when_valid
+        @sensor.closest_beacon = Year2022::Day15::Beacon.new(2, 10)
+
+        assert_equal([[8, -2], [17, 7], [8, 16], [-1, 7]], @sensor.coordinate_of_maximum_reachable_points)
+      end
+
+      def test_coordinate_of_maximum_reachable_points_when_invalid
+        @sensor.closest_beacon = nil
+        assert_raises(ArgumentError) { @sensor.coordinate_of_maximum_reachable_points }
+      end
     end
   end
 end
