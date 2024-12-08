@@ -11,15 +11,15 @@ module Year2024
         @levels << level
       end
 
-      def safe?
+      def find_bad_level
         # gradually increasing --> 1
         # gradually decreasing --> -1
         direction = nil
         num_of_levels = levels.length
 
         (0..(num_of_levels - 2)).each do |idx|
-          return false if levels[idx] == levels[idx + 1] # neither an increase or a decrease
-          return false if (levels[idx + 1] - levels[idx]).abs > 3
+          return idx if levels[idx] == levels[idx + 1] # neither an increase or a decrease
+          return idx if (levels[idx + 1] - levels[idx]).abs > 3
 
           if idx.zero?
             direction =
@@ -36,15 +36,45 @@ module Year2024
                 1
               end
 
-            return false if current_direction != direction
+            return idx if current_direction != direction
           end
         end
 
-        true
+        nil
+      end
+
+      def safe?
+        find_bad_level.nil?
       end
 
       def unsafe?
         !safe?
+      end
+
+      def safe_without_any_bad_levels_or_with_a_single_bad_level?
+        bad_level_idx = find_bad_level
+
+        if bad_level_idx.nil?
+          true
+        else
+          first_variation = levels.select.with_index { |_val, idx| idx != bad_level_idx - 1 }
+          new_bad_level_idx = self.class.new(first_variation).find_bad_level
+
+          if new_bad_level_idx.nil?
+            true
+          else
+            second_variation = levels.select.with_index { |_val, idx| idx != bad_level_idx }
+            new_bad_level_idx = self.class.new(second_variation).find_bad_level
+
+            if new_bad_level_idx.nil?
+              true
+            else
+              last_variation = levels.select.with_index { |_val, idx| idx != bad_level_idx + 1 }
+              new_bad_level_idx = self.class.new(last_variation).find_bad_level
+              new_bad_level_idx.nil?
+            end
+          end
+        end
       end
     end
   end
