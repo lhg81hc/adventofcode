@@ -5,12 +5,12 @@ module Year2024
   module Day1
     class ListParserTest < Test::Unit::TestCase
       def setup
-        @input_path = File.join(File.dirname(__FILE__), '../input.txt')
+        @input_path = File.join(File.dirname(__FILE__), './input.txt')
         @list_parser = Year2024::Day1::ListParser.new(@input_path)
       end
 
       def test_initialization
-        assert_equal(@list_parser.input_path.to_s, File.join(File.dirname(__FILE__), '../input.txt'))
+        assert_equal(@list_parser.input_path.to_s, File.join(File.dirname(__FILE__), './input.txt'))
       end
 
       def test_parse
