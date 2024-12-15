@@ -4,34 +4,33 @@ module Year2024
       TARGET = 'XMAS'.freeze
       REVERSE_TARGET = 'SAMX'.freeze
 
-      attr_reader :input_path, :letters, :width, :height
+      attr_reader :input_path, :letters
 
       def initialize(input_path)
         @input_path = input_path
         @scanned = false
-        @width = 0
-        @height = 0
         @letters = []
       end
 
       def search
         scan unless scanned?
-        count = 0
 
-        letters.each.with_index do |row, row_idx|
-          row.each.with_index do |_char, char_idx|
-            chars_coordinates(char_idx, row_idx).each do |coordinates|
-              word = coordinates.map { |coordinate| letters[coordinate[1]][coordinate[0]] }.join
-              count += 1 if [TARGET, REVERSE_TARGET].include?(word)
-            end
-          end
+        letters.each.with_index.inject(0) do |count, (row, row_idx)|
+          row.each.with_index { |_c, char_idx| count += num_of_xmas_appearance_around_a_point(char_idx, row_idx) }
+          count
         end
-
-        count
       end
 
       def scanned?
         @scanned
+      end
+
+      def height
+        scanned? ? @letters.length : 0
+      end
+
+      def width
+        scanned? ? @letters.first.length : 0
       end
 
       def scan
@@ -39,31 +38,54 @@ module Year2024
           @letters[line_idx] = line.strip.split('')
         end
 
-        @height = @letters.length
-        @width = @letters.first.length
         @scanned = true
       end
 
-      def chars_coordinates(char_idx, row_idx)
-        r = []
+      private
 
-        if row_idx + 3 <= height - 1
-          r << [[char_idx, row_idx], [char_idx, row_idx + 1], [char_idx, row_idx + 2], [char_idx, row_idx + 3]]
+      def num_of_xmas_appearance_around_a_point(char_idx, row_idx)
+        potential_xmas_characters_coordinates(char_idx, row_idx).inject(0) do |count, coordinates|
+          word = coordinates.map { |coordinate| letters[coordinate[1]][coordinate[0]] }.join
+          count += 1 if [TARGET, REVERSE_TARGET].include?(word)
+          count
         end
+      end
 
-        if row_idx + 3 <= height - 1 && char_idx + 3 <= width - 1
-          r << [[char_idx, row_idx], [char_idx + 1, row_idx + 1], [char_idx + 2, row_idx + 2], [char_idx + 3, row_idx + 3]]
+      def potential_xmas_characters_coordinates(char_idx, row_idx)
+        %i[
+          forward_coordinates
+          downward_coordinates
+          left_backward_diagonal_coordinates
+          right_forward_diagonal_coordinates
+        ].each_with_object([]) do |me, r|
+          coordinates = send(me, char_idx, row_idx)
+          r << coordinates unless coordinates.empty?
+          r
         end
+      end
 
-        if char_idx + 3 <= width - 1
-          r << [[char_idx, row_idx], [char_idx + 1, row_idx], [char_idx + 2, row_idx], [char_idx + 3, row_idx]]
-        end
+      def forward_coordinates(char_idx, row_idx)
+        return [] if char_idx + 3 > width - 1
 
-        if row_idx + 3 <= height - 1 && char_idx - 3 >= 0
-          r << [[char_idx, row_idx], [char_idx - 1, row_idx + 1], [char_idx - 2, row_idx + 2], [char_idx - 3, row_idx + 3]]
-        end
+        [[char_idx, row_idx], [char_idx + 1, row_idx], [char_idx + 2, row_idx], [char_idx + 3, row_idx]]
+      end
 
-        r
+      def downward_coordinates(char_idx, row_idx)
+        return [] if row_idx + 3 > height - 1
+
+        [[char_idx, row_idx], [char_idx, row_idx + 1], [char_idx, row_idx + 2], [char_idx, row_idx + 3]]
+      end
+
+      def left_backward_diagonal_coordinates(char_idx, row_idx)
+        return [] if row_idx + 3 > height - 1 || (char_idx - 3).negative?
+
+        [[char_idx, row_idx], [char_idx - 1, row_idx + 1], [char_idx - 2, row_idx + 2], [char_idx - 3, row_idx + 3]]
+      end
+
+      def right_forward_diagonal_coordinates(char_idx, row_idx)
+        return [] if row_idx + 3 > height - 1 || char_idx + 3 > width - 1
+
+        [[char_idx, row_idx], [char_idx + 1, row_idx + 1], [char_idx + 2, row_idx + 2], [char_idx + 3, row_idx + 3]]
       end
     end
   end
