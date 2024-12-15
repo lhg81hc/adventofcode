@@ -2,15 +2,16 @@ require_relative '../corrupted_memory_reader'
 
 module Year2024
   module Day3
-    module Part1
+    module Part2
       class Answer
         def self.run
           new.run
         end
 
         def run
+          corrupted_memory_reader.enabled_multiplication_instructions.each { |a| puts a.str }
           sum =
-            corrupted_memory_reader.all_multiplication_instructions.inject(0) do |r, i|
+            corrupted_memory_reader.enabled_multiplication_instructions.inject(0) do |r, i|
               r += i.result
               r
             end

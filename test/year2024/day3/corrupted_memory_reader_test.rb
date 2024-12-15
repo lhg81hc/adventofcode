@@ -14,23 +14,35 @@ module Year2024
         assert_equal(@memory_reader.input_path.to_s, File.join(File.dirname(__FILE__), './input.txt'))
       end
 
-      def test_multiplication_instructions
-        multiplication_instructions = @memory_reader.multiplication_instructions
-        assert_equal(multiplication_instructions.length, 4)
+      def test_all_multiplication_instructions
+        instructions = @memory_reader.all_multiplication_instructions
+        assert_equal(instructions.length, 4)
 
-        first_instruction = multiplication_instructions[0]
-        last_instruction = multiplication_instructions[3]
+        first_instruction = instructions[0]
+        second_instruction = instructions[1]
+        third_instruction = instructions[2]
+        last_instruction = instructions[3]
 
-        assert(first_instruction.is_a?(Year2024::Day3::MultiplicationInstruction))
         assert_equal(first_instruction.str, 'mul(2,4)')
-
-        assert(last_instruction.is_a?(Year2024::Day3::MultiplicationInstruction))
+        assert_equal(second_instruction.str, 'mul(5,5)')
+        assert_equal(third_instruction.str, 'mul(11,8)')
         assert_equal(last_instruction.str, 'mul(8,5)')
       end
 
-      def test_sum
-        assert_equal(@memory_reader.sum, 161)
+      def test_enabled_multiplication_instructions
+        instructions = @memory_reader.enabled_multiplication_instructions
+        assert_equal(instructions.length, 2)
+
+        first_instruction = instructions[0]
+        last_instruction = instructions[1]
+
+        assert_equal(first_instruction.str, 'mul(2,4)')
+        assert_equal(last_instruction.str, 'mul(8,5)')
       end
+
+      # def test_sum
+      #   assert_equal(@memory_reader.sum, 161)
+      # end
     end
   end
 end
