@@ -1,8 +1,11 @@
 module Year2024
   module Day4
     class WordSearch
-      TARGET = 'XMAS'.freeze
-      REVERSE_TARGET = 'SAMX'.freeze
+      XMAS = 'XMAS'.freeze
+      SAMX = 'SAMX'.freeze
+      SAM = 'SAM'.freeze
+      MAS = 'MAS'.freeze
+      CENTER_OF_X_MAS = 'A'.freeze
 
       attr_reader :input_path, :letters
 
@@ -12,11 +15,25 @@ module Year2024
         @letters = []
       end
 
-      def search
+      def search_xmas
         scan unless scanned?
 
         letters.each.with_index.inject(0) do |count, (row, row_idx)|
           row.each.with_index { |_c, char_idx| count += num_of_xmas_appearance_around_a_point(char_idx, row_idx) }
+          count
+        end
+      end
+
+      def search_x_mas
+        scan unless scanned?
+
+        letters.each.with_index.inject(0) do |count, (row, row_idx)|
+          row.each.with_index do |char, char_idx|
+            next unless char == CENTER_OF_X_MAS
+
+            count += 1 if x_mas_center?(char_idx, row_idx)
+          end
+
           count
         end
       end
@@ -46,17 +63,26 @@ module Year2024
       def num_of_xmas_appearance_around_a_point(char_idx, row_idx)
         potential_xmas_characters_coordinates(char_idx, row_idx).inject(0) do |count, coordinates|
           word = coordinates.map { |coordinate| letters[coordinate[1]][coordinate[0]] }.join
-          count += 1 if [TARGET, REVERSE_TARGET].include?(word)
+          count += 1 if [XMAS, SAMX].include?(word)
           count
         end
       end
 
+      def x_mas_center?(char_idx, row_idx)
+        words =
+          mas_diagonal_coordinates(char_idx, row_idx).map do |coordinates|
+            coordinates.map { |coordinate| letters[coordinate[1]][coordinate[0]] }.join
+          end
+
+        !words.empty? && words.all? { |word| [MAS, SAM].include?(word) }
+      end
+
       def potential_xmas_characters_coordinates(char_idx, row_idx)
         %i[
-          forward_coordinates
-          downward_coordinates
-          left_backward_diagonal_coordinates
-          right_forward_diagonal_coordinates
+          xmas_forward_coordinates
+          xmas_downward_coordinates
+          xmas_right_diagonal_coordinates
+          xmas_left_diagonal_coordinates
         ].each_with_object([]) do |me, r|
           coordinates = send(me, char_idx, row_idx)
           r << coordinates unless coordinates.empty?
@@ -64,28 +90,38 @@ module Year2024
         end
       end
 
-      def forward_coordinates(char_idx, row_idx)
+      def xmas_forward_coordinates(char_idx, row_idx)
         return [] if char_idx + 3 > width - 1
 
         [[char_idx, row_idx], [char_idx + 1, row_idx], [char_idx + 2, row_idx], [char_idx + 3, row_idx]]
       end
 
-      def downward_coordinates(char_idx, row_idx)
+      def xmas_downward_coordinates(char_idx, row_idx)
         return [] if row_idx + 3 > height - 1
 
         [[char_idx, row_idx], [char_idx, row_idx + 1], [char_idx, row_idx + 2], [char_idx, row_idx + 3]]
       end
 
-      def left_backward_diagonal_coordinates(char_idx, row_idx)
+      def xmas_right_diagonal_coordinates(char_idx, row_idx)
         return [] if row_idx + 3 > height - 1 || (char_idx - 3).negative?
 
         [[char_idx, row_idx], [char_idx - 1, row_idx + 1], [char_idx - 2, row_idx + 2], [char_idx - 3, row_idx + 3]]
       end
 
-      def right_forward_diagonal_coordinates(char_idx, row_idx)
+      def xmas_left_diagonal_coordinates(char_idx, row_idx)
         return [] if row_idx + 3 > height - 1 || char_idx + 3 > width - 1
 
         [[char_idx, row_idx], [char_idx + 1, row_idx + 1], [char_idx + 2, row_idx + 2], [char_idx + 3, row_idx + 3]]
+      end
+
+      def mas_diagonal_coordinates(char_idx, row_idx)
+        return [] if (char_idx - 1).negative? || (row_idx - 1).negative?
+        return [] if char_idx + 1 > width - 1 || row_idx + 1 > height - 1
+
+        [
+          [[char_idx - 1, row_idx - 1], [char_idx, row_idx], [char_idx + 1, row_idx + 1]],
+          [[char_idx - 1, row_idx + 1], [char_idx, row_idx], [char_idx + 1, row_idx - 1]]
+        ]
       end
     end
   end

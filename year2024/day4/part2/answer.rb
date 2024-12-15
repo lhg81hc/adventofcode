@@ -2,7 +2,7 @@ require_relative '../word_search'
 
 module Year2024
   module Day4
-    module Part1
+    module Part2
       class Answer
         def self.run
           new.run
@@ -11,7 +11,7 @@ module Year2024
         def run
           word_search.scan unless word_search.scanned?
 
-          puts "The word XMAS appears #{word_search.search_xmas} times"
+          puts "The word X-MAS appears #{word_search.search_x_mas} times"
         end
 
         def word_search
