@@ -9,7 +9,7 @@ module Year2024
         end
 
         def run
-          corrupted_memory_reader.enabled_multiplication_instructions.each { |a| puts a.str }
+          corrupted_memory_reader.instructions.each { |a| puts a.str }
           sum =
             corrupted_memory_reader.enabled_multiplication_instructions.inject(0) do |r, i|
               r += i.result

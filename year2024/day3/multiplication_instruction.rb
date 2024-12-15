@@ -1,7 +1,7 @@
 module Year2024
   module Day3
     class MultiplicationInstruction
-      RE_PATTERN = /mul\(\d+,\d+\)/
+      RE_PATTERN = /mul\(\d+,\d+\)/.freeze
 
       attr_reader :str
 

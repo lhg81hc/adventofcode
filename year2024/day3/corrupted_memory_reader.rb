@@ -1,9 +1,10 @@
 require_relative './multiplication_instruction'
+require_relative './conditional_instruction'
 
 module Year2024
   module Day3
     class CorruptedMemoryReader
-      DO_INSTRUCTION = "do()".freeze
+      DO_INSTRUCTION = 'do()'.freeze
       DONT_INSTRUCTION = "don't()".freeze
 
       attr_reader :input_path
@@ -13,64 +14,43 @@ module Year2024
       end
 
       def all_multiplication_instructions
-        @all_multiplication_instructions ||= multiplication_instructions_by_condition(false)
+        @all_multiplication_instructions ||=
+          instructions.select { |i| i.is_a?(Year2024::Day3::MultiplicationInstruction) }
       end
 
       def enabled_multiplication_instructions
-        @enabled_multiplication_instructions ||= multiplication_instructions_by_condition(true)
-      end
+        @enabled_multiplication_instructions ||=
+          begin
+            last_conditional_instruction = nil
 
-      def multiplication_instructions_by_condition(consider_conditional_instructions)
-        r = []
-        last_conditional_instruction = nil
-
-        File.foreach(input_path) do |line|
-          parsed_result = parse_multiplication_instructions_from_line(line, last_conditional_instruction: last_conditional_instruction, consider_conditional_instructions: consider_conditional_instructions)
-          last_conditional_instruction = parsed_result[0]
-          r += parsed_result[1]
-        end
-
-        r
-      end
-
-      def parse_multiplication_instructions_from_line(line, last_conditional_instruction:, consider_conditional_instructions:)
-        return [] if line.nil? || line.length.zero?
-
-        current_conditional_instruction = last_conditional_instruction
-        enabled_multiplication_instructions = []
-
-        last_index = line.length - 1
-        start_index = 0
-        end_index = 0
-
-        while start_index < last_index
-          end_index += 1
-          substring = line[start_index..end_index].dup
-
-          if consider_conditional_instructions && (substring.match(/do\(\)/) || substring.match(/don't\(\)/))
-            current_conditional_instruction = substring.match(/do\(\)/).to_s if substring.match(/do\(\)/)
-            current_conditional_instruction = substring.match(/don't\(\)/).to_s if substring.match(/don't\(\)/)
-            start_index = end_index + 1
-          end
-
-          if substring.match(/mul\(\d+,\d+\)/)
-            multiplication_instruction = substring.match(/mul\(\d+,\d+\)/).to_s
-
-            if consider_conditional_instructions
-              if current_conditional_instruction.nil? || current_conditional_instruction == DO_INSTRUCTION
-                enabled_multiplication_instructions << Year2024::Day3::MultiplicationInstruction.new(multiplication_instruction)
-              end
-            else
-              enabled_multiplication_instructions << Year2024::Day3::MultiplicationInstruction.new(multiplication_instruction)
+            instructions.each_with_object([]) do |i, r|
+              r << i if i.is_a?(Year2024::Day3::MultiplicationInstruction) &&
+                        last_conditional_instruction&.do_instruction?
+              last_conditional_instruction = i if i.is_a?(Year2024::Day3::ConditionalInstruction)
+              r
             end
+          end
+      end
 
-            start_index = end_index + 1
+      def instructions
+        @instructions ||=
+          File.foreach(input_path).inject([]) do |r, line|
+            r += parse_line(line)
+            r
+          end
+      end
+
+      def parse_line(line)
+        line.scan(/do\(\)|don't\(\)|mul\(\d+,\d+\)/).each_with_object([]) do |str, r|
+          if [Year2024::Day3::ConditionalInstruction::DONT_INSTRUCTION,
+              Year2024::Day3::ConditionalInstruction::DO_INSTRUCTION].include?(str)
+            r << Year2024::Day3::ConditionalInstruction.new(str)
+          elsif str.match(Year2024::Day3::MultiplicationInstruction::RE_PATTERN)
+            r << Year2024::Day3::MultiplicationInstruction.new(str)
           end
 
-          start_index = end_index if end_index == last_index
+          r
         end
-
-        [current_conditional_instruction, enabled_multiplication_instructions]
       end
     end
   end
