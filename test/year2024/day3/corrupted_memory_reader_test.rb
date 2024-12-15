@@ -39,10 +39,6 @@ module Year2024
         assert_equal(first_instruction.str, 'mul(2,4)')
         assert_equal(last_instruction.str, 'mul(8,5)')
       end
-
-      # def test_sum
-      #   assert_equal(@memory_reader.sum, 161)
-      # end
     end
   end
 end
