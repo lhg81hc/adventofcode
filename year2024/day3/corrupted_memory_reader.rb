@@ -25,7 +25,7 @@ module Year2024
 
             instructions.each_with_object([]) do |i, r|
               r << i if i.is_a?(Year2024::Day3::MultiplicationInstruction) &&
-                        last_conditional_instruction&.do_instruction?
+                        (last_conditional_instruction.nil? || last_conditional_instruction.do_instruction?)
               last_conditional_instruction = i if i.is_a?(Year2024::Day3::ConditionalInstruction)
               r
             end
