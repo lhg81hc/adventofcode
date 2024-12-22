@@ -21,8 +21,23 @@ module Year2024
       end
 
       def correct_order_updates
+        @correct_order_updates ||= updates_partition[0]
+      end
+
+      def incorrect_order_updates
+        @incorrect_order_updates ||= updates_partition[1]
+      end
+
+      def updates_partition
         updates.each_with_object([]) do |update, r|
-          r << update if update_contains_pages_in_correct_orders?(update)
+          r[0] ||= []
+          r[1] ||= []
+
+          if update_contains_pages_in_correct_orders?(update)
+            r[0] << update
+          else
+            r[1] << update
+          end
         end
       end
 
