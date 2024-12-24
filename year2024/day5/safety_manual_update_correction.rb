@@ -23,6 +23,46 @@ module Year2024
         dup_page_numbers
       end
 
+      def correctly_order_page_numbers_using_backtracking
+        dup_page_numbers = page_numbers.dup
+        permutations(dup_page_numbers, 0)
+      end
+
+      def permutations(arr, idx)
+        if idx == arr.length
+          if correctly_ordered_permutation(arr)
+            return arr
+          else
+            return nil
+          end
+        end
+
+        (idx..(arr.length - 1)).each do |i|
+          swap(arr, idx, i)
+
+          result = permutations(arr, idx + 1)
+          return result unless result.nil?
+
+          swap(arr, idx, i)
+        end
+
+        nil
+      end
+
+      def pairs(arr)
+        length = arr.length
+        return [] unless length >= 2
+
+        arr.each.with_index.inject([]) do |r, (_e, idx)|
+          r += ((idx + 1)..(length - 1)).map { |i| [arr[idx], arr[i]] } if idx != length - 1
+          r
+        end
+      end
+
+      def correctly_ordered_permutation(permutation)
+        pairs(permutation).all? { |pair| page_ordering_rules.right_order?(*pair) }
+      end
+
       private
 
       def partition(arr, low, high)

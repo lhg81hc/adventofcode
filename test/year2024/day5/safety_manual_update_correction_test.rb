@@ -24,6 +24,10 @@ module Year2024
       def test_correctly_ordered_page_numbers
         assert_equal(@correction.correctly_ordered_page_numbers, ['97', '75', '47', '29', '13'])
       end
+
+      def test_correctly_order_page_numbers_using_backtracking
+        assert_equal(@correction.correctly_order_page_numbers_using_backtracking, ['97', '75', '47', '29', '13'])
+      end
     end
   end
 end
