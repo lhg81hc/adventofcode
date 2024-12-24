@@ -29,30 +29,11 @@ module Year2024
       end
 
       def updates_partition
-        updates.each_with_object([]) do |update, r|
-          r[0] ||= []
-          r[1] ||= []
-
-          if update_contains_pages_in_correct_orders?(update)
-            r[0] << update
-          else
-            r[1] << update
-          end
-        end
+        @updates_partition ||= updates.partition { |v| v.correct_order?(page_ordering_rules) }
       end
 
       def page_ordering_rules
         @page_ordering_rules ||= Year2024::Day5::PageOrderingRules.new(input_path)
-      end
-
-      private
-
-      def update_contains_pages_in_correct_orders?(update)
-        update.page_pairs.each do |pair|
-          return false unless page_ordering_rules.right_order?(*pair)
-        end
-
-        true
       end
     end
   end

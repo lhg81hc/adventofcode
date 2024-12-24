@@ -27,6 +27,18 @@ module Year2024
       def middle_page_number
         page_numbers[page_numbers.length / 2]
       end
+
+      def find_incorrect_order_page_pair(page_ordering_rules)
+        page_pairs.each do |pair|
+          return pair unless page_ordering_rules.right_order?(*pair)
+        end
+
+        nil
+      end
+
+      def correct_order?(page_ordering_rules)
+        find_incorrect_order_page_pair(page_ordering_rules).nil?
+      end
     end
   end
 end
