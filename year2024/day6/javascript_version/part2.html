@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Day 6 - Part 2</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <div id="wrapper"></div>
+        <div id="interactive-section">
+            <form style="margin-top: 15px" id="form">
+                <fieldset>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label for="user_input">Obstacle Position</label>
+                        <input id='user_input' name='position' type="text" placeholder="number,number">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <input type="submit" value="Submit">
+                    </div>
+                </fieldset>
+            </form>
+            <p id="log"></p>
+        </div>
+        <script type="module" src="input.js"></script>
+        <script type="module" src="manufacturing_lab_blueprint.js"></script>
+        <script type="module" src="path_prediction.js"></script>
+        <script type="module" src="part2.js"></script>
+    </body>
+</html>

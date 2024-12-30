@@ -10,21 +10,23 @@ module Year2024
         end
 
         def run
-          count = 0
-          memoize = {}
+          prediction = route_prediction.predict
 
-          route_prediction.predict.each do |position|
-            if memoize[position.join(',')].nil?
-              memoize[position.join(',')] = true
-              count += 1
-            end
-          end
-
-          puts "The number of distinct positions the guard will visit before leaving the mapped area: #{count}"
+          puts 'The number of distinct positions the guard will visit before ' \
+               "leaving the mapped area: #{prediction.visited_positions.count}"
         end
 
         def route_prediction
-          @route_prediction ||= Year2024::Day6::RoutePrediction.new(manufacturing_lab_map)
+          @route_prediction ||=
+            begin
+              manufacturing_lab_map.scan unless manufacturing_lab_map.scanned?
+
+              Year2024::Day6::RoutePrediction.new(
+                manufacturing_lab_map.two_d_map,
+                manufacturing_lab_map.current_guard_position,
+                manufacturing_lab_map.current_guard_direction
+              )
+            end
         end
 
         def manufacturing_lab_map

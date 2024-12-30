@@ -34,7 +34,7 @@ module Year2024
       end
 
       def scan_line(line, line_idx)
-        chars = line.chars
+        chars = line.strip.chars
 
         if @current_guard_position.nil? && @current_guard_direction.nil?
           chars.each.with_index do |char, char_idx|
