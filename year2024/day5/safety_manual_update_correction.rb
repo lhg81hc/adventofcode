@@ -1,5 +1,4 @@
 require 'forwardable'
-require 'pry'
 
 module Year2024
   module Day5
