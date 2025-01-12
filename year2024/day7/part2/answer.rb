@@ -2,7 +2,7 @@ require_relative '../calibration_equation'
 
 module Year2024
   module Day7
-    module Part1
+    module Part2
       class Answer
         def self.run
           new.run
@@ -12,9 +12,15 @@ module Year2024
           sum = 0
 
           calibration_equations.each do |calibration_equation|
-            puts "Testing #{calibration_equation.str}..."
-
-            sum += calibration_equation.test_value if calibration_equation.adjustable_using_two_operators?
+            if calibration_equation.adjustable_using_two_operators?
+              sum += calibration_equation.test_value
+              puts "#{calibration_equation.str} --> Valid"
+            elsif calibration_equation.adjustable_using_three_operators?
+              sum += calibration_equation.test_value
+              puts "#{calibration_equation.str} --> Valid"
+            else
+              puts "#{calibration_equation.str} --> Invalid!!!"
+            end
           end
 
           puts sum
