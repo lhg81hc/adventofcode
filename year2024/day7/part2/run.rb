@@ -1,4 +1,4 @@
-# https://adventofcode.com/2024/day/6
+# https://adventofcode.com/2024/day/7
 #
 # The engineers seem concerned; the total calibration result you gave them is nowhere close to being within safety
 # tolerances. Just then, you spot your mistake: some well-hidden elephants are holding a third type of operator.

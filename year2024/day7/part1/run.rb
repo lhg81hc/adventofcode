@@ -1,4 +1,4 @@
-# https://adventofcode.com/2024/day/6
+# https://adventofcode.com/2024/day/7
 #
 # The Historians take you to a familiar rope bridge over a river in the middle of a jungle. The Chief isn't on this side
 # of the bridge, though; maybe he's on the other side?
