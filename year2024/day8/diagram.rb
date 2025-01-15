@@ -6,7 +6,8 @@ module Year2024
     class Diagram
       include AntinodeFinder
 
-      attr_reader :input_path, :width, :height
+      attr_reader :input_path
+      attr_accessor :width, :height
 
       def initialize(input_path)
         @input_path = input_path
