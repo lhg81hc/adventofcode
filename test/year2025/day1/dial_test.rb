@@ -29,21 +29,14 @@ module Year2025
             'L82' => 32,
           }
 
-        # rotation_map.each do |rotation_instruction, new_position|
-        #   rotation = Year2025::Day1::Rotation.new(rotation_instruction)
-        #   @dial.rotate(rotation)
-        #   assert_equal(@dial.current_position, new_position)
-        # end
-        #
-        # assert_equal(@dial.password, 3)
-        # assert_equal(@dial.password_0x434C49434B, 6)
+        rotation_map.each do |rotation_instruction, new_position|
+          rotation = Year2025::Day1::Rotation.new(rotation_instruction)
+          @dial.rotate(rotation)
+          assert_equal(@dial.current_position, new_position)
+        end
 
-
-        @dial = Year2025::Day1::Dial.new
-        rotation = Year2025::Day1::Rotation.new('L1000')
-        @dial.rotate(rotation)
-        assert_equal(@dial.password_0x434C49434B, 10)
-        assert_equal(@dial.current_position, 50)
+        assert_equal(@dial.password, 3)
+        assert_equal(@dial.password_0x434C49434B, 6)
       end
     end
   end
