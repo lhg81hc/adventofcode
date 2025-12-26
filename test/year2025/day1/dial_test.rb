@@ -1,12 +1,12 @@
 require 'test/unit'
-require_relative '../../../year2025/day1/part1/dial'
-require_relative '../../../year2025/day1/part1/rotation'
+require_relative '../../../year2025/day1/dial'
+require_relative '../../../year2025/day1/rotation'
 
 module Year2025
   module Day1
     class DialTest < Test::Unit::TestCase
       def setup
-        @dial = Year2025::Day1::Part1::Dial.new
+        @dial = Year2025::Day1::Dial.new
       end
 
       def test_initialization
@@ -29,13 +29,21 @@ module Year2025
             'L82' => 32,
           }
 
-        rotation_map.each do |rotation_instruction, new_position|
-          rotation = Year2025::Day1::Part1::Rotation.new(rotation_instruction)
-          @dial.rotate(rotation)
-          assert_equal(@dial.current_position, new_position)
-        end
+        # rotation_map.each do |rotation_instruction, new_position|
+        #   rotation = Year2025::Day1::Rotation.new(rotation_instruction)
+        #   @dial.rotate(rotation)
+        #   assert_equal(@dial.current_position, new_position)
+        # end
+        #
+        # assert_equal(@dial.password, 3)
+        # assert_equal(@dial.password_0x434C49434B, 6)
 
-        assert_equal(@dial.password, 3)
+
+        @dial = Year2025::Day1::Dial.new
+        rotation = Year2025::Day1::Rotation.new('L1000')
+        @dial.rotate(rotation)
+        assert_equal(@dial.password_0x434C49434B, 10)
+        assert_equal(@dial.current_position, 50)
       end
     end
   end

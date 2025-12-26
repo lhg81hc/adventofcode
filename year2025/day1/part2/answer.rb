@@ -3,7 +3,7 @@ require_relative '../dial'
 
 module Year2025
   module Day1
-    module Part1
+    module Part2
       class Answer
         def self.run
           new.run
@@ -12,14 +12,14 @@ module Year2025
         def run
           dial = Year2025::Day1::Dial.new
 
+          puts "current: #{dial.current_position}"
+
           File.foreach(input_filepath).each do |line|
             rotation = Year2025::Day1::Rotation.new(line)
             dial.rotate(rotation)
 
-            puts "#{line.strip} --> current: #{dial.current_position}"
+            puts "rotation: #{line.strip}, current: #{dial.current_position}, password_0x434C49434B: #{dial.password_0x434C49434B}"
           end
-
-          puts "The actual password to open the door: #{dial.password}"
         end
 
         def input_filepath

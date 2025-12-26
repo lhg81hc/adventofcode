@@ -21,6 +21,10 @@ module Year2025
         to_the_left? ? -clicks : clicks
       end
 
+      def to_s
+        @raw
+      end
+
       def parse!
         @direction = @raw.scan(/[A-Z]/).first
         @clicks = @raw.scan(/\d+/).first&.to_i
