@@ -1,8 +1,7 @@
-require_relative '../rotation'
-require_relative '../dial'
+require_relative '../product_id_ranges'
 
 module Year2025
-  module Day1
+  module Day2
     module Part1
       class Answer
         def self.run
@@ -10,16 +9,17 @@ module Year2025
         end
 
         def run
-          dial = Year2025::Day1::Dial.new
+          total = 0
 
-          File.foreach(input_filepath).each do |line|
-            rotation = Year2025::Day1::Rotation.new(line)
-            dial.rotate(rotation)
-
-            puts "#{line.strip} --> current: #{dial.current_position}"
+          File.open(input_filepath).readlines.each do |line|
+            stripped_line = line.strip
+            stripped_line.split(',').each do |range|
+              product_id_ranges = Year2025::Day2::ProductIdRanges.new(range)
+              total += product_id_ranges.mirrored_ids.sum
+            end
           end
 
-          puts "The actual password to open the door: #{dial.password}"
+          puts "Adding up all the invalid IDs in this example produces #{total}"
         end
 
         def input_filepath
