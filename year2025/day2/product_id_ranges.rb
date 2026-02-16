@@ -25,7 +25,36 @@ module Year2025
         results
       end
 
+      def repeated_ids
+        results = []
+        current_id = first_id
+
+        while current_id <= last_id
+          results << current_id if repeated_sequence?(current_id)
+
+          current_id += 1
+        end
+
+        results
+      end
+
       private
+
+      def repeated_sequence?(id)
+        str = id.to_s
+        length = str.length
+
+        return false if length <= 1
+
+        (1..(length / 2)).each do |pattern_length|
+          next unless (length % pattern_length).zero?
+
+          pattern = str[0, pattern_length]
+          return true if pattern * (length / pattern_length) == str
+        end
+
+        false
+      end
 
       def starting_prefix
         number_of_digits = Math.log10(first_id).floor + 1
@@ -37,10 +66,10 @@ module Year2025
         first_id / (10 ** (half_of_digits + 1))
       end
 
-      def mirrored_id(first_half)
-        number_of_digits = Math.log10(first_half).floor + 1
+      def mirrored_id(prefix)
+        number_of_digits = Math.log10(prefix).floor + 1
 
-        first_half * (10 ** number_of_digits) + first_half
+        prefix * (10 ** number_of_digits) + prefix
       end
 
       def parse!

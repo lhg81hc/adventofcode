@@ -16,9 +16,14 @@ module Year2025
         assert_equal(@second_production_id_ranges.last_id, 1012)
       end
 
-      def test_invalid_ids
+      def test_mirrored_ids
         assert_equal(@first_production_id_ranges.mirrored_ids, [38593859])
         assert_equal(@second_production_id_ranges.mirrored_ids, [1010])
+      end
+
+      def test_repeated_ids
+        assert_equal(@first_production_id_ranges.repeated_ids, [38593859])
+        assert_equal(@second_production_id_ranges.repeated_ids, [999, 1010])
       end
     end
   end
